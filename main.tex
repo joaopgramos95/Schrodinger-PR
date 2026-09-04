@@ -1,0 +1,298 @@
+\documentclass[a4paper,11pt,reqno]{amsart}
+\usepackage[utf8]{inputenc}
+\usepackage{enumerate}
+\usepackage{amsmath, amssymb,amsthm}
+\usepackage{mathtools}
+\usepackage{leftidx}
+\usepackage{setspace}
+\numberwithin{equation}{section}
+\usepackage{biblatex}
+%\usepackage{mathbbol}
+\setcounter{tocdepth}{1} %2=show subsections, 1= show only sections
+\usepackage[left=3cm, right=3cm]{geometry}
+\usepackage{hyperref}
+\usepackage{xcolor}
+%\definecolor{name}{model}{color-spec}
+\definecolor{my-black}{rgb}{0,0,0}
+\definecolor{my-blue}{rgb}{0,0,0.8}
+\definecolor{my-red}{rgb}{0.8,0,0} 
+\definecolor{my-green}{rgb}{0,0.5,0}
+\hypersetup{colorlinks,
+    linkcolor	= {my-blue},
+    citecolor	= {my-red},
+    urlcolor		= {my-black}
+}
+\usepackage{graphicx}
+\usepackage{tikz-cd}
+\onehalfspacing
+%Javier's suggestion to avoid overfull boxes
+%\overfullrule=10cm better not to use because ArXiv might mess up things
+%\usepackage{microtype}
+
+\addbibresource{biblio.bib}
+
+\theoremstyle{plain} %italic
+
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}{Corollary}[section]
+\newtheorem{proposition}{Proposition}[section]
+\newtheorem{assumption}{Assumption}[section]
+\newtheorem{problem}{Problem}[section]
+\newtheorem{consequence}{Consequence}[section]
+\newtheorem*{theorem*}{Theorem} %to avoid numbering
+
+
+\theoremstyle{definition} %non-italic
+\newtheorem{remark}{Remark}[section]
+
+\newtheorem{definition}{Definition}[section]
+\newtheorem{notation}{Notation}[section]
+\newtheorem{conjecture}{Conjecture}[section]
+\newtheorem{example}{Example}[section]
+\newtheorem{claim}{Claim}[section]
+
+\theoremstyle{remark}
+\newtheorem*{remark-non}{Remark}
+
+\DeclareMathOperator{\id}{id}
+\DeclareMathOperator{\real}{Re}
+\DeclareMathOperator{\imag}{Im}
+\DeclareMathOperator{\image}{im}
+\DeclareMathOperator{\supp}{supp}
+\DeclareMathOperator{\vol}{vol}
+\DeclareMathOperator{\inv}{inv}
+\DeclareMathOperator{\Tr}{Tr}
+\DeclareMathOperator{\ord}{ord}
+\DeclareMathOperator{\Hom}{Hom}
+\DeclareMathOperator{\Aut}{Aut}
+\DeclareMathOperator{\End}{End}
+\DeclareMathOperator{\Hol}{Hol}
+\DeclareMathOperator{\GL}{GL}
+\DeclareMathOperator{\SL}{SL}
+\DeclareMathOperator{\PGL}{PGL}
+\DeclareMathOperator{\PSL}{PSL}
+\DeclareMathOperator{\Spur}{Sp}
+\DeclareMathOperator{\PSO}{PSO}
+\DeclareMathOperator{\SO}{SO}
+\DeclareMathOperator{\Or}{O}
+\DeclareMathOperator{\Res}{Res}
+\DeclareMathOperator{\diam}{diam}
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\sinc}{sinc}
+\DeclareMathOperator{\disc}{disc}
+
+
+\newcommand{\R}{\mathbb{R}}
+\renewcommand{\P}{\mathbb{P}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\g}{\mathfrak{g}}
+\renewcommand{\o}{\mathfrak{o}}
+\renewcommand{\d}{\mathfrak{d}}
+\renewcommand{\a}{\mathfrak{a}}
+\renewcommand{\b}{\mathfrak{b}}
+\newcommand{\p}{\mathfrak{p}}
+\newcommand{\I}{\mathbf{I}}
+
+\renewcommand{\sl}{\mathfrak{sl}}
+\newcommand{\h}{\mathfrak{h}}
+\renewcommand{\H}{\mathbb{H}}
+\textwidth 6.5in
+\oddsidemargin  -0.1in \evensidemargin -0.1in \parindent0.7em
+\textheight 23cm
+
+
+
+\title{Schr\"odinger PR}
+
+\begin{document}
+\maketitle 
+
+\section{Linear Schr\"odinger}
+
+We start with the Schr\"odinger equation with a potential $V$:
+\begin{equation}\label{eq:schrodinger}
+i \partial_t u + \Delta u = V \cdot u,
+\end{equation}
+where $u$ is a function on $\R^d \times \R$ which is smooth enough. Multiply both sides in \eqref{eq:schrodinger} by $\overline{u}$, then take conjugates of \eqref{eq:schrodinger} and multiply this by $u$, and subtract both things. This yields 
+\[
+\partial_t |u|^2 = i \cdot \frac{\left(\overline{u} \Delta u - u \Delta \overline{u}\right)}{2}+ \text{Im}(V) \cdot |u|^2 = \text{Im}(u \Delta \overline{u}) + \text{Im}(V)\cdot |u|^2.
+\]
+Now, note that if $u(x,t) = r(x,t) \cdot e^{i \phi(x,t)}$, then we have 
+\[
+\Delta u = e^{i\phi}[\Delta r + 2i\nabla r\cdot\nabla\phi - r|\nabla\phi|^2 + i r\Delta\phi],
+\]
+so
+\[
+\overline{u}\Delta u = r(\Delta r - r|\nabla\phi|^2) + i[2r(\nabla r\cdot\nabla\phi) + r^2\Delta\phi].
+\]
+Thus,
+\[
+\text{Im}(\overline{u}\Delta u) = 2r\nabla r\cdot\nabla\phi + r^2\Delta\phi = \nabla\cdot(r^2\nabla\phi),
+\]
+and so 
+\begin{equation}\label{eq:first-eq}
+\partial_t (r^2) = \text{div}(r^2 \nabla \phi) + \text{Im}(V) \cdot r^2. 
+\end{equation}
+Moreover, if we look at the original equation \eqref{eq:schrodinger}, do the same process of multiplying etc. as before, but \emph{adding} the results at the end, we get 
+\[
+\text{Im}(\overline{u} \partial_t u) = \text{Re}(\overline{u} \Delta u) - \text{Re}(V) \cdot |u|^2\iff r^2 \cdot \partial_t \phi = r (\Delta r - r |\nabla \phi|^2) - \text{Re}(V) \cdot r^2, 
+\]
+which is the same as saying that 
+\begin{equation}\label{eq:second-eq}
+    \partial_t \phi + |\nabla \phi|^2= \frac{\Delta r}{r} - \text{Re}(V).
+\end{equation}
+Suppose that $u_1(t),u_2(t)$ are solutions to \eqref{eq:schrodinger} that belong to the class $ C^1(\R^d)$ for all times $t.$ Suppose also that $|u_1(t,x)| = |u_2(t,x)|$ for all $t \in A$, where $|A| = +\infty$ is bounded. Since we know that 
+\[
+|u_1(t)|^2 \equiv |u_2(t)|^2, \, t \in A,
+\]
+it follows from \eqref{eq:first-eq} that - since $A$ contains at least one accummulation point - for some $t_0$ we have 
+\begin{equation}\label{eq:combined}
+0 \equiv\partial_t (|u_1(t_0)|^2 - |u_2(t_0)|^2) = \text{div}(|u_1|^2 \cdot \nabla(\phi_1-\phi_2)),
+\end{equation}
+where $\phi_i$ is the phase function associated with $u_i.$ We then integrate \eqref{eq:combined} over any open set $U$ where $|u_1(t_0)| > 0$, multiplied by $\phi_1 - \phi_2.$ That gives us 
+\[
+\int_U |u_1|^2 |\nabla (\phi_1 - \phi_2)|^2 = 0,
+\]
+as long as we can show that the boundary term is zero. Since the boundary term equals 
+\[
+\int_{\partial U} |u_1(t_0)|^2 (\phi_1 - \phi_2) \nabla(\phi_1-\phi_2)  \cdot \nu_{\partial U}.
+\]
+We note that 
+\[
+\left|\nabla \phi_i\right| = \left|  \frac{\text{Im}(\overline{u_i}\nabla u_i)}{|u_i|^2}\right|,
+\]
+and hence 
+\[
+\left| |u_1(t_0)|^2 (\phi_1 - \phi_2) \nabla(\phi_1-\phi_2)  \cdot \nu_{\partial U} \right| \le 2|u_1(t_0)|^2 \left(\frac{|\nabla u_1|}{|u_1|} + \frac{|\nabla u_2|}{|u_2|} \right).
+\]
+Taking $U$ to be any maximal set where $|u_1(t_0)| > 0$, we see that, over the boundary of $U$, the right-hand side above vanishes, and hence so does the integral - this has to be made slightly more rigorous but hopefully no surprises there. In the end, we get that 
+\[ 
+\int_U |u_1(t_0)|^2 |\nabla(\phi_1 - \phi_2)|^2 \equiv 0 \, \iff \, \phi_1 \equiv \phi_2 + C \text{ over } U. 
+\]
+Now we need to patch things up - that is, we need to show that it cannot happen that over different connected components of the set  
+\begin{equation}\label{eq:non-zero-set}
+U = \{ |u_1(t_0)| > 0\}, 
+\end{equation} 
+there are different constant $A,B \in \R$ such that 
+\[
+\phi_1 - \phi_2 \equiv A \text{ in one component, while }\phi_1 - \phi_2 \equiv B \text{ in the other one.}
+\]
+We now employ a classical theorem due to Masuda \cite{masuda1967unique}: it says that, if a solution of \eqref{eq:schrodinger} is such that the following list of assertions holds, then it cannot vanish on an open set without vanishing identically: 
+\begin{enumerate}
+    \item[(I)] $V$ is time-independent, real-valued and belongs to $L^2_{loc}$;
+    \item[(II)] $V$ is locally $L^{\infty}$, except for a set of measure zero; 
+    \item[(III)] The spectrum of $H := -\Delta + V$ is bounded from below.
+\end{enumerate}
+Under those assumptions, any solution to \eqref{eq:schrodinger} which vanishes on an open set must vanish identically. In order to use this in our favor, consider $u_3 = u_1 - e^{-iA}u_2.$ Since \eqref{eq:schrodinger} is a \emph{linear} equation, we have that $u_3$ is also a solution to \eqref{eq:schrodinger}. Moreover, by hypothesis, we have that $u_3 \equiv 0$ on a connected component of the set $U$ defined before. Hence, by Masuda's result, it follows that $u_3 \equiv 0,$ and we have that $u_1 \equiv u_2 \cdot e^{iA},$ which is the claim we were after. 
+
+\section{Non-linear versions}
+
+In this section, we explore the same problem of phase retrieval as before, but now our main focus will be the \emph{non-linear Schr\"odinger equation}
+\begin{equation}\label{eq:nls}
+i \partial_t u + \Delta u = \lambda |u|^{a-1} \cdot u,
+\end{equation}
+where $a>1$ is a fixed parameter. In anology to what has been done before for the linear case, we see easily that this equation translates in polar coordinates into 
+\begin{align}
+\partial_t (r^2) &= \text{div}(r^2 \nabla \phi) +  \text{Im}(\lambda) r^{a+1},\cr 
+   \partial_t \phi + |\nabla \phi|^2 &= \frac{\Delta r}{r} - \text{Re}(\lambda) r^{a-1}. 
+\end{align}
+By using the same strategy as before, we are able to show that, in each connected component $A_i$ of the set $U$ defined in \eqref{eq:non-zero-set}, two different solutions $u_1,u_2$ to \eqref{eq:nls} which have the same absolute value for a set $A$ of times which is contained in a compact set and is infinite must satisfy that 
+\[
+u_1 \equiv e^{-i\alpha_i} u_2,
+\]
+for some real constant $\alpha_i$. In order to show that $u_1$ differs from $u_2$ by a universal phase parameter, we must show that the constants $\alpha_i$ match, up to integer multiples of $2\pi.$  
+
+In order to show the latter assertion, we first assume that is not the case. We start with a definition. 
+
+\begin{definition} Let $U = \bigcup_i A_i,$ where $A_i$ are maximal connected components, and $U$ is defined by \eqref{eq:non-zero-set}. We say that two such components $A_i,A_j$ are \emph{adjacent at a point} $y_0 \in \overline{A_i}$ if there is a sequence of points $\{x_n\}_n \subset A_j$ with $x_n \to y_0$ as $n \to \infty.$
+\end{definition} 
+
+\begin{definition} Let $S \subset \R^n$ be a closed set, and $x_0 \in \partial S$. We say that $v \in \mathbb{S}^{n-1}$ \emph{ goes out of } $S$ \emph{through $x_0$} if, for each $\delta >0,$ the set $\{x_0 + t \cdot v \colon t  \in (0,\delta)\}$ contains a point in $S^c$, while $\{ x_0 + t \cdot v \colon t \in (-\delta,0)\}$ contains a point in $S.$
+\end{definition}
+
+\begin{lemma} Let $A_1, A_2\subset U$ be maximal connected components of non-vanishing set, which are adjacent to one another at a point $y_0$. Suppose there are two solutions $u_1,u_2 \in C^2(\R^2)$ to \eqref{eq:nls} which satisfy 
+\[
+|u_1(t,x)| = |u_2(t,x)|, \, \forall \, x \in \R^n, \, t \in E,
+\]
+where $E$ is a bounded, infinite set, and $u_2 \equiv u_1 \cdot e^{-i \alpha_1}$ on $A_1,$ while $u_2 \equiv u_2 \cdot e^{-i \alpha_2}$ on $A_2$, where $\alpha_1 - \alpha_2 \not\equiv 0 \mod 2\pi.$
+
+Then we have that $\partial_v u(y_0) = 0$, whenever $v$ is a direction going out of $\overline{A_1}$ through $y_0$. 
+\end{lemma}
+
+\begin{proof} Fix $y_0 \in \partial \overline{A_1}.$ Fix a direction $v \in \mathbb{S}^{n-1}$ going out of $\overline{A_1}$ through $y_0$, and consider $F_{1,v}(t) := u_1(y_0 + t \cdot v), \, t \in [-a,a].$ We have that $F_{1,v}(0) = 0$ by definition, and $F_{1,v}$ is differentiable since we supposes that $u_i \in C^2(\R^2),$ so we either have that this function has derivative zero at $0$, which implies the conclusion directly, or that the function $F_{1,v}$ changes sign at $0$. 
+
+This latter assertion means that $u_1(y_0 + t \cdot v)$ does \emph{not} vanish on a small interval around $0$, except for $t=0$ itself. Since $y_0 \in \partial \overline{A_1}$, if we let 
+\[
+S_{\pm} = \{ y_0 + t \cdot v \, \colon \, \pm t > 0\},
+\]
+since by definition $v$ goes out of $\overline{A_1}$ through $y_0,$ we have some different possibilities: 
+
+\begin{enumerate}
+    \item[(i)] \textit{Case (a):} $S_{\pm} \subset A_1$. This case is allowed to happen for some isolated directions, which is the reason why it will not be the most relevant to us for now. Instead, we look into the other possible case. \\
+
+    \item[(ii)] \textit{Case (b):} $S_{+} \subset A_j$, while $S_- \subset A_1,$ with $j \neq 1$. \\
+
+    In this case, we look at $u_2$ on the same interval: on $S_+$, we have $u_2 = e^{i\alpha_j } u_1,$ while $u_2 = e^{i\alpha_1} u_1$ on the other side. Differentiating both sides with respect to $v$ yields that the function $F_{2,v}(y_0 + t \cdot v)$ is differentiable as well, with derivative at $0$ being equal to $e^{i\alpha_j} F_{1,v}'(0)$ (approaching from one side), which equals $e^{i\alpha_1} F_{1,v}'(0)$ (differentiating from the other one). This shows that $\alpha_j - \alpha_1 \equiv 0 \mod 2\pi $, which shows that we \emph{cannot} have $j=2$ in this situation.
+\end{enumerate}
+
+Now, let us suppose that Case (a) holds for all directions $v$. We claim that this cannot hold. Indeed, since $y_0 \in \partial \overline{A_1},$ we have that there is a succession $\eta_n \to y_0$ with $\eta_n \in (\overline{A_1})^c, \, \forall \, n$. If infinitely many of the $\eta_n$ belong to a certain different connected component $A_2$, then by possibly taking a subsequence we may suppose that the direction of $\eta_n$ converges. By employing the same strategy as before, we obtain a contradiction just like in Case (b). 
+
+The remaining cases to deal with are: 
+
+\begin{enumerate}
+    \item[(i)] There is no single connected component which contains infinitely many elements of the succession $\{\eta_n\}_n$. If that is the case, again passing to a subsequence, assume the direction of the sequence $\eta_n$ converges. Take two points $\eta_j,\eta_k$ in the sequence, each belonging to a different connected component. Then there is a point in the segment joining them at which $u_1$ vanishes - otherwise they would belong to the same component. Let that point be given by $\rho_k$. Since the direction of the sequence converges, and since no connected component contains infinitely many elements of our original sequence, it follows that the sequence $\rho_k$ is infinite and its direction converges. 
+
+    By employing the methods from before we conclude that the directional derivative in that direction vanishes, which contradicts the fact that we found ourselves in Case (a). 
+
+    \item[(ii)] $u_1(\eta_n) \equiv 0.$ In that case, arguing similarly as before, we get a contradiction as well. 
+\end{enumerate}
+
+Our conclusion is that if $A-B \not\equiv 0 \mod \, 2\pi,$ then in all directions $v$ for which we have point in the complement of $\overline{A_1}$ converging to $y_0$ along that direction, the directional derivative with respect to $v$ must vanish. That is, for each direction $v$ going out of $\overline{A_1},$ the directional derivative vanishes. 
+
+By letting $\tilde{u}_1 = u_1 \cdot \mathbb{I}_{A_1},$ we have that $\tilde{u}_1$ is still of class $C^1,$ since by what we showed above the only issues are when we leave the set $A_1$ along a straight line, and in that case we know that the directional derivatives vanish at the boundary of the closure of $A_1$. By employing the same argument, we see that $\tilde{u}_1$ actually is of class $C^2$ if $u_1$ is, hence satisfies \eqref{eq:schrodinger} pointwise as well. 
+
+As we supposed that $U$ has multiple connected components, we conclude that $\tilde{u}_1$ vanishes identically on the ones not equal to $A_1$. This directly implies by the result of Masuda that $\tilde{u}_1 \equiv 0$, and hence $u_1 \equiv 0$, which implies $u_2 \equiv 0$. In other words, whenever the problem we are trying to solve to begin with is not trivial, we can actually solve it. 
+
+\end{proof}
+
+\section{Jaming done fucked it}
+
+We show that phase retrieval fails in $\mathbb{R}^2$ for Schrodinger, disproving Jaming's theorem.
+\medskip
+
+Let $\phi(x)=e^{-x^2/2}$ and $\psi(x)=-\phi'(x)=xe^{-x^2/2}.$
+Define $a(x_1,x_2)=\phi(x_1)\psi(x_2)$, $b(x_1,x_2)=\psi(x_1)\phi(x_2).$ Consider initial data as $f=a+ib$ and $g=a-ib$. Note that these data are Schwartz on $\mathbb{R}^2$ and are not multiples of each other.
+\medskip
+
+ We seek to prove that the evolved states always have the same absolute value. Let $U_d(t)=e^{it\Delta_d}$ be the Schrodinger propagator on $\mathbb{R}^d$. We claim that if $u,v\in \mathcal{S}(\mathbb{R})$ and $(u\otimes v)(x_1,x_2)=u(x_1)v(x_2)$ then $$U_2(t)(u\otimes v)=(U_1(t)u)\otimes (U_1(t)v).$$
+ This should follow as $\widehat{u\otimes v}(\xi_1,\xi_2)=\widehat{u}(\xi_1)\widehat{v}(\xi_2)$ and because the propagator splits.
+ \medskip
+
+ We thus conclude that $U_2(t)a=(U_1(t)\phi)\otimes (U_1(t)\psi)$ and $U_2(t)b=(U_1(t)\psi)\otimes (U_1(t)\phi)$.
+ \medskip
+
+ We now explicitly compute that for $t\in \mathbb{R}$ we have 
+ $$(U_1(t)\phi)(x)=(1+2it)^{-1/2}\exp(-\frac{x^2}{2(1+2it)}).$$
+ Note that when $t=0$ we get the right answer, and explicit computation also shows that this function solves the equation $i\partial_tu+\partial_x^2u=0.$
+\medskip
+
+To compute $(U_1(t)\psi)(x)$ we note that Fourier multipliers commute and $\psi=-\phi'$ so that 
+$$(U_1(t)\psi)(x)=\frac{x}{1+2it} (U_1(t)\phi)(x).$$
+Define
+$$A_t(x)=(1+2it)^{-1/2}\exp(-\frac{x^2}{2(1+2it)})$$
+We have 
+$$U_2(t)a(x_1,x_2)=A_t(x_1)A_t(x_2)\frac{x_2}{1+2it} $$
+and 
+$$U_2(t)b(x_1,x_2)=A_t(x_1)A_t(x_2)\frac{x_1}{1+2it}. $$
+Hence, 
+$$U_2(f)(x_1,x_2)=A_t(x_1)A_t(x_2)\frac{x_2+ix_1}{1+2it}$$ and 
+$$U_2(g)(x_1,x_2)=A_t(x_1)A_t(x_2)\frac{x_2-ix_1}{1+2it}$$ 
+which have the same absolute value for all times.
+
+ \printbibliography
+\end{document}

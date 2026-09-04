@@ -1,0 +1,833 @@
+\documentclass[11pt]{amsart}
+
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[protrusion=true,expansion=false]{microtype}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue,
+            hypertexnames=false]{hyperref}
+
+\newtheorem{mainresult}{Theorem}
+\renewcommand{\themainresult}{\Alph{mainresult}}
+\newtheorem{maincorollary}[mainresult]{Corollary}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\T}{\mathbb T}
+\newcommand{\HH}{\mathcal H}
+\newcommand{\Sc}{\mathcal S}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\Ran}{\operatorname{Ran}}
+\newcommand{\ac}{\mathrm{ac}}
+\newcommand{\pp}{\mathrm{pp}}
+\newcommand{\Id}{\mathrm{Id}}
+\newcommand{\D}{\mathcal D}
+\newcommand{\1}{\mathbf 1}
+\newcommand{\loc}{\mathrm{loc}}
+
+\title{Phase retrieval for Schr\"odinger evolutions}
+\author{Ben Pineau}
+\author{João P. G. Ramos}
+\author{Mitchell A. Taylor}
+\date{}
+
+\begin{document}
+\raggedbottom
+
+\begin{abstract}
+Let $I\subset\mathbb R$ be a nonempty open interval.  We prove that two
+$L^2$ solutions of the one-dimensional Schr\"odinger equation with the same
+real potential are equal up to one constant unimodular factor whenever their
+moduli agree on $I\times\mathbb R$.  The potential may depend on time and is
+assumed locally to belong to
+$L^1_tL^\infty_x+L^2_{t,x}$; no spatial decay is required.  The result yields
+phase retrieval for the cubic nonlinear Schr\"odinger equation in the global
+$L^2$ class.  The conclusion is false for the free equation in every spatial
+dimension at least two, even for Schwartz initial data.
+\end{abstract}
+
+\maketitle
+
+\tableofcontents
+
+\section{Introduction and main results}
+
+Let $I_0\subset\mathbb R$ be a nonempty open interval.  We consider two
+solutions of
+\[
+ if_t+f_{xx}=Vf
+\]
+with the same real potential.  The principal result requires neither spatial
+decay of $V$ nor finite energy of the solutions.
+
+\begin{mainresult}[Common time-dependent potentials]
+\label{thm:time-potential}
+Suppose that the measurable function
+$V:I_0\times\mathbb R\to\mathbb R$ has, on every bounded interval
+$J\Subset I_0$, a decomposition
+\[
+ V=V_\infty+V_2,
+ \qquad
+ V_\infty\in L^1(J;L^\infty(\mathbb R)),
+ \qquad
+ V_2\in L^2(J\times\mathbb R).
+\]
+Let $u,v\in C(I_0;L^2(\mathbb R))$ be mild solutions of
+\[
+ if_t+f_{xx}=Vf.
+\]
+If
+\[
+ |u(t,x)|=|v(t,x)|
+ \quad\text{for almost every }(t,x)\in I_0\times\mathbb R,
+\]
+then $v=\zeta u$ on $I_0\times\mathbb R$ for some
+$\zeta\in\mathbb T$.
+\end{mainresult}
+
+If the potential and both solutions extend globally, uniqueness propagates
+the conclusion to every time.  The theorem also applies to nonlinear
+equations whenever equality of the moduli makes their nonlinear potentials
+identical.  This gives the following consequence.
+
+\begin{maincorollary}[Cubic nonlinear Schr\"odinger equation]
+\label{cor:cubic-NLS}
+Let $\sigma\in\mathbb R$, and let
+$u,v\in C(\mathbb R;L^2(\mathbb R))$ be global mild solutions of
+\[
+ if_t+f_{xx}=\sigma|f|^2f.
+\]
+If $|u|=|v|$ almost everywhere on $I_0\times\mathbb R$, then
+$v=\zeta u$ for every time and some $\zeta\in\mathbb T$.
+\end{maincorollary}
+
+The one-dimensional restriction cannot be removed.
+
+\setcounter{mainresult}{5}
+\begin{mainresult}[Failure in higher dimensions]
+\label{thm:higher-dimensional-failure}
+For every $d\ge2$ there are nonproportional functions
+$f,g\in\mathcal S(\mathbb R^d)$ such that
+\[
+ |e^{it\Delta}f(x)|=|e^{it\Delta}g(x)|
+ \quad\text{for every }(t,x)\in\mathbb R\times\mathbb R^d.
+\]
+\end{mainresult}
+
+The proof of Theorem~\ref{thm:time-potential} uses the Strichartz and
+local-smoothing estimates and a stripwise form of the Ionescu--Kenig Carleman
+estimate.  These three external inputs are stated in the forms needed below.
+Every deduction from them is proved.
+
+All nonsmooth identities are distributional unless another meaning is
+specified.  If $f\in H^{1/2}_{\mathrm{loc}}(\mathbb R)$, products such as
+$\overline f f_x$ are interpreted by localized
+$H^{-1/2}$--$H^{1/2}$ duality.  We take Hilbert-space inner products to be
+linear in the first variable.
+
+
+\section{A physical-space theorem for time-dependent potentials}
+
+Fix the potential, the solutions, and the interval $I_0$ from
+Theorem~\ref{thm:time-potential}.  On every bounded interval
+$I\Subset I_0$ we use a decomposition
+\[
+ V=V_\infty+V_2,
+ \qquad
+ V_\infty\in L^1(I;L^\infty(\R)),
+ \qquad
+ V_2\in L^2(I\times\R).
+ \tag{1.1}\label{eq:potential-decomposition}
+\]
+The common equation is
+\[
+ if_t+f_{xx}=Vf.
+ \tag{1.2}\label{eq:linear-time-potential}
+\]
+Here ``mild'' means that, for $t_0,t\in I$,
+\[
+ f(t)=e^{i(t-t_0)\partial_x^2}f(t_0)
+ -i\int_{t_0}^t e^{i(t-s)\partial_x^2}(V(s)f(s))\,ds.
+\]
+The products satisfy
+\[
+ V_\infty f\in L^1(I;L^2),
+ \qquad
+ V_2f\in L^2(I;L^1)\subset L^{4/3}(I;L^1),
+\]
+by H\"older's inequality and $f\in C(I;L^2)$.  The Duhamel integral is
+interpreted using this decomposition.
+
+We use the following local form of the half-space propagation argument of
+Ionescu--Kenig~\cite{IonescuKenig}.
+
+\begin{proposition}[Stripwise half-space propagation]
+\label{prop:strip-propagation}
+Let $J$ be a compact interval, $z=(z_1,z_2)\in\R^2$, and
+$\mathcal H=i\partial_t+\Delta_z$.  Put
+\begin{align*}
+ X&=L^1(J;L^2(\R^2))+L^{4/3}(J\times\R^2),\\
+ X'&=L^\infty(J;L^2(\R^2))\cap L^4(J\times\R^2),\\
+ Y&=L^1(J;L^\infty(\R^2))+L^2(J\times\R^2).
+\end{align*}
+The sum norm on $X$ and $Y$ is the infimum over all decompositions into the
+two displayed summands; the intersection norm on $X'$ is the maximum of the
+two norms.  There is an absolute $\varepsilon_*>0$ with the following
+property.  Suppose
+$Z\in C(J;L^2)\cap X'$, $\mathcal HZ=WZ\in X$, and
+$Z=0$ on $J\times\{z_1>b\}$.  If for some $h>0$
+\[
+ \sup_{a\le b-h}
+ \|\1_{\{a<z_1<a+h\}}W\|_Y\le\varepsilon_*,
+ \tag{1.3}\label{eq:strip-smallness}
+\]
+then $Z=0$ on $J\times\R^2$.
+\end{proposition}
+
+\begin{proof}
+The multiplier estimate used in the two-dimensional Schr\"odinger Carleman
+inequality follows from two applications of H\"older's inequality.  If
+$A=A_\infty+A_2$ with
+$A_\infty\in L^1_tL^\infty_z$ and $A_2\in L^2_{t,z}$, then
+\begin{align*}
+ \|A_\infty B\|_{L^1_tL^2_z}
+ &\le\|A_\infty\|_{L^1_tL^\infty_z}
+       \|B\|_{L^\infty_tL^2_z},\\
+ \|A_2B\|_{L^{4/3}_{t,z}}
+ &\le\|A_2\|_{L^2_{t,z}}\|B\|_{L^4_{t,z}}.
+\end{align*}
+Taking the infimum over decompositions of $A$ gives
+\[
+ \|AB\|_X\le
+ \|A\|_Y\|B\|_{X'}.
+ \tag{1.4}\label{eq:XY-multiplier}
+\]
+Apply the bounded-weight estimate in
+\cite[Lemma~9.1 and the proof of Theorem~2.5]{IonescuKenig} after translating
+the plane $z_1=b$ to $z_1=0$.  Its potential term is bounded by
+\eqref{eq:XY-multiplier} and is absorbed when its $Y$ norm is at most
+$\varepsilon_*$.  After the potential term has been absorbed, the Carleman parameter may tend
+to infinity.  The weighted estimate then shows that a solution which vanishes
+on $z_1>b$ also vanishes on $z_1>b-h$.
+
+For precision, the time-dependent translation used in the cited proof is
+$z_1=y_1+w_\delta(t)$, where $w_\delta=b$ near the endpoints of $J$ and
+$w_\delta=b-h$ away from them.  Conjugation by
+$e^{-iw_\delta'(t)y_1/2}$ removes the first-order term.  The remaining affine
+term $w_\delta''(t)y_1/2$ is controlled by the coercive bounded weight in that
+lemma.  No potential outside the strip $b-h<z_1<b$ occurs because $Z$ already
+vanishes to its right.  Letting the Carleman parameter tend to infinity and
+then $\delta\downarrow0$ gives the asserted enlargement of the zero set.
+Iteration over the planes $z_1=b-jh$, $j\ge1$, gives
+\[
+ Z=0\quad\text{on }\{z_1>b-jh\}\times J
+ \quad(j=0,1,2,\ldots).
+\]
+The union of these half-spaces is $\R^2$, which proves $Z=0$.  This proposition
+is the only place where the Ionescu--Kenig Carleman estimate is imported.
+\end{proof}
+
+We next recover the normal Cauchy data needed to create a half-space solution.
+
+\begin{lemma}[Endpoint current and Wronskian]
+\label{lem:endpoint-wronskian}
+Under the hypotheses of Theorem~\ref{thm:time-potential}, on every bounded
+interval $I\Subset I_0$ one has
+\[
+ u,v\in L^4(I;L^\infty(\R)),
+ \qquad
+ \chi u,\chi v\in L^2(I;H^{1/2}(\R))
+ \quad(\chi\in C_c^\infty(\R)).
+ \tag{1.5}\label{eq:linear-endpoint-regularity}
+\]
+Moreover, for almost every $t\in I_0$,
+\[
+ \overline u\,u_x=\overline v\,v_x,
+ \qquad
+ v u_x-u v_x=0
+ \quad\text{in }\D'(\R_x),
+ \tag{1.6}\label{eq:current-wronskian}
+\]
+where the first product is interpreted by
+$H^{-1/2}$--$H^{1/2}$ duality.
+\end{lemma}
+
+\begin{proof}
+Fix $I=[a,b]$.  The one-dimensional admissible endpoint is
+$(q,r)=(4,\infty)$, since $2/q+1/r=1/2$.  The homogeneous and inhomogeneous
+Strichartz estimates~\cite{KeelTao} give
+\begin{align*}
+ \|e^{i(t-a)\partial_x^2}f(a)\|_{L^4_tL^\infty_x(I)}
+ &\lesssim\|f(a)\|_2,\\
+ \left\|\int_a^t e^{i(t-s)\partial_x^2}F(s)\,ds
+ \right\|_{L^4_tL^\infty_x(I)}
+ &\lesssim\|F\|_{L^1_tL^2_x+L^{4/3}_tL^1_x}.
+\end{align*}
+Apply these estimates to the Duhamel formula.  For either solution $f$, this
+gives
+\begin{align*}
+ \|f\|_{L^4_tL^\infty_x(I)}
+ \lesssim_I{}&\|f\|_{L^\infty_tL^2_x(I)}
+ +\|V_\infty\|_{L^1_tL^\infty_x(I)}
+       \|f\|_{L^\infty_tL^2_x(I)}\\
+ &+|I|^{1/4}\|V_2\|_{L^2_{t,x}(I\times\R)}
+       \|f\|_{L^\infty_tL^2_x(I)}.
+\end{align*}
+For the last term, H\"older's inequality in $x$ gives
+\[
+ \|V_2(t)f(t)\|_1\le\|V_2(t)\|_2\|f(t)\|_2.
+\]
+The function $t\mapsto\|V_2(t)\|_2$ belongs to $L^2(I)$, and
+$L^2(I)\subset L^{4/3}(I)$ with norm at most $|I|^{1/4}$.  This proves the
+displayed Strichartz bound.  Since $L^4(I)\subset L^2(I)$ on a bounded
+interval, we also obtain
+\begin{align*}
+ \|V_2f\|_{L^1_tL^2_x}
+ &\le \|V_2\|_{L^2_{t,x}}\|f\|_{L^2_tL^\infty_x}<\infty,\\
+ \|V_\infty f\|_{L^1_tL^2_x}
+ &\le \|V_\infty\|_{L^1_tL^\infty_x}
+       \|f\|_{L^\infty_tL^2_x}<\infty.
+\end{align*}
+The local-smoothing estimate~\cite{VegaVisciglia} states that, for
+$\chi\in C_c^\infty(\R)$,
+\[
+ \|\chi e^{it\partial_x^2}g\|_{L^2(I;H^{1/2})}
+ \le C_{I,\chi}\|g\|_2.
+\]
+Apply this estimate to the homogeneous term in the Duhamel formula.  For the
+inhomogeneous term, apply it for each fixed forcing time $s$ and then use
+Minkowski's integral inequality.  The two preceding $L^1_tL^2_x$ bounds give
+\[
+ \left\|\chi\int_a^t e^{i(t-s)\partial_x^2}(Vf)(s)\,ds
+ \right\|_{L^2_tH^{1/2}_x}
+ \lesssim_{I,\chi}\|Vf\|_{L^1_tL^2_x}.
+\]
+This proves \eqref{eq:linear-endpoint-regularity}.  For the remainder of the
+proof, take a bounded interval $I$ with $\overline I\subset I_0$.
+
+For $f\in H^{1/2}_{\loc}\cap L^\infty_{\loc}$ define
+\[
+ \langle\overline f f_x,\phi\rangle
+ :=\langle f_x,\phi\overline f\rangle_{H^{-1/2},H^{1/2}},
+ \qquad \phi\in C_c^\infty(\R).
+\]
+This pairing is well-defined.  After inserting a cutoff equal to one on
+$\supp\phi$, multiplication by $\phi$ maps
+$H^{1/2}\cap L^\infty$ into $H^{1/2}$, while differentiation maps
+$H^{1/2}$ into $H^{-1/2}$.  Its time integral is finite because the local
+$H^{1/2}$ norm belongs to $L^2(I)$.
+The continuity equation
+\[
+ \partial_t|f|^2+2\partial_x\Im(\overline f f_x)=0
+ \tag{1.7}\label{eq:continuity-general}
+\]
+holds in distributions.  It follows by smoothing the equation; the potential
+term cancels because $V$ is real, and all remaining terms converge by
+\eqref{eq:linear-endpoint-regularity}.  If $\phi\in C_c^\infty(\R)$ and
+$a(x)=\int_{-\infty}^x\phi(y)\,dy$, then $a$ is bounded and $a'=\phi$.
+Although $a$ need not have compact support, it is a bounded Lipschitz
+multiplier and $a'=\phi$ is compactly supported.  One may therefore test the
+weak equation directly against a temporal regularization of
+$\eta(t)a(x)\overline{f(t,x)}$.  Multiplication by $a$ is bounded on
+$H^{1/2}$, the potential contribution is real and cancels after taking the
+imaginary part, and all remaining pairings are integrable in time by
+\eqref{eq:linear-endpoint-regularity}.  Approximation by smooth functions
+then gives
+\[
+ -\int_I\eta'(t)\int_\R a(x)|f(t,x)|^2\,dx\,dt
+ =2\int_I\eta(t)
+ \langle\Im(\overline f f_x),\phi\rangle\,dt.
+\]
+Equivalently,
+\[
+ \frac d{dt}\int_\R a|f|^2
+ =2\langle\Im(\overline f f_x),\phi\rangle
+ \tag{1.8}\label{eq:localized-continuity-general}
+\]
+in $\D'(I)$.  The left sides for $u$ and $v$ agree because their densities agree.  Hence
+\[
+ \int_I\eta(t)
+ \langle\Im(\overline u u_x-\overline v v_x),\phi\rangle\,dt=0
+\]
+for every $\eta\in C_c^\infty(I)$ and every spatial test function $\phi$.
+Choose a countable dense family of spatial test functions.  After removing
+one null set of times, the current identity holds for every member of this
+family and therefore, by continuity of the distributional pairing, for every
+$\phi$.  Their real parts agree because the distributional product rule gives
+\[
+ 2\Re(\overline f f_x)=\partial_x|f|^2.
+\]
+This rule follows by approximating $f$ in local $H^{1/2}$ while retaining its
+local $L^\infty$ bound, or directly from the Gagliardo product estimate.  We
+have proved the first identity in \eqref{eq:current-wronskian} for almost every
+time.
+
+We prove the second identity without division by $u$ at its zeros.  The
+following one-dimensional fact is used at almost every time.  Suppose
+$f,g\in H^{1/2}_{\loc}\cap L^\infty_{\loc}$,
+$|f|=|g|$, and $\overline f f'=\overline g g'$ as quadratic-form
+distributions.  After multiplying both functions by a common smooth cutoff which equals one
+near the test-function support, assume
+$f,g\in H^{1/2}\cap L^\infty$.  The hypotheses are preserved: the additional
+term in each logarithmic derivative is the same because $|f|=|g|$.  Put
+\[
+ \rho=|f|^2=|g|^2,
+ \quad s_\varepsilon=\frac{\rho}{\rho+\varepsilon},
+ \quad h_\varepsilon=\frac{fg}{\rho+\varepsilon}.
+\]
+The Gagliardo seminorm is
+\[
+ [a]_{H^{1/2}}^2=\iint_{\R^2}
+ \frac{|a(x)-a(y)|^2}{|x-y|^2}\,dx\,dy.
+\]
+It shows directly that a Lipschitz map fixing zero acts continuously on
+$H^{1/2}$, and that $H^{1/2}\cap L^\infty$ is an algebra.  Hence
+$h_\varepsilon$, $s_\varepsilon f$, and $s_\varepsilon g$ are admissible
+localized $H^{1/2}$ multipliers.  Since
+\[
+ \overline f h_\varepsilon=s_\varepsilon g,
+ \qquad
+ \overline g h_\varepsilon=s_\varepsilon f,
+\]
+testing the logarithmic-derivative identity against
+$h_\varepsilon\phi$ gives
+\[
+ \langle f',s_\varepsilon g\phi\rangle
+ -\langle g',s_\varepsilon f\phi\rangle=0.
+\]
+Thus, with $T_\varepsilon(z)=\varepsilon z/(|z|^2+\varepsilon)$,
+\[
+ \langle gf'-fg',\phi\rangle
+ =\langle f',T_\varepsilon(g)\phi\rangle
+  -\langle g',T_\varepsilon(f)\phi\rangle.
+\]
+The maps $T_\varepsilon$ are uniformly Lipschitz, vanish at zero, and satisfy
+$|T_\varepsilon(z)|\le\sqrt\varepsilon/2$.  Thus they converge pointwise to
+zero.  Moreover,
+\[
+ \frac{|T_\varepsilon(f(x))-T_\varepsilon(f(y))|^2}{|x-y|^2}
+ \le C\frac{|f(x)-f(y)|^2}{|x-y|^2},
+\]
+with $C$ independent of $\varepsilon$.  The Gagliardo formula and dominated
+convergence give
+$T_\varepsilon(f),T_\varepsilon(g)\to0$ in $H^{1/2}_{\loc}$.  After
+multiplication by the fixed test function $\phi$, duality gives
+\begin{align*}
+ |\langle f',T_\varepsilon(g)\phi\rangle|
+ &\le \|f'\|_{H^{-1/2}(K)}
+       \|T_\varepsilon(g)\phi\|_{H^{1/2}},\\
+ |\langle g',T_\varepsilon(f)\phi\rangle|
+ &\le \|g'\|_{H^{-1/2}(K)}
+       \|T_\varepsilon(f)\phi\|_{H^{1/2}},
+\end{align*}
+where $K$ contains $\supp\phi$.  Both right sides tend to zero.  Passing to
+the limit proves $gf'-fg'=0$.  Apply this with $f=u(t)$ and $g=v(t)$ on the common
+full-measure set supplied by \eqref{eq:linear-endpoint-regularity} and the
+first identity in \eqref{eq:current-wronskian}.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:time-potential}]
+Fix a bounded interval $I$ with $\overline I\subset I_0$.  On this interval
+set $\rho=|u|^2=|v|^2$ and define the exterior product
+\[
+ F(t,x,y)=u(t,x)v(t,y)-v(t,x)u(t,y).
+ \tag{1.9}\label{eq:exterior-product}
+\]
+The two tensor products in \eqref{eq:exterior-product} belong to
+$C(I;L^2(\R^2))$, because
+$\|a\otimes b\|_{L^2(\R^2)}=\|a\|_2\|b\|_2$.  Apply
+$i\partial_t+\partial_x^2+\partial_y^2$ to each term.  For instance,
+\begin{align*}
+ &(i\partial_t+\partial_x^2+\partial_y^2)
+   (u(t,x)v(t,y))\\
+ &\qquad=V(t,x)u(t,x)v(t,y)+V(t,y)u(t,x)v(t,y).
+\end{align*}
+The identical calculation for $v(t,x)u(t,y)$ gives
+\[
+ iF_t+F_{xx}+F_{yy}=(V(t,x)+V(t,y))F
+ \tag{1.10}\label{eq:exterior-equation}
+\]
+in distributions.  The calculation is justified by inserting smooth
+approximations in the mild equation and passing to the limit in the spaces
+established below.  On each bounded interval $I$,
+\[
+ F\in C(I;L^2(\R^2))\cap L^4(I\times\R^2).
+ \tag{1.11}\label{eq:exterior-class}
+\]
+Indeed, interpolation between $L^\infty_tL^2_x$ and
+$L^4_tL^\infty_x$ with equal weights gives
+\[
+ \|f\|_{L^8_tL^4_x}
+ \le\|f\|_{L^\infty_tL^2_x}^{1/2}
+     \|f\|_{L^4_tL^\infty_x}^{1/2}.
+\]
+Consequently
+\begin{align*}
+ \|u(x)v(y)\|_{L^4_{t,x,y}}^4
+ &=\int_I\int_\R\int_\R|u(t,x)|^4|v(t,y)|^4\,dx\,dy\,dt\\
+ &=\int_I\|u(t)\|_4^4\|v(t)\|_4^4\,dt\\
+ &\le\|u\|_{L^8_tL^4_x}^4\|v\|_{L^8_tL^4_x}^4<\infty.
+\end{align*}
+The same estimate holds for $v(x)u(y)$.
+Moreover, the right side of \eqref{eq:exterior-equation} belongs to
+$L^1(I;L^2(\R^2))$.  For example, Fubini's theorem gives
+\begin{align*}
+ &\|V_2(t,x)u(t,x)v(t,y)\|_{L^2_{x,y}}\\
+ &\qquad=\|V_2(t)u(t)\|_{L^2_x}\|v(t)\|_{L^2_y}
+ \le\|V_2(t)\|_2\|u(t)\|_\infty\|v(t)\|_2.
+\end{align*}
+The last expression is integrable in $t$ by Cauchy--Schwarz, because
+$V_2\in L^2_tL^2_x$, $u\in L^2_tL^\infty_x$, and
+$v\in L^\infty_tL^2_x$.  For $V_\infty$, use
+\[
+ \|V_\infty(t,x)u(t,x)v(t,y)\|_2
+ \le\|V_\infty(t)\|_\infty\|u(t)\|_2\|v(t)\|_2
+\]
+and $V_\infty\in L^1_tL^\infty_x$.  The terms with $x$ and $y$ interchanged
+are identical.
+
+Introduce orthogonal coordinates
+\[
+ r=\frac{x+y}{\sqrt2},
+ \qquad s=\frac{x-y}{\sqrt2}.
+\]
+Then
+\[
+ iF_t+F_{rr}+F_{ss}=QF,
+ \qquad
+ Q(t,r,s)=V\!\left(t,\frac{r+s}{\sqrt2}\right)
+          +V\!\left(t,\frac{r-s}{\sqrt2}\right).
+ \tag{1.12}\label{eq:rotated-exterior}
+\]
+Interchanging $x$ and $y$ changes the sign of $F$.  In the new coordinates
+this interchange fixes $r$ and sends $s$ to $-s$.  Therefore
+\[
+ F(t,r,-s)=-F(t,r,s).
+\]
+We claim that both of its Cauchy traces at $s=0$ vanish.  For $\psi\in C_c^\infty(I\times\R_r)$ set
+\[
+ H_\psi(s)=\langle F(\cdot,\cdot,s),\psi\rangle_{t,r}.
+\]
+Cauchy--Schwarz in $(t,r)$ and Fubini's theorem give
+$H_\psi\in L^2_{\loc}(\R_s)$.  Pairing
+\eqref{eq:rotated-exterior} with $\psi$ and integrating by parts in $t$ and
+$r$ gives, in distributions of $s$,
+\[
+ H_\psi''(s)
+ =\langle QF,\psi\rangle_{t,r}
+ +\langle F,i\psi_t-\psi_{rr}\rangle_{t,r}.
+ \tag{1.12a}\label{eq:scalar-trace-equation}
+\]
+For a compact $s$-interval, Minkowski's inequality bounds the first term in
+$L^2_s$ by a constant times $\|QF\|_{L^1_tL^2_{r,s}}$; the second is bounded
+by $\|F\|_{L^1_tL^2_{r,s}}$.  Thus $H_\psi''\in L^2_{\loc}(\R_s)$.  The
+one-dimensional Fourier characterization of Sobolev spaces now gives
+$H_\psi\in H^2_{\loc}(\R_s)$.  Such a function and its first derivative have
+continuous representatives, so both traces at $s=0$ exist.  Oddness gives
+$H_\psi(0)=0$.
+
+For $z=(r-s)/\sqrt2$,
+\begin{align*}
+ H_\psi(s)=\sqrt2\iint
+ &[u(t,z+\sqrt2s)v(t,z)-v(t,z+\sqrt2s)u(t,z)]\\
+ &\hspace{28mm}\times\psi(t,\sqrt2z+s)\,dz\,dt.
+\end{align*}
+For $f\in H^{1/2}$,
+\[
+ \frac{f(\cdot+h)-f}{h}\longrightarrow f_x
+ \quad\text{in }H^{-1/2}.
+\]
+Indeed, on the Fourier-transform side the multiplier is
+$(e^{ih\xi}-1)/h$, which converges pointwise to $i\xi$ and is bounded by
+$|\xi|$.  Dominated convergence with the $H^{1/2}$ weight proves the claim.
+After inserting cutoffs supported near the projection of $\supp\psi$, pair
+this convergence with the other local $H^{1/2}$ factor.  The difference
+quotients are uniformly bounded from $H^{1/2}$ to $H^{-1/2}$, while the two
+local $H^{1/2}$ norms belong to $L^2_t$.  Cauchy--Schwarz in time therefore
+justifies passage to the limit under the temporal integral.  The term obtained by
+differentiating $\psi(t,\sqrt2z+s)$ vanishes at $s=0$ because the bracket in
+the preceding display vanishes there.  Lemma
+\ref{lem:endpoint-wronskian} gives
+\[
+ H_\psi'(0)=2\iint(vu_x-uv_x)(t,z)\psi(t,\sqrt2z)\,dz\,dt=0.
+\]
+Thus the zero extension
+\[
+ G(t,r,s)=\1_{\{s>0\}}F(t,r,s)
+\]
+solves the same equation on all of $I\times\R^2$.  Indeed, the distributional
+jump formula is
+\[
+ \partial_s^2(\1_{\{s>0\}}F)
+ =\1_{\{s>0\}}F_{ss}
+  +\delta_{s=0}F_s|_{s=0}+\delta'_{s=0}F|_{s=0}.
+\]
+Both boundary distributions vanish by the two trace identities.  Therefore
+\[
+ iG_t+G_{rr}+G_{ss}=QG.
+\]
+Multiplication by a half-space characteristic function is a bounded operator
+on $L^2$, so $G\in C(I;L^2)$.  It also preserves the $L^4$ bound, and
+$QG\in L^1_tL^2$ by the estimate already proved for $QF$.
+
+It remains to apply Proposition~\ref{prop:strip-propagation}.  Choose a compact
+subinterval $J\subset I$ so short that
+\[
+ 2\|V_\infty\|_{L^1(J;L^\infty)}<\varepsilon_*/2.
+\]
+For $S_{a,h}=\{(r,s):a<s<a+h\}$, Fubini's theorem and the substitution
+$x=(r+s)/\sqrt2$, for which $dr=\sqrt2\,dx$, give
+\begin{align*}
+ &\left\|\1_{S_{a,h}}
+ V_2\!\left(t,\frac{r+s}{\sqrt2}\right)\right\|_{L^2_{t,r,s}}^2\\
+ &\quad=\int_J\int_a^{a+h}\int_\R
+ \left|V_2\!\left(t,\frac{r+s}{\sqrt2}\right)\right|^2dr\,ds\,dt\\
+ &\quad=\sqrt2h\int_J\int_\R|V_2(t,x)|^2\,dx\,dt
+ =\sqrt2h\|V_2\|_{L^2(J\times\R)}^2.
+ \tag{1.13}\label{eq:ridge-strip}
+\end{align*}
+and the same identity holds for the second ridge.  Choose $h>0$ so that their
+combined $L^2$ norm is below $\varepsilon_*/2$.  After reflecting $s$ to make
+the zero half-space $z_1>0$, estimates \eqref{eq:ridge-strip} and
+\eqref{eq:potential-decomposition} verify \eqref{eq:strip-smallness}.
+Proposition~\ref{prop:strip-propagation} gives $G=0$.  Oddness then gives
+$F=0$ almost everywhere on $J\times\R^2$.  Since
+$F\in C(J;L^2(\R^2))$, it follows that $F(t)=0$ in $L^2(\R^2)$ for every
+$t\in J$.
+
+Choose $t_0\in J$.  If $u(t_0)=0$, equal density gives $v(t_0)=0$; the
+uniqueness argument below then gives $u=v=0$ on $I_0$, and one may take
+$\zeta=1$.  Suppose instead that $u(t_0)\ne0$.  Choose $x_0$ in a full-measure
+set on which $u(t_0,x_0)\ne0$ and the identity
+$F(t_0,x_0,y)=0$ holds for almost every $y$.  Then
+\[
+ v(t_0,y)=\frac{v(t_0,x_0)}{u(t_0,x_0)}u(t_0,y)
+ \quad\text{for almost every }y.
+\]
+Thus $v(t_0)=\zeta u(t_0)$ for a scalar $\zeta$.  Equality of the densities,
+or merely of the $L^2$ norms, gives $|\zeta|=1$.
+
+We finally spell out uniqueness.  If two mild solutions have the same value at
+one endpoint of a sufficiently short interval $K$, their difference $w$
+satisfies the homogeneous Duhamel equation.  The homogeneous and inhomogeneous
+Strichartz estimates, together with the estimates used in
+Lemma~\ref{lem:endpoint-wronskian}, give
+\[
+ \|w\|_{L^\infty_tL^2_x(K)\cap L^4_tL^\infty_x(K)}
+ \le C\bigl(
+ \|V_\infty\|_{L^1_tL^\infty_x(K)}
+ +|K|^{1/4}\|V_2\|_{L^2_{t,x}(K)}\bigr)
+ \|w\|_{L^\infty_tL^2_x(K)\cap L^4_tL^\infty_x(K)}.
+\]
+By absolute continuity of the two potential norms, $K$ may be chosen so that
+the coefficient on the right is less than one.  Hence $w=0$ on $K$.
+Partitioning each compact subinterval of $I_0$ into finitely many such pieces
+extends uniqueness forward and backward from $t_0$.  Since multiplication by a
+constant commutes with the linear equation, $v$ and $\zeta u$ have the same
+initial value at $t_0$ and therefore agree throughout $I_0$.
+\end{proof}
+
+\section{The cubic nonlinear equation}
+
+We prove Corollary~\ref{cor:cubic-NLS}.  Its equation is
+\[
+ if_t+f_{xx}=\sigma|f|^2f.
+ \tag{2.1}\label{eq:cubic-NLS}
+\]
+The mild solutions are the standard $L^2$ Strichartz solutions obtained from
+the Duhamel formula.
+
+\begin{proof}[Proof of Corollary~\ref{cor:cubic-NLS}]
+Fix a bounded interval $I$.  A pair $(q,r)$ is Schr\"odinger-admissible in
+one dimension if
+\[
+ \frac2q+\frac1r=\frac12,
+ \qquad 2\le q,r\le\infty.
+\]
+The pair $(8,4)$ is admissible.  On a time interval $K$, the homogeneous and
+inhomogeneous Strichartz estimates~\cite{KeelTao} give
+\[
+ \left\|e^{i(t-t_0)\partial_x^2}f(t_0)
+ -i\sigma\int_{t_0}^te^{i(t-s)\partial_x^2}|f(s)|^2f(s)\,ds
+ \right\|_{L^\infty_tL^2_x\cap L^8_tL^4_x}
+ \lesssim \|f(t_0)\|_2
+ +|\sigma|\,\||f|^2f\|_{L^{8/7}_tL^{4/3}_x}.
+\]
+For the nonlinear term, H\"older's inequality in space and the finite-measure
+embedding in time give
+\begin{align*}
+ \||f|^2f\|_{L^{8/7}_tL^{4/3}_x(K)}
+ &\le |K|^{1/2}
+       \||f|^2f\|_{L^{8/3}_tL^{4/3}_x(K)}\\
+ &=|K|^{1/2}\|f\|_{L^8_tL^4_x(K)}^3.
+ \tag{2.2}\label{eq:NLS-fixed-point-estimate}
+\end{align*}
+The pointwise inequality
+\[
+ \bigl||z|^2z-|w|^2w\bigr|
+ \le C(|z|^2+|w|^2)|z-w|
+\]
+and the same H\"older estimate give
+\begin{align*}
+ &\||f|^2f-|g|^2g\|_{L^{8/7}_tL^{4/3}_x(K)}\\
+ &\qquad\le C|K|^{1/2}
+ \bigl(\|f\|_{L^8_tL^4_x(K)}^2+\|g\|_{L^8_tL^4_x(K)}^2\bigr)
+ \|f-g\|_{L^8_tL^4_x(K)}.
+\end{align*}
+Thus the Duhamel map is a contraction on a ball in
+$C(K;L^2)\cap L^8(K;L^4)$ when $K$ is sufficiently short.  This is the local
+$L^2$ construction referred to in the theorem.  For smooth solutions,
+multiplication by $\overline f$, integration in $x$, and taking imaginary
+parts give
+\[
+ \frac d{dt}\|f(t)\|_2^2=0.
+\]
+Approximation of the initial data and the $C_tL^2_x$ convergence in the fixed
+point construction extend mass conservation to $L^2$ solutions.  Since the
+length of the contraction interval depends only on $|\sigma|\|f(t_0)\|_2^2$,
+the local solution can be iterated for all time.  In particular, covering the
+bounded interval $I$ by finitely many local intervals gives
+\[
+ u,v\in L^8(I;L^4(\R)).
+ \tag{2.3}\label{eq:NLS-L8L4}
+\]
+The inhomogeneous term belongs to $L^{8/7}_tL^{4/3}_x$ by
+\eqref{eq:NLS-fixed-point-estimate}.  The pair $(8,4)$ is admissible, so its dual
+pair is $(8/7,4/3)$.  The inhomogeneous Strichartz estimate from this dual
+pair to the admissible endpoint $(4,\infty)$ gives
+\[
+ u,v\in L^4(I;L^\infty(\R)).
+ \tag{2.4}\label{eq:NLS-endpoint}
+\]
+Finally, \eqref{eq:NLS-L8L4} and the finite length of $I$ imply
+\[
+ \|u\|_{L^4(I\times\R)}
+ \le |I|^{1/8}\|u\|_{L^8_tL^4_x},
+\]
+and the same estimate holds for $v$.
+
+On $I_0\times\R$, set $\rho=|u|^2=|v|^2$ and
+$V=\sigma\rho$.  For every bounded $J\Subset I_0$, the preceding estimate
+gives
+\[
+ \|V\|_{L^2(J\times\R)}
+ =|\sigma|\|u\|_{L^4(J\times\R)}^2<\infty.
+\]
+Because $\sigma$ and $\rho$ are real, $V$ is real.  On $I_0$ the two
+nonlinear equations are therefore the same linear equation:
+\[
+ iu_t+u_{xx}=Vu,
+ \qquad
+ iv_t+v_{xx}=Vv.
+\]
+Theorem~\ref{thm:time-potential} gives $v=\zeta u$ on $I_0$ for some
+$\zeta\in\T$.  Choose $t_0\in I_0$.  The fixed-point difference estimate
+above gives uniqueness for the cubic equation in
+$C_tL^2_x\cap L^8_tL^4_x$.  Since the two nonlinear solutions agree up to
+$\zeta$ at $t_0$, gauge covariance and uniqueness give
+$v=\zeta u$ for every time.
+\end{proof}
+
+\section{Failure in dimensions at least two}
+
+We prove Theorem~\ref{thm:higher-dimensional-failure}.
+
+\begin{proof}[Proof of Theorem~\ref{thm:higher-dimensional-failure}]
+It suffices to work in $d=2$.  Let
+\[
+ \phi(x)=e^{-x^2/2},
+ \qquad \psi(x)=-\phi'(x)=xe^{-x^2/2},
+\]
+and define
+\begin{align*}
+ a(x_1,x_2)&=\phi(x_1)\psi(x_2),\\
+ b(x_1,x_2)&=\psi(x_1)\phi(x_2),\\
+ f&=a+ib,
+ \qquad g=a-ib.
+\end{align*}
+Since
+\[
+ f(x_1,x_2)=e^{-(x_1^2+x_2^2)/2}(x_2+ix_1),
+ \qquad
+ g(x_1,x_2)=e^{-(x_1^2+x_2^2)/2}(x_2-ix_1),
+\]
+both functions are Schwartz.  They are not scalar multiples.  If $f=cg$,
+then setting $x_1=0$ and $x_2\ne0$ gives $c=1$, whereas setting $x_2=0$ and
+$x_1\ne0$ gives $c=-1$.
+
+The free propagator preserves tensor products.  Indeed, the Fourier transform
+of $p(x_1)q(x_2)$ is $\widehat p(\xi_1)\widehat q(\xi_2)$, while
+\[
+ e^{-it(\xi_1^2+\xi_2^2)}=e^{-it\xi_1^2}e^{-it\xi_2^2}.
+\]
+Therefore
+\[
+ e^{it\Delta_2}(p\otimes q)
+ =(e^{it\partial_x^2}p)\otimes(e^{it\partial_x^2}q).
+\]
+
+Define
+\[
+ A_t(x)=(1+2it)^{-1/2}
+ \exp\!\left(-\frac{x^2}{2(1+2it)}\right),
+\]
+where the square root is chosen continuously from $t=0$.  Direct
+differentiation gives
+\[
+ i\partial_tA_t+\partial_x^2A_t=0,
+ \qquad A_0=\phi.
+\]
+Uniqueness of the free evolution yields $e^{it\partial_x^2}\phi=A_t$.
+Since $\psi=-\phi'$ and spatial differentiation commutes with the free
+propagator,
+\[
+ e^{it\partial_x^2}\psi
+ =-\partial_xA_t=\frac{x}{1+2it}A_t.
+\]
+Consequently
+\begin{align*}
+ e^{it\Delta}f(x_1,x_2)
+ &=A_t(x_1)A_t(x_2)\frac{x_2+ix_1}{1+2it},\\
+ e^{it\Delta}g(x_1,x_2)
+ &=A_t(x_1)A_t(x_2)\frac{x_2-ix_1}{1+2it}.
+\end{align*}
+Since $x_1,x_2$ are real,
+\[
+ |x_2+ix_1|^2=x_1^2+x_2^2=|x_2-ix_1|^2.
+\]
+All other factors in the two formulas are identical.  Their moduli therefore
+coincide at every point and every time.
+
+For $d>2$, tensor both functions with
+$\Phi(x_3,\ldots,x_d)=\exp(-\frac12\sum_{j=3}^dx_j^2)$.  The free propagator
+again factors, so the modulus identity and nonproportionality are preserved.
+\end{proof}
+
+\begin{thebibliography}{9}
+
+\bibitem{IonescuKenig}
+A.~D.~Ionescu and C.~E.~Kenig,
+\emph{$L^p$ Carleman inequalities and uniqueness of solutions of nonlinear
+Schr\"odinger equations},
+Acta Math. \textbf{193} (2004), 193--239.
+
+\bibitem{KeelTao}
+M.~Keel and T.~Tao,
+\emph{Endpoint Strichartz estimates},
+Amer. J. Math. \textbf{120} (1998), 955--980.
+
+\bibitem{VegaVisciglia}
+L.~Vega and N.~Visciglia,
+\emph{On the local smoothing for the Schr\"odinger equation},
+Proc. Amer. Math. Soc. \textbf{135} (2007), 119--128.
+
+\end{thebibliography}
+
+\end{document}

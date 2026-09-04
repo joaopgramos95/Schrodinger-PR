@@ -1,0 +1,2313 @@
+\documentclass[11pt]{amsart}
+
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[protrusion=true,expansion=false]{microtype}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue,
+            hypertexnames=false]{hyperref}
+
+\newtheorem{mainresult}{Theorem}
+\renewcommand{\themainresult}{\Alph{mainresult}}
+\newtheorem{maincorollary}[mainresult]{Corollary}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\T}{\mathbb T}
+\newcommand{\HH}{\mathcal H}
+\newcommand{\Sc}{\mathcal S}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\Ran}{\operatorname{Ran}}
+\newcommand{\ac}{\mathrm{ac}}
+\newcommand{\pp}{\mathrm{pp}}
+\newcommand{\Id}{\mathrm{Id}}
+\newcommand{\D}{\mathcal D}
+\newcommand{\1}{\mathbf 1}
+\newcommand{\loc}{\mathrm{loc}}
+
+\title{Phase retrieval for stationary Schr\"odinger evolutions}
+\author{}
+\date{}
+
+\begin{document}
+\raggedbottom
+
+\begin{abstract}
+We prove phase retrieval up to one constant unimodular factor for three
+classes of stationary one-dimensional Schr\"odinger evolutions.  For real
+potentials in the Faddeev class $L^1_1(\mathbb R)$, measurements on all of
+spacetime determine arbitrary $L^2$ initial data.  If the potential is smooth
+and compactly supported to the left of a point, measurements on the exterior
+half-line to its right suffice.  Masuda's unique-continuation theorem gives a
+third result for finite-energy solutions of a broad class of semibounded
+potentials which may grow at infinity.  We also examine the attempt to extend
+the Masuda argument to arbitrary $L^2$ data and isolate the missing current
+trace.
+\end{abstract}
+
+\maketitle
+
+\tableofcontents
+
+\section*{Introduction and main results}
+
+Let $V:\mathbb R\to\mathbb R$ and let $H=-\partial_x^2+V$ be a self-adjoint
+Schr\"odinger operator.  We ask whether
+\[
+ |e^{-itH}f(x)|^2
+\]
+determines $f$ up to multiplication by one element of
+$\mathbb T=\{z\in\mathbb C:|z|=1\}$.
+
+Write
+\[
+ L^1_1(\mathbb R)=\left\{V:\mathbb R\to\mathbb C:
+ \int_{\mathbb R}(1+|x|)|V(x)|\,dx<\infty\right\}.
+\]
+The first result allows arbitrary $L^2$ initial data, negative eigenvalues,
+and a zero-energy resonance.
+
+\setcounter{mainresult}{2}
+\begin{mainresult}[Stationary potentials in the Faddeev class]
+\label{thm:main}
+Let $V\in L^1_1(\mathbb R)$ be real, let $H=-\partial_x^2+V$ be its
+self-adjoint quadratic-form realization, and let $u_0,v_0\in L^2(\mathbb R)$.
+If
+\[
+ |e^{-itH}u_0(x)|=|e^{-itH}v_0(x)|
+ \quad\text{for almost every }(t,x)\in\mathbb R^2,
+\]
+then $v_0=\zeta u_0$ for some $\zeta\in\mathbb T$.
+\end{mainresult}
+
+For smooth compactly supported potentials, the observation set can be reduced
+to one exterior half-line.
+
+\begin{mainresult}[Observation on one exterior half-line]
+\label{thm:half-line}
+Let $V\in C_c^\infty(\mathbb R;\mathbb R)$, let $H=-\partial_x^2+V$, and
+choose $R\in\mathbb R$ so that $\operatorname{supp}V\subset(-\infty,R]$.
+If $u_0,v_0\in L^2(\mathbb R)$ and
+\[
+ |e^{-itH}u_0(x)|=|e^{-itH}v_0(x)|
+ \quad\text{for almost every }(t,x)\in\mathbb R\times(R,\infty),
+\]
+then $v_0=\zeta u_0$ for some $\zeta\in\mathbb T$.
+\end{mainresult}
+
+The last theorem uses measurements on one nonempty open time interval and
+allows semibounded potentials which need not decay.  Its additional $H^1$
+hypothesis is part of the reduction from equal densities to an open zero set,
+not an assumption in Masuda's unique-continuation theorem itself.
+
+\begin{mainresult}[Masuda class]
+\label{thm:phase-retrieval}
+Let $V:\mathbb R\to\mathbb R$ satisfy the following conditions:
+\begin{enumerate}
+\item $V\in L^2_{\mathrm{loc}}(\mathbb R)$;
+\item there is a null set $Q$ such that $\mathbb R\setminus Q$ is connected
+and open and $V$ is locally essentially bounded on $\mathbb R\setminus Q$;
+\item $-\partial_x^2+V$ on $C_c^\infty(\mathbb R)$ is essentially
+self-adjoint;
+\item its self-adjoint closure is bounded from below.
+\end{enumerate}
+Let $u,v\in C(\mathbb R;L^2(\mathbb R))$ be weak solutions of
+$if_t+f_{xx}=Vf$.  Suppose that, on a nonempty open interval $I$,
+\[
+ u,v\in C(I;H^1(\mathbb R)),
+ \qquad |u|=|v|\quad\text{almost everywhere on }I\times\mathbb R.
+\]
+Then $v=\zeta u$ on $\mathbb R\times\mathbb R$ for some
+$\zeta\in\mathbb T$.
+\end{mainresult}
+
+Theorems~\ref{thm:main} and~\ref{thm:phase-retrieval} are incomparable.
+The first has arbitrary $L^2$ data and an integrable decaying potential; the
+second has finite-energy data but permits, for example, confining potentials.
+Theorem~\ref{thm:half-line} strengthens the observation geometry on a smaller
+potential class.
+
+The proof of Theorem~\ref{thm:main} uses the one-dimensional scattering
+representation in Proposition~\ref{prop:scattering}.  Theorem
+\ref{thm:half-line} uses the same scattering data and a Cauchy-transform
+argument.  Theorem~\ref{thm:phase-retrieval} uses Masuda's
+unique-continuation theorem.  These external inputs are stated in the forms
+needed below.
+
+All nonsmooth identities are distributional unless another meaning is
+specified.  We use
+\[
+ \widehat f(\xi)=(2\pi)^{-1/2}\int_{\mathbb R}e^{-ix\xi}f(x)\,dx
+\]
+and take Hilbert-space inner products to be linear in the first variable.
+The value of a spectral representative on a null set is immaterial.
+
+\part{Stationary decaying potentials}
+
+\section{Stationary potentials in the Faddeev class}
+
+Write
+\[
+ L^1_1(\R)=\left\{V:\R\to\C:
+ \int_{\R}(1+|x|)|V(x)|\,dx<\infty\right\}.
+\]
+We prove Theorem~\ref{thm:main}.  Let $H=-\partial_x^2+V$ be the
+self-adjoint quadratic-form realization, and choose jointly measurable
+representatives of
+\[
+ u(t)=e^{-itH}u_0,
+ \qquad
+ v(t)=e^{-itH}v_0.
+\]
+The hypothesis is
+\[
+ |u(t,x)|=|v(t,x)|
+ \quad\text{for almost every $(t,x)\in\R^2$}.
+ \tag{1.1}\label{eq:modulus-hypothesis}
+\]
+
+Strong continuity of the unitary group and
+\[
+ \||a|^2-|b|^2\|_1
+ \le\|a-b\|_2(\|a\|_2+\|b\|_2)
+\]
+show that $t\mapsto |e^{-itH}f|^2$ is continuous from $\R$ to $L^1(\R)$.
+Thus \eqref{eq:modulus-hypothesis}, which initially holds for almost every
+time, implies equality in $L^1_x$ for every $t$.  The proof uses scattering at both
+infinities.  A zero-energy resonance is allowed.  The rank-one structure of
+the spectral density matrix gives integrability on almost every fixed
+energy-gap curve, while the product system in
+Lemma~\ref{lem:product-system} uses no derivative of $V$.
+
+\section{Scattering input}
+
+We record the standard one-dimensional facts used in the proof.  They are
+valid for real $V\in L^1_1(\R)$; see, for example,
+\cite{DeiftTrubowitz,EgorovaKopylovaMarchenkoTeschl,TeschlBook}.
+
+\begin{proposition}[Standard scattering representation]\label{prop:scattering}
+Let $V\in L^1_1(\R)$ be real.  Then the following statements hold.
+\begin{enumerate}
+\item The singular continuous spectrum of $H$ is empty, the absolutely
+continuous spectrum is $[0,\infty)$ with multiplicity two, and the negative
+spectrum consists of finitely many simple eigenvalues
+\[
+ E_j=-\kappa_j^2,
+ \qquad 0<\kappa_1<\cdots<\kappa_N.
+\]
+There is no eigenvalue in $[0,\infty)$.
+
+\item There are real normalized eigenfunctions $\phi_j$ and physical
+generalized eigenfunctions $e_\alpha(\cdot,k)$, $\alpha\in\{1,2\}$, $k>0$,
+such that
+\[
+ \mathcal F:
+ L^2(\R)\longrightarrow
+ \C^N\oplus L^2(\R_+;\C^2)
+\]
+is unitary and diagonalizes $H$.  Thus, if
+\[
+ \mathcal F f=(c_1,\ldots,c_N;g_1,g_2),
+\]
+then
+\begin{align}
+ (e^{-itH}f)(x)
+ ={}&\sum_{j=1}^N c_j e^{-itE_j}\phi_j(x) \notag\\
+ &+\sum_{\alpha=1}^2\int_0^\infty
+       e^{-itk^2}g_\alpha(k)e_\alpha(x,k)\,dk
+ \tag{2.1}\label{eq:spectral-expansion}
+\end{align}
+in $L^2_x$.
+
+\item For each $k>0$, the two functions
+$e_1(\cdot,k),e_2(\cdot,k)$ form a basis of the solution space of
+\[
+ -y''+Vy=k^2y.
+\]
+On compact $x$-sets, uniformly for $k>0$,
+\[
+ |e_\alpha(x,k)|\lesssim 1,
+ \qquad
+ |\partial_xe_\alpha(x,k)|\lesssim 1+k.
+ \tag{2.2}\label{eq:scattering-local-bounds}
+\]
+More precisely, for each $\sigma\in\{+,-\}$ there are coefficients
+$c^{\sigma}_{\alpha,\varepsilon}(k)$, $\varepsilon\in\{+1,-1\}$, and
+remainders $r^\sigma_\alpha(x,k)$ such that
+\begin{equation}
+ e_\alpha(x,k)
+ =\sum_{\varepsilon=\pm1}
+   c^{\sigma}_{\alpha,\varepsilon}(k)e^{i\varepsilon kx}
+   +r^\sigma_\alpha(x,k),
+ \qquad x\to\sigma\infty,
+ \tag{2.3}\label{eq:uniform-scattering-expansion}
+\end{equation}
+and
+\[
+ \sup_{k>0}|c^{\sigma}_{\alpha,\varepsilon}(k)|<\infty,
+ \qquad
+ \lim_{x\to\sigma\infty}
+ \sup_{k>0}|r^\sigma_\alpha(x,k)|=0.
+\]
+
+\item For every negative eigenfunction,
+\[
+ \phi_j(x)=a_j^+e^{-\kappa_jx}(1+o(1))
+ \quad (x\to+\infty),
+ \tag{2.4}\label{eq:bound-tail-plus}
+\]
+and there is an analogous expansion at $-\infty$, with nonzero leading
+coefficients.
+\end{enumerate}
+\end{proposition}
+
+For clarity, let $f_\pm(x,k)\sim e^{\pm ikx}$ as
+$x\to\pm\infty$ be the Jost solutions.  We choose the physical incidence
+eigenfunctions in the proposition to be
+\[
+ e_1(x,k)=(2\pi)^{-1/2}T(k)f_+(x,k),
+ \qquad
+ e_2(x,k)=(2\pi)^{-1/2}T(k)f_-(x,k).
+\]
+Thus the uniform assertion in part (3) concerns the physical incidence
+eigenfunctions, not an unnormalized Jost solution on the opposite half-line.
+The right Jost Volterra equation and the transformation-operator estimate give
+\[
+ \sup_{k>0}|f_+(x,k)e^{-ikx}-1|\longrightarrow0
+ \qquad (x\to+\infty),
+\]
+and the analogous assertion holds for $f_-$ at $-\infty$.  Multiplication by
+the transmission coefficient, followed by the scattering identity
+\[
+ T(k)f_+(x,k)=f_-(x,-k)+R_-(k)f_-(x,k),
+\]
+transfers the bounds to the left because $|T(k)|,|R_-(k)|\le1$.  The other
+channel is analogous; here one also uses
+$f_\pm(x,-k)=\overline{f_\pm(x,k)}$ for real $V$.  This proves
+\eqref{eq:uniform-scattering-expansion}.  The same Volterra estimates, together
+with the differential equation, give the local derivative bound in
+\eqref{eq:scattering-local-bounds}.  This also shows directly why a zero
+resonance causes no loss of uniformity for the physical eigenfunctions.
+
+Only this proposition is imported from scattering theory.  Everything below is
+an elementary consequence of it, one-dimensional ODE theory, and Fourier
+analysis.
+
+\section{The fixed-gap shell estimate}
+
+Let
+\[
+ \delta=k^2-\ell^2,
+ \qquad
+ s=k^2+\ell^2,
+ \qquad k,\ell>0.
+\]
+The inverse change of variables is
+\[
+ k=\sqrt{\frac{s+\delta}{2}},
+ \qquad
+ \ell=\sqrt{\frac{s-\delta}{2}},
+ \qquad s>|\delta|,
+\]
+and
+\[
+ dk\,d\ell
+ =\frac{d\delta\,ds}{4\sqrt{s^2-\delta^2}}.
+ \tag{3.1}\label{eq:gap-sum-jacobian}
+\]
+
+The next estimate is the reason arbitrary $L^2$ initial states are admissible.
+
+\begin{lemma}[Rank-one shell estimate]\label{lem:shell}
+Let $f,g\in L^2(\R_+)$ and let $I\subset\R$ be a bounded interval.  Then
+\[
+ \iint_{\{k^2-\ell^2\in I\}}
+ |f(k)g(\ell)|\,dk\,d\ell
+ \le C_I\|f\|_2\|g\|_2.
+ \tag{3.2}\label{eq:shell-schur}
+\]
+Consequently, for almost every $\delta\in\R$,
+\[
+ s\longmapsto
+ \frac{
+ |f(\sqrt{(s+\delta)/2})
+ g(\sqrt{(s-\delta)/2})|
+ }{4\sqrt{s^2-\delta^2}}
+ \tag{3.3}\label{eq:shell-density}
+\]
+belongs to $L^1((|\delta|,\infty))$.  The resulting $L^1$ norm is locally
+integrable as a function of $\delta$.
+\end{lemma}
+
+\begin{proof}
+Set
+\[
+ K_I(k,\ell)=\mathbf 1_I(k^2-\ell^2),
+ \qquad k,\ell>0.
+\]
+Choose $M>0$ with $I\subset[-M,M]$.  For fixed $k$, the condition
+$K_I(k,\ell)\ne0$ implies
+\[
+ \max(0,k^2-M)\le \ell^2\le k^2+M.
+\]
+If $k^2\le M$, the length of this interval in the $\ell$ variable is at most
+$\sqrt{k^2+M}\le\sqrt{2M}$.  If $k^2>M$, its length is
+\begin{align*}
+ \sqrt{k^2+M}-\sqrt{k^2-M}
+ &=\frac{2M}{\sqrt{k^2+M}+\sqrt{k^2-M}}\\
+ &\le \sqrt{2M}.
+\end{align*}
+Consequently
+\[
+ \sup_{k>0}\int_0^\infty K_I(k,\ell)\,d\ell\le\sqrt{2M}.
+\]
+Interchanging $k$ and $\ell$ gives the same estimate for the other Schur
+integral.  Schur's test states that a nonnegative kernel $K$ satisfying
+\[
+ \sup_k\int K(k,\ell)\,d\ell\le A,
+ \qquad
+ \sup_\ell\int K(k,\ell)\,dk\le B
+\]
+defines an $L^2$ operator of norm at most $\sqrt{AB}$.  We therefore have
+$\|K_I\|_{L^2\to L^2}\le\sqrt{2M}$ and
+\begin{align*}
+ \iint K_I(k,\ell)|f(k)g(\ell)|\,dk\,d\ell
+ &=\int_0^\infty |f(k)|(K_I|g|)(k)\,dk\\
+ &\le\|f\|_2\|K_I|g|\|_2
+ \le\sqrt{2M}\|f\|_2\|g\|_2.
+\end{align*}
+This proves \eqref{eq:shell-schur}.
+
+For $(k,\ell)\in(0,\infty)^2$, the map
+$(k,\ell)\mapsto(\delta,s)=(k^2-\ell^2,k^2+\ell^2)$ is a $C^1$
+diffeomorphism onto $\{(\delta,s):s>|\delta|\}$.  The change-of-variables
+formula \eqref{eq:gap-sum-jacobian} gives, for every bounded interval $I$,
+\begin{align*}
+ &\iint_{\{k^2-\ell^2\in I\}}|f(k)g(\ell)|\,dk\,d\ell\\
+ &\quad=\int_I\int_{|\delta|}^\infty
+ \frac{|f(\sqrt{(s+\delta)/2})g(\sqrt{(s-\delta)/2})|}
+ {4\sqrt{s^2-\delta^2}}\,ds\,d\delta.
+\end{align*}
+The left side is finite by \eqref{eq:shell-schur}.  Tonelli's theorem now
+shows that the inner integral is finite for almost every $\delta\in I$, and
+that these inner integrals form an $L^1(I)$ function.  A countable exhaustion
+of $\R$ by bounded intervals proves both remaining assertions.
+\end{proof}
+
+\begin{remark}\label{rem:rank-one-essential}
+It would not be enough merely to observe that the spectral density-matrix
+kernel belongs to $L^2(\R_+^2)$.  A general $L^2$ kernel need not have an
+integrable restriction to almost every hyperbola $k^2-\ell^2=\delta$.
+Lemma~\ref{lem:shell} uses the finite sum of rank-one terms in an essential
+way.
+\end{remark}
+
+We will also use the following consequence of the one-dimensional change of
+variables.  Suppose
+$g\in L^2(\R_+)$ and $E_j=-\kappa_j^2$.  A bound--continuous term has temporal
+frequency $k^2+\kappa_j^2$.  Its density in that frequency variable is locally
+integrable, because under $\delta=k^2+\kappa_j^2$,
+\[
+ \frac{|g(\sqrt{\delta-\kappa_j^2})|}
+      {2\sqrt{\delta-\kappa_j^2}}\,d\delta
+ =|g(k)|\,dk,
+\]
+and $g$ is integrable on bounded $k$-intervals.  Bound--bound terms, by
+contrast, are point masses in the temporal-frequency variable.
+
+\section{A derivative-free product system}
+
+The following elementary system is the central structural observation.
+
+\begin{lemma}[Product system]\label{lem:product-system}
+Let $V\in L^1_{\mathrm{loc}}(\R)$ and suppose
+\[
+ -y''+Vy=Ey,
+ \qquad
+ -z''+Vz=Fz
+\]
+distributionally.  Put
+\[
+ \delta=E-F,
+ \qquad
+ s=E+F,
+\]
+and define
+\[
+ A=yz,
+ \quad
+ B=y'z+yz',
+ \quad
+ C=y'z-yz',
+ \quad
+ D=y'z'.
+ \tag{4.1}\label{eq:product-state-definition}
+\]
+Then $A,B,C,D$ are locally absolutely continuous and satisfy
+\begin{equation}
+ \boxed{
+ \begin{aligned}
+ A'&=B,\\
+ B'&=(2V-s)A+2D,\\
+ C'&=-\delta A,\\
+ D'&=\left(V-\frac{s}{2}\right)B+\frac{\delta}{2}C.
+ \end{aligned}}
+ \tag{4.2}\label{eq:product-system}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Since $V\in L^1_{\mathrm{loc}}$, every distributional solution belongs to
+$W^{2,1}_{\mathrm{loc}}$.  Thus $y,z$ and their first derivatives are locally
+absolutely continuous, and the ordinary product rule is valid almost
+everywhere.  Since
+\[
+ y''=(V-E)y,
+ \qquad z''=(V-F)z,
+\]
+we obtain
+\[
+ A'=y'z+yz'=B.
+\]
+Differentiating $B$ gives
+\begin{align*}
+ B'
+ &=y''z+2y'z'+yz''\\
+ &=(V-E)yz+2y'z'+(V-F)yz\\
+ &=(2V-E-F)A+2D=(2V-s)A+2D.
+\end{align*}
+Similarly,
+\begin{align*}
+ C'
+ &=y''z-yz''\\
+ &=(V-E)yz-(V-F)yz=(F-E)A=-\delta A.
+\end{align*}
+Finally,
+\begin{align*}
+ D'
+ &=y''z'+y'z''=(V-E)yz'+(V-F)y'z.
+\end{align*}
+The definitions of $B$ and $C$ imply
+\[
+ yz'=\frac{B-C}{2},
+ \qquad y'z=\frac{B+C}{2}.
+\]
+Since $E=(s+\delta)/2$ and $F=(s-\delta)/2$, substitution gives
+\begin{align*}
+ D'
+ &=\left(V-\frac{s+\delta}{2}\right)\frac{B-C}{2}
+   +\left(V-\frac{s-\delta}{2}\right)\frac{B+C}{2}\\
+ &=\left(V-\frac{s}{2}\right)B+\frac{\delta}{2}C.
+\end{align*}
+Every right-hand side is locally integrable.  Hence all four components are
+locally absolutely continuous and the system holds everywhere in its
+integral form.
+\end{proof}
+
+For fixed $E$ let $\Sc_E$ denote the solution space of
+$-y''+Vy=Ey$.  Fix $x_0\in\R$.  Existence and uniqueness for the integral
+system associated with the Schr\"odinger equation show that
+\[
+ y\longmapsto (y(x_0),y'(x_0))
+\]
+is an isomorphism from $\Sc_E$ onto $\C^2$.  In particular,
+$\dim\Sc_E=2$.  The tensor product $\Sc_E\otimes\Sc_F$ is therefore
+four-dimensional.  At $x_0$, a simple tensor $y\otimes z$ has coordinates
+\[
+ yz,\qquad y'z,\qquad yz',\qquad y'z'.
+\]
+The product-state coordinates are obtained from these by the invertible
+linear change
+\[
+ A=yz,
+ \quad B=y'z+yz',
+ \quad C=y'z-yz',
+ \quad D=y'z',
+\]
+whose inverse is
+\[
+ yz=A,
+ \qquad y'z=\frac{B+C}{2},
+ \qquad yz'=\frac{B-C}{2},
+ \qquad y'z'=D.
+\]
+The first-order system \eqref{eq:product-system} has unique solutions for
+arbitrary initial data in $\C^4$.  It follows that the map
+\[
+ \Sc_E\otimes\Sc_F
+ \longrightarrow
+ \{\text{solutions of \eqref{eq:product-system}}\}
+ \tag{4.3}\label{eq:tensor-identification}
+\]
+induced by \eqref{eq:product-state-definition} is an isomorphism.
+
+\begin{lemma}[Independence of unequal-energy products]
+\label{lem:product-independence}
+Suppose $E\ne F$.  If $y_1,y_2$ form a basis of $\Sc_E$ and $z_1,z_2$ form a
+basis of $\Sc_F$, then the four functions
+\[
+ y_i z_j,
+ \qquad 1\le i,j\le2,
+\]
+are linearly independent.
+\end{lemma}
+
+\begin{proof}
+Suppose
+\[
+ \sum_{i,j=1}^2c_{ij}y_i(x)z_j(x)=0
+ \quad\text{for every }x.
+\]
+The tensor $T=\sum_{i,j}c_{ij}y_i\otimes z_j$ determines, through
+\eqref{eq:tensor-identification}, a solution $(A,B,C,D)$ of
+\eqref{eq:product-system}.  The displayed relation says $A=0$.  Therefore
+$B=A'=0$.  The second equation of the system becomes $0=2D$, so $D=0$.
+The fourth equation then becomes $0=\delta C/2$.  Since
+$\delta=E-F\ne0$, it follows that $C=0$.  Thus the product state is the zero
+solution.  The map \eqref{eq:tensor-identification} is injective, so $T=0$.
+Because $\{y_i\otimes z_j:1\le i,j\le2\}$ is a basis of
+$\Sc_E\otimes\Sc_F$, every coefficient $c_{ij}$ vanishes.
+\end{proof}
+
+We also record the elementary negative-energy ODE fact used below.
+
+\begin{lemma}[Negative-energy dichotomy]\label{lem:negative-dichotomy}
+Let $V\in L^1(\R)$ be real and let $G=-\kappa^2<0$.  At $+\infty$ the
+solution space $\Sc_G$ has a basis $y^d_{G,+},y^g_{G,+}$ satisfying
+\begin{align*}
+ y^d_{G,+}(x)&=e^{-\kappa x}(1+o(1)),
+ & (y^d_{G,+})'(x)&=-\kappa e^{-\kappa x}(1+o(1)),\\
+ y^g_{G,+}(x)&=e^{\kappa x}(1+o(1)),
+ & (y^g_{G,+})'(x)&=\kappa e^{\kappa x}(1+o(1)).
+\end{align*}
+At $-\infty$ there is a basis $y^d_{G,-},y^g_{G,-}$ with
+\begin{align*}
+ y^d_{G,-}(x)&=e^{\kappa x}(1+o(1)),
+ & (y^d_{G,-})'(x)&=\kappa e^{\kappa x}(1+o(1)),\\
+ y^g_{G,-}(x)&=e^{-\kappa x}(1+o(1)),
+ & (y^g_{G,-})'(x)&=-\kappa e^{-\kappa x}(1+o(1)).
+\end{align*}
+In particular, if the lines
+\[
+ L^d_{G,+}:=\operatorname{span}\{y^d_{G,+}\},
+ \qquad
+ L^d_{G,-}:=\operatorname{span}\{y^d_{G,-}\}
+\]
+coincide, then $G$ is an $L^2$ eigenvalue of $H$.
+\end{lemma}
+
+\begin{proof}
+The equation at energy $G=-\kappa^2$ is
+\[
+ y''-\kappa^2y=Vy.
+\]
+On a right half-line, the solution which is asymptotic to $e^{-\kappa x}$ is
+obtained from the Volterra equation
+\[
+ y(x)=e^{-\kappa x}
+ +\frac1\kappa\int_x^\infty
+   \sinh(\kappa(t-x))V(t)y(t)\,dt.
+ \tag{4.4}\label{eq:negative-volterra}
+\]
+To see why only $V\in L^1$ is needed, write $m(x)=e^{\kappa x}y(x)$.  Then
+\eqref{eq:negative-volterra} becomes
+\[
+ m(x)=1+\frac1{2\kappa}\int_x^\infty
+ \bigl(1-e^{-2\kappa(t-x)}\bigr)V(t)m(t)\,dt.
+\]
+The kernel in parentheses has absolute value at most $2$.  Successive
+approximation on a sufficiently far right half-line, followed by continuation
+to the left, gives a unique bounded solution with $m(x)\to1$.  Differentiating
+the Volterra equation gives $m'(x)\to0$.  Therefore
+\[
+ y^d_{G,+}(x)=e^{-\kappa x}(1+o(1)),
+ \qquad
+ (y^d_{G,+})'(x)=-\kappa e^{-\kappa x}(1+o(1)).
+\]
+In particular, $y^d_{G,+}$ has no zeros for all sufficiently large $x$.
+Fix such an $x_0$.  Reduction of order gives a second solution
+\[
+ y^g_{G,+}(x)
+ =2\kappa y^d_{G,+}(x)
+   \int_{x_0}^{x}\frac{dt}{(y^d_{G,+}(t))^2}.
+ \tag{4.5}\label{eq:negative-growing-solution}
+\]
+Since $(y^d_{G,+}(t))^{-2}=e^{2\kappa t}(1+o(1))$, integration yields
+\[
+ \int_{x_0}^{x}\frac{dt}{(y^d_{G,+}(t))^2}
+ =\frac{e^{2\kappa x}}{2\kappa}(1+o(1)).
+\]
+Substitution in \eqref{eq:negative-growing-solution}, followed by
+differentiation, gives the asserted growing asymptotics.  The Wronskian of
+the two solutions is $2\kappa\ne0$, so they form a basis.  ODE uniqueness
+extends both solutions to all of $\R$.
+
+Replacing $x$ by $-x$ and $V(x)$ by $V(-x)$ gives the corresponding decaying
+and growing basis at $-\infty$.
+
+Suppose now that $L^d_{G,+}=L^d_{G,-}$.  A nonzero solution $y$ spanning this
+common line satisfies, for some constants $C,R>0$,
+\[
+ |y(x)|+|y'(x)|\le Ce^{-\kappa|x|}
+ \quad (|x|\ge R).
+\]
+Hence $y,y'\in L^2(\R)$, so $y\in H^1(\R)$.  The distributional equation
+$-y''+Vy=Gy$ is the weak eigenvalue equation for the quadratic-form
+realization of $H$.  Since its right side belongs to $L^2$, the representation
+theorem for closed semibounded forms places $y$ in the operator domain and
+gives $Hy=Gy$.  Thus $G$ is an $L^2$ eigenvalue.
+\end{proof}
+
+\section{Fixed-gap injectivity}
+
+We now prove the analytic core of the argument.  Fix $\delta\ne0$.  For
+$s>|\delta|$, put
+\[
+ E(s)=\frac{s+\delta}{2},
+ \qquad
+ F(s)=\frac{s-\delta}{2},
+\]
+and let
+\[
+ X_{\alpha\beta}(x,s)
+ =\bigl(A_{\alpha\beta},B_{\alpha\beta},
+        C_{\alpha\beta},D_{\alpha\beta}\bigr)(x,s)
+\]
+be the product state associated with
+\[
+ y=e_\alpha(\cdot,\sqrt{E(s)}),
+ \qquad
+ z=\overline{e_\beta(\cdot,\sqrt{F(s)})}.
+\]
+Since $V$ is real, the second factor is again a solution of the Schr\"odinger
+equation at energy $F(s)$.
+
+There may also be bound--continuous products with the same energy difference
+$\delta$.  They form the following finite family.  If $\delta>\kappa_j^2$, set
+\[
+ k_j=\sqrt{\delta-\kappa_j^2},
+ \qquad s_j=\delta-2\kappa_j^2,
+\]
+and take the two product states associated with
+$e_\alpha(\cdot,k_j)\phi_j$, $\alpha=1,2$.  Their energies are
+$k_j^2$ and $-\kappa_j^2$, so their difference is $\delta$ and their sum is
+$s_j$.  If $\delta<-\kappa_j^2$, set
+\[
+ k_j=\sqrt{-\delta-\kappa_j^2},
+ \qquad s_j=-\delta-2\kappa_j^2,
+\]
+and take the states associated with
+$\phi_j\overline{e_\alpha(\cdot,k_j)}$.  These have energy difference
+$\delta$ as well.  Enumerate all compatible states as $X_\rho(x)$, denote
+their energy sums by $s_\rho$, and denote their scalar coefficients by
+$a_\rho$.  If several contributions produce the same state, combine their
+coefficients first.
+
+\begin{proposition}[Fixed-gap injectivity]\label{prop:fixed-gap}
+Suppose $q_{\alpha\beta}\in L^1((|\delta|,\infty))$ and
+\begin{align}
+ W(x)
+ :={}&\sum_{\alpha,\beta=1}^2
+ \int_{|\delta|}^\infty
+ q_{\alpha\beta}(s)A_{\alpha\beta}(x,s)\,ds
+ +\sum_\rho a_\rho A_\rho(x)
+ =0
+ \tag{5.1}\label{eq:fixed-gap-relation}
+\end{align}
+for every $x\in\R$.  Then every $q_{\alpha\beta}$ vanishes almost everywhere
+and every $a_\rho$ vanishes.
+\end{proposition}
+
+\begin{proof}
+The proof has four steps.
+
+\smallskip
+\noindent
+\emph{Step 1: the energy-sum resolvent.}
+The continuum sums satisfy $s>|\delta|$.  There are only finitely many
+bound--continuous sums $s_\rho$.  Hence the set of all sums occurring in
+\eqref{eq:fixed-gap-relation} is bounded from below.  Choose a real number
+$\lambda$ strictly below this set.  In particular, every denominator below is
+nonzero and has one sign.  Define
+\begin{align}
+ Z_\lambda(x)
+ :={}&\sum_{\alpha,\beta=1}^2
+ \int_{|\delta|}^\infty
+ \frac{q_{\alpha\beta}(s)}{s-\lambda}
+ X_{\alpha\beta}(x,s)\,ds
+ +\sum_\rho\frac{a_\rho}{s_\rho-\lambda}X_\rho(x).
+ \tag{5.2}\label{eq:resolvent-state}
+\end{align}
+Write its components as
+$Z_\lambda=(A_\lambda,B_\lambda,C_\lambda,D_\lambda)$.
+
+Let $K\subset\R$ be compact.  The energies $E(s)$ and $F(s)$ are positive and
+at most $s+|\delta|$.  The local scattering estimates
+\eqref{eq:scattering-local-bounds} therefore give, uniformly for $x\in K$ and
+$s>|\delta|$,
+\[
+ |A_{\alpha\beta}|\\lesssim_K1,
+ \qquad
+ |B_{\alpha\beta}|+|C_{\alpha\beta}|
+ \lesssim_K1+\sqrt{s},
+ \qquad
+ |D_{\alpha\beta}|\lesssim_K1+s.
+ \tag{5.3}\label{eq:product-state-bounds}
+\]
+For example, $D$ is the product of one derivative at energy $E(s)$ and one at
+energy $F(s)$, so
+\[
+ |D|\lesssim_K(1+\sqrt{E(s)})(1+\sqrt{F(s)})\lesssim_K1+s.
+\]
+Because $\lambda$ is fixed below the spectral sums,
+\[
+ \frac1{|s-\lambda|}\lesssim_\lambda\frac1{1+s}.
+\]
+After division by $s-\lambda$, the bounds for the four components are
+respectively $O(1)$, $O((1+s)^{-1/2})$, $O((1+s)^{-1/2})$, and $O(1)$.
+Each is bounded by a constant times $|q_{\alpha\beta}(s)|$.  Since every
+$q_{\alpha\beta}$ is integrable, all components in
+\eqref{eq:resolvent-state} converge absolutely and uniformly on $K$.  The
+finite atomic sum causes no convergence issue.
+
+Direct differentiation under the untruncated integral would require more
+than $q\in L^1$, because derivatives of $D$ grow with $s$.  We avoid this.
+Choose $\chi_R\in C_c^\infty((|\delta|,\infty))$ with
+$0\le\chi_R\le1$ and $\chi_R(s)\to1$ pointwise.  Insert $\chi_R$ in every
+continuum integral in \eqref{eq:resolvent-state}, retain all atomic terms, and
+call the resulting state $Z_{\lambda,R}$.  Let $W_R$ be the same truncation of
+\eqref{eq:fixed-gap-relation}.  Every truncated integral may be
+differentiated distributionally by pairing with a compactly supported test
+function in $x$ and using Fubini's theorem.  Applying
+\eqref{eq:product-system} and the identity
+\[
+ \frac{s}{s-\lambda}=1+\frac{\lambda}{s-\lambda}
+\]
+gives
+\begin{align}
+ A_{\lambda,R}'
+ &=B_{\lambda,R}, \tag{5.4}\label{eq:cutoff-system-1}\\
+ B_{\lambda,R}'
+ &=(2V-\lambda)A_{\lambda,R}+2D_{\lambda,R}-W_R,
+ \tag{5.5}\label{eq:cutoff-system-2}\\
+ C_{\lambda,R}'
+ &=-\delta A_{\lambda,R}, \tag{5.6}\label{eq:cutoff-system-3}\\
+ D_{\lambda,R}'
+ &=\left(V-\frac{\lambda}{2}\right)B_{\lambda,R}
+   +\frac{\delta}{2}C_{\lambda,R}-\frac12W_R'.
+ \tag{5.7}\label{eq:cutoff-system-4}
+\end{align}
+The uniform local bound for $A$ and dominated convergence give
+$W_R\to W=0$ locally uniformly.  Therefore, for every
+$\varphi\in C_c^\infty(\R)$,
+\[
+ \langle W_R',\varphi\rangle
+ =-\int_\R W_R(x)\varphi'(x)\,dx\longrightarrow0.
+\]
+Thus $W_R'\to0$ in distributions.  The component bounds established above
+also give local uniform convergence $Z_{\lambda,R}\to Z_\lambda$.  Products
+such as $V B_{\lambda,R}$ converge in $L^1_{\mathrm{loc}}$, because
+$V\in L^1_{\mathrm{loc}}$ and $B_{\lambda,R}$ converges locally uniformly.
+We may therefore pass to the limit in each of the four distributional
+identities and obtain
+\begin{equation}
+ \boxed{
+ \begin{aligned}
+ A_\lambda'&=B_\lambda,\\
+ B_\lambda'&=(2V-\lambda)A_\lambda+2D_\lambda,\\
+ C_\lambda'&=-\delta A_\lambda,\\
+ D_\lambda'&=\left(V-\frac{\lambda}{2}\right)B_\lambda
+              +\frac{\delta}{2}C_\lambda.
+ \end{aligned}}
+ \tag{5.8}\label{eq:lambda-product-system}
+\end{equation}
+Initially these identities hold distributionally, while all four components
+are continuous.  The first and third equations already show that $A_\lambda$
+and $C_\lambda$ are locally absolutely continuous.  The right side of the
+fourth equation belongs to $L^1_{\mathrm{loc}}$: $V B_\lambda$ is locally
+integrable and the other terms are continuous.  Hence $D_\lambda$ is locally
+absolutely continuous.  The right side of the second equation is then locally
+integrable, so $B_\lambda$ is locally absolutely continuous as well.  Thus
+$Z_\lambda$ is an ordinary solution of the product system with auxiliary
+energies
+\[
+ E_\lambda=\frac{\lambda+\delta}{2},
+ \qquad
+ F_\lambda=\frac{\lambda-\delta}{2}.
+ \tag{5.9}\label{eq:auxiliary-energies}
+\]
+
+\smallskip
+\noindent
+\emph{Step 2: decay of the scalar component.}
+We claim that
+\[
+ A_\lambda(x)\longrightarrow0
+ \qquad (x\to\pm\infty).
+ \tag{5.10}\label{eq:scalar-decay}
+\]
+Every atomic term is a product of a fixed positive-energy scattering solution
+and a negative-energy eigenfunction.  The scattering factor is bounded at
+both ends, while the eigenfunction decays exponentially there.  Hence every
+atomic contribution to $A_\lambda(x)$ tends to zero as $x\to\pm\infty$.
+
+Consider a continuum product at one of the two ends.  Write both scattering
+solutions as the sum of the two plane waves in
+\eqref{eq:uniform-scattering-expansion} and a remainder.  Multiplication gives
+four plane-wave terms, with phases
+\[
+ x\bigl(\varepsilon k(s)+\eta\ell(s)\bigr),
+ \qquad \varepsilon,\eta\in\{-1,1\},
+ \tag{5.11}\label{eq:product-phases}
+\]
+and terms containing at least one remainder.  The plane-wave coefficients are
+uniformly bounded.  Therefore their amplitudes after insertion into
+$A_\lambda$ are bounded by
+\[
+ C\frac{|q_{\alpha\beta}(s)|}{|s-\lambda|},
+\]
+which belongs to $L^1((|\delta|,\infty))$.  The scattering remainders tend to
+zero uniformly in the energy parameter.  Their products are bounded by the
+same integrable majorant, so dominated convergence makes their integrals tend
+to zero.
+
+It remains to treat each plane-wave integral.  Define
+\[
+ p_+(s)=k(s)+\ell(s),
+ \qquad
+ p_-(s)=k(s)-\ell(s).
+\]
+Since $k^2-\ell^2=\delta$,
+\[
+ p_-(s)=\frac{\delta}{p_+(s)}.
+\]
+The function $p_+$ is strictly increasing: both $k(s)$ and $\ell(s)$ are
+strictly increasing.  Since $\delta\ne0$, $p_-$ is strictly monotone as well.
+Their derivatives do not vanish on the open interval
+$(|\delta|,\infty)$.  Thus each is a $C^1$ diffeomorphism onto its image.
+If $f\in L^1(ds)$, the substitution $p=p_\pm(s)$ gives
+\[
+ \int_{|\delta|}^\infty f(s)e^{ixp_\pm(s)}\,ds
+ =\int_{p_\pm((|\delta|,\infty))}
+ f(s(p))\left|\frac{ds}{dp}\right|e^{ixp}\,dp.
+\]
+The new amplitude is integrable because its $L^1(dp)$ norm equals
+$\|f\|_{L^1(ds)}$.  The Riemann--Lebesgue lemma makes the last integral tend
+to zero as $|x|\to\infty$.  The four phases in
+\eqref{eq:product-phases} are $\pm p_+$ and $\pm p_-$.  Summing them proves
+\eqref{eq:scalar-decay} at both ends.
+
+\smallskip
+\noindent
+\emph{Step 3: uniqueness at a negative auxiliary sum.}
+Choose $\lambda$ sufficiently negative that
+\[
+ \lambda<-|\delta|,
+ \qquad
+ \frac{\lambda-|\delta|}{2}<\inf\sigma(H).
+ \tag{5.12}\label{eq:negative-lambda-choice}
+\]
+Then $E_\lambda,F_\lambda<0$, and the lower of these two energies lies below
+the spectrum of $H$.
+
+Assume first that $\delta>0$.  Write
+\[
+ E_\lambda=-\alpha^2,
+ \qquad
+ F_\lambda=-\beta^2,
+ \qquad 0<\alpha<\beta.
+\]
+By Lemma~\ref{lem:negative-dichotomy}, choose decaying and growing bases at
+$+\infty$ for both energy spaces.  In these bases the tensor represented by
+$Z_\lambda$ has a unique expansion
+\begin{align*}
+ T={}&c_{dd}\,y^d_{E_\lambda,+}\otimes y^d_{F_\lambda,+}
+ +c_{gd}\,y^g_{E_\lambda,+}\otimes y^d_{F_\lambda,+}\\
+ &+c_{dg}\,y^d_{E_\lambda,+}\otimes y^g_{F_\lambda,+}
+ +c_{gg}\,y^g_{E_\lambda,+}\otimes y^g_{F_\lambda,+}.
+\end{align*}
+Its scalar component $A_\lambda$ is the same linear combination of the four
+ordinary products.  Their asymptotic rates are, in the displayed order,
+\[
+ e^{-(\alpha+\beta)x},
+ \quad e^{-(\beta-\alpha)x},
+ \quad e^{(\beta-\alpha)x},
+ \quad e^{(\alpha+\beta)x}.
+\]
+Divide $A_\lambda(x)$ by $e^{(\alpha+\beta)x}$.  Every term except the last
+tends to zero, while the last tends to $c_{gg}$.  Since
+$A_\lambda(x)\to0$, we obtain $c_{gg}=0$.  Now divide the remaining expansion
+by $e^{(\beta-\alpha)x}$.  The first two terms tend to zero and the third
+tends to $c_{dg}$, so $c_{dg}=0$.  The coefficients $c_{dd}$ and $c_{gd}$ are
+not forced to vanish at this end because their products decay.  We have shown
+that
+\[
+ T\in\Sc_{E_\lambda}\otimes L^d_{F_\lambda,+}.
+\]
+where $L^d_{F_\lambda,+}$ is the one-dimensional space of solutions at energy
+$F_\lambda$ which decay at $+\infty$.  Repeating the argument at $-\infty$
+places the same tensor in
+\[
+ \Sc_{E_\lambda}\otimes L^d_{F_\lambda,-}.
+\]
+The two lines $L^d_{F_\lambda,+}$ and $L^d_{F_\lambda,-}$ are distinct by
+Lemma~\ref{lem:negative-dichotomy}; otherwise $F_\lambda$ would be an $L^2$
+eigenvalue, contrary to $F_\lambda<\inf\sigma(H)$.  Distinct one-dimensional subspaces of the
+two-dimensional space $\Sc_{F_\lambda}$ have zero intersection.  To verify
+the tensor statement, choose a basis $z_+,z_-$ of $\Sc_{F_\lambda}$ with
+$z_+$ spanning $L^d_{F_\lambda,+}$ and $z_-$ spanning
+$L^d_{F_\lambda,-}$.  A tensor in the first product space has the form
+$Y\otimes z_+$, while one in the second has the form $\widetilde Y\otimes
+z_-$.  Uniqueness of coordinates in the basis $z_+,z_-$ forces both tensors
+to vanish if they are equal.  Hence the two tensor-product subspaces have zero
+intersection, so $T=0$ and therefore $Z_\lambda=0$.  If
+$\delta<0$, the same argument applies after interchanging $E_\lambda$ and
+$F_\lambda$.
+
+We have proved
+\[
+ Z_\lambda=0
+ \quad\text{for every sufficiently negative real $\lambda$}.
+ \tag{5.13}\label{eq:negative-resolvent-zero}
+\]
+
+\smallskip
+\noindent
+\emph{Step 4: Cauchy uniqueness.}
+For fixed $x$, define the finite complex measure
+\begin{align}
+ d\mu_x(s)
+ :={}&\sum_{\alpha,\beta=1}^2
+ q_{\alpha\beta}(s)A_{\alpha\beta}(x,s)\,ds
+ +\sum_\rho a_\rho A_\rho(x)\delta_{s_\rho}.
+ \tag{5.14}\label{eq:cauchy-measure}
+\end{align}
+Choose $m\in\R$ strictly below every spectral sum occurring in
+\eqref{eq:fixed-gap-relation}; in particular
+$\supp\mu_x\subset[m,\infty)$.  Set
+\[
+ F_x(z):=\int_{[m,\infty)}\frac{d\mu_x(s)}{s-z},
+ \qquad z\in\C\setminus[m,\infty).
+\]
+For every compact subset of the slit plane, the denominator is uniformly
+separated from zero on the support of the measure.  Differentiation under the
+integral is therefore justified, so $F_x$ is holomorphic on the connected
+domain $\C\setminus[m,\infty)$.  For real $\lambda<m$, its defining integral
+is exactly the first component $A_\lambda(x)$ of
+\eqref{eq:resolvent-state}.  By \eqref{eq:negative-resolvent-zero}, it
+vanishes on a nonempty real interval.  The holomorphic identity theorem gives
+$F_x\equiv0$ on the slit plane.
+
+We recall why this forces the measure to vanish.  For $a<b$ at which
+$\mu_x$ has no atoms, the Stieltjes inversion formula gives
+\[
+ \mu_x((a,b))
+ =\lim_{\varepsilon\downarrow0}\frac1{2\pi i}
+ \int_a^b\bigl(F_x(t+i\varepsilon)-F_x(t-i\varepsilon)\bigr)\,dt.
+\]
+The right side is zero.  Applying this separately to the real and imaginary
+parts and then using regularity of finite Borel measures gives $\mu_x=0$.
+
+For a fixed $x$, the equality $\mu_x=0$ says that its absolutely continuous
+density vanishes for almost every $s$, and that each of its atomic masses is
+zero.  The exceptional set in $s$ may depend on $x$.  Choose a countable dense
+set $D\subset\R$.  The union of the exceptional sets over $x\in D$ is still
+null.  For every $s$ outside this union,
+\[
+ \sum_{\alpha,\beta=1}^2
+ q_{\alpha\beta}(s)A_{\alpha\beta}(x,s)=0
+ \quad (x\in D).
+\]
+For fixed $s$, each product is continuous in $x$.  Density of $D$ extends the
+identity to every $x\in\R$.
+Lemma~\ref{lem:product-independence} gives
+$q_{\alpha\beta}(s)=0$ for every $\alpha,\beta$.  At an atom, distinct bound
+energies give distinct values of $s$ for fixed $\delta$.  More explicitly, if
+$\delta>0$ and the second energy is $E_j=-\kappa_j^2$, then
+\[
+ E=\delta-\kappa_j^2>0,
+ \qquad
+ s=\delta-2\kappa_j^2,
+ \qquad |s|<\delta.
+\]
+Thus this atom lies strictly below the continuum threshold $s=\delta$, and
+different $j$ give different atoms.  A zero residue has the form
+\[
+ \phi_j(x)\sum_{\alpha=1}^2b_\alpha e_\alpha(x,k)=0.
+\]
+The eigenfunction $\phi_j$ is nonzero on some interval, and the two continuum
+solutions are independent there, so $b_1=b_2=0$.  The case $\delta<0$ is
+symmetric.  Thus all atomic coefficients vanish as well.
+\end{proof}
+
+\section{Application to the modulus identity}
+
+Let
+\[
+ \mathcal Fu_0=(c_1,\ldots,c_N;g_1,g_2),
+ \qquad
+ \mathcal Fv_0=(d_1,\ldots,d_N;h_1,h_2).
+\]
+Choose measurable representatives of the four $L^2$ functions; their values
+on null sets will play no role.
+Define
+\[
+ Q_{\alpha\beta}(k,\ell)
+ =g_\alpha(k)\overline{g_\beta(\ell)}
+  -h_\alpha(k)\overline{h_\beta(\ell)}.
+ \tag{6.1}\label{eq:ac-kernel-difference}
+\]
+This is a finite sum of rank-one $L^2$ kernels.  Formally, the
+continuous--continuous part of the density difference is
+\begin{align*}
+ \sum_{\alpha,\beta=1}^2\int_0^\infty\int_0^\infty
+ &e^{-it(k^2-\ell^2)}Q_{\alpha\beta}(k,\ell)\\
+ &\times e_\alpha(x,k)\overline{e_\beta(x,\ell)}\,dk\,d\ell.
+ \tag{6.2a}\label{eq:formal-cc-density}
+\end{align*}
+The temporal frequency is the energy difference
+$\delta=k^2-\ell^2$.  The second variable
+$s=k^2+\ell^2$ parametrizes the corresponding fixed-gap curve.  The purpose
+of the next approximation is to make this formal expansion valid for
+$L^2$ spectral coefficients.
+
+The equality of moduli says that
+\[
+ \mathcal D(t,x):=|u(t,x)|^2-|v(t,x)|^2=0
+ \tag{6.2}\label{eq:density-difference}
+\]
+as a distribution in $(t,x)$.  To justify the spectral expansion, choose
+$g_{\alpha,n},h_{\alpha,n}\in C_c^\infty((0,\infty))$ converging to
+$g_\alpha,h_\alpha$ in $L^2$, while leaving the bound-state coefficients
+fixed.  Let $u_n,v_n$ be the corresponding evolutions.  Unitarity gives
+\[
+ \sup_{t\in\R}\|u_n(t)-u(t)\|_2=\|u_{0,n}-u_0\|_2\longrightarrow0.
+\]
+For any $a,b\in L^2$, the identity
+$|a|^2-|b|^2=(a-b)\overline a+b(\overline a-\overline b)$ and
+Cauchy--Schwarz give
+\[
+ \||a|^2-|b|^2\|_1\le\|a-b\|_2(\|a\|_2+\|b\|_2).
+\]
+Consequently, uniformly in $t$,
+\[
+ \bigl\||u_n(t)|^2-|u(t)|^2\bigr\|_{L^1_x}
+ \le
+ \|u_n(t)-u(t)\|_2\bigl(\|u_n(t)\|_2+\|u(t)\|_2\bigr)
+ \longrightarrow0,
+ \tag{6.3}\label{eq:density-approximation}
+\]
+and the same holds for $v_n$.
+
+Fix a spatial test function $\varphi\in C_c^\infty(\R)$ and a temporal
+frequency cutoff $\chi\in C_c^\infty((-M,M))$.  On $\supp\varphi$, the
+physical eigenfunctions are uniformly bounded.  Thus the difference between
+the $(\alpha,\beta)$ continuous--continuous forms for $u_n$ and $u$ is
+bounded, up to a constant depending on $\varphi$, by
+\begin{align*}
+ \iint_{|k^2-\ell^2|<M}
+ &\bigl|g_{\alpha,n}(k)\overline{g_{\beta,n}(\ell)}
+       -g_\alpha(k)\overline{g_\beta(\ell)}\bigr|\,dk\,d\ell\\
+ \le{}&\iint_{|k^2-\ell^2|<M}
+ |g_{\alpha,n}(k)-g_\alpha(k)|\,|g_{\beta,n}(\ell)|\,dk\,d\ell\\
+ &+\iint_{|k^2-\ell^2|<M}
+ |g_\alpha(k)|\,|g_{\beta,n}(\ell)-g_\beta(\ell)|\,dk\,d\ell.
+\end{align*}
+Lemma~\ref{lem:shell} bounds this by a constant times
+\[
+ \sqrt{2M}\left(
+ \|g_{\alpha,n}-g_\alpha\|_2\|g_{\beta,n}\|_2
+ +\|g_\alpha\|_2\|g_{\beta,n}-g_\beta\|_2
+ \right),
+ \tag{6.4}\label{eq:double-form-approximation}
+\]
+which tends to zero.  The same estimate applies to $h$.
+
+Let $\check\chi$ be the inverse Fourier transform of $\chi$.  Since
+$\check\chi$ is Schwartz, it belongs to $L^1(\R_t)$.  Equation
+\eqref{eq:density-approximation} therefore permits passage to the limit in
+\[
+ \iint \check\chi(t)\varphi(x)
+ \bigl(|u_n(t,x)|^2-|v_n(t,x)|^2\bigr)\,dx\,dt.
+\]
+For the smooth compactly supported spectral data, Fubini's theorem gives the
+spectral expansion directly.  Estimate \eqref{eq:double-form-approximation}
+shows that its continuous--continuous part converges to
+\eqref{eq:formal-cc-density} after testing in $(t,x)$.  A mixed term contains
+only one continuum integral.  The support of $\chi(\pm(k^2+\kappa_j^2))$ is a
+bounded $k$-interval, on which an $L^2$ function is in $L^1$ by
+Cauchy--Schwarz.  This justifies the mixed terms as well.
+
+We now disintegrate the temporal Fourier transform.  In the
+continuous--continuous term, apply the change of variables
+\[
+ \delta=k^2-\ell^2,
+ \qquad s=k^2+\ell^2.
+\]
+The shell estimate and Tonelli's theorem show that this change is legitimate
+for almost every $\delta$.  Formula \eqref{eq:gap-sum-jacobian} gives
+\[
+ q_{\alpha\beta,\delta}(s)
+ =\frac{
+ Q_{\alpha\beta}
+ \left(\sqrt{(s+\delta)/2},\sqrt{(s-\delta)/2}\right)
+ }{4\sqrt{s^2-\delta^2}}.
+ \tag{6.5}\label{eq:q-from-Q}
+\]
+Define
+\[
+ G_{\mathrm{cc}}(\delta,x)
+ :=\sum_{\alpha,\beta=1}^2
+   \int_{|\delta|}^{\infty}
+   q_{\alpha\beta,\delta}(s)A_{\alpha\beta}(x,s)\,ds.
+\]
+For the mixed terms, if $\delta>\kappa_j^2$, put
+\[
+ k_j^+(\delta)=\sqrt{\delta-\kappa_j^2},
+ \qquad
+ a^+_{j\alpha}(\delta)
+ =\frac{
+ g_\alpha(k_j^+(\delta))\overline{c_j}
+ -h_\alpha(k_j^+(\delta))\overline{d_j}}
+ {2k_j^+(\delta)},
+\]
+and if $\delta<-\kappa_j^2$, put
+\[
+ k_j^-(\delta)=\sqrt{-\delta-\kappa_j^2},
+ \qquad
+ a^-_{j\alpha}(\delta)
+ =\frac{
+ c_j\overline{g_\alpha(k_j^-(\delta))}
+ -d_j\overline{h_\alpha(k_j^-(\delta))}}
+ {2k_j^-(\delta)}.
+\]
+These formulas follow directly from the mixed spectral phases.  The product
+of a continuum term with the conjugate of the $j$th bound term has phase
+\[
+ e^{-it(k^2+\kappa_j^2)},
+\]
+so it contributes at $\delta=k^2+\kappa_j^2>\kappa_j^2$.  Since
+$d\delta=2k\,dk$, its density contains $1/(2k)$.  The conjugate ordering has
+phase $e^{it(k^2+\kappa_j^2)}$, contributes at
+$\delta=-(k^2+\kappa_j^2)$, and has the same Jacobian.  Set
+\begin{align*}
+ G_{\mathrm{mix}}(\delta,x)
+ :={}&\sum_{j,\alpha}\mathbf 1_{\{\delta>\kappa_j^2\}}
+ a^+_{j\alpha}(\delta)
+ e_\alpha(x,k_j^+(\delta))\phi_j(x)\\
+ &+\sum_{j,\alpha}\mathbf 1_{\{\delta<-\kappa_j^2\}}
+ a^-_{j\alpha}(\delta)
+ \phi_j(x)\overline{e_\alpha(x,k_j^-(\delta))},
+\end{align*}
+and $G_{\ac}=G_{\mathrm{cc}}+G_{\mathrm{mix}}$.
+
+With the standard jointly measurable choice of the physical eigenfunctions,
+these formulas define strongly measurable $C(K)$-valued functions for every
+compact $K$.  To verify continuity in $x$, let $x_n\to x$ in $K$.  Each
+product of generalized eigenfunctions converges pointwise, and the local bound
+\eqref{eq:scattering-local-bounds} supplies an integrable majorant on every
+fixed shell.  Dominated convergence gives convergence in the defining
+integrals.
+
+Let $I\subset\R$ be bounded.  By the local scattering bound and the triangle
+inequality,
+\begin{align*}
+ \int_I\|G_{\mathrm{cc}}(\delta,\cdot)\|_{C(K)}\,d\delta
+ \lesssim_K\sum_{\alpha,\beta=1}^2
+ \iint_{\{k^2-\ell^2\in I\}}
+ \bigl(|g_\alpha(k)g_\beta(\ell)|
+      +|h_\alpha(k)h_\beta(\ell)|\bigr)\,dk\,d\ell.
+\end{align*}
+Lemma~\ref{lem:shell} bounds the right side by
+\[
+ C_{I,K}\sum_{\alpha,\beta=1}^2
+ \bigl(\|g_\alpha\|_2\|g_\beta\|_2
+       +\|h_\alpha\|_2\|h_\beta\|_2\bigr).
+\]
+For a positive mixed term, the substitution
+$\delta=k^2+\kappa_j^2$ gives
+\begin{align*}
+ &\int_I\left\|
+ \mathbf1_{\{\delta>\kappa_j^2\}}a^+_{j\alpha}(\delta)
+ e_\alpha(\cdot,k_j^+(\delta))\phi_j
+ \right\|_{C(K)}\,d\delta\\
+ &\qquad\lesssim_K (|c_j|+|d_j|)
+ \int_{J_{I,j}}(|g_\alpha(k)|+|h_\alpha(k)|)\,dk,
+\end{align*}
+where $J_{I,j}$ is a bounded $k$-interval.  This is finite by
+Cauchy--Schwarz.  The negative mixed term is identical.  Therefore
+\[
+ \int_I\|G_{\mathrm{mix}}(\delta,\cdot)\|_{C(K)}\,d\delta<\infty.
+\]
+Consequently
+\begin{equation}
+ G_{\ac}\in L^1_{\mathrm{loc}}(\R_\delta;C(K))
+ \quad\text{for every compact }K\subset\R.
+ \tag{6.6}\label{eq:C-K-valued-density}
+\end{equation}
+
+Fix $\varphi\in C_c^\infty(\R)$.  The estimates above permit Fubini's theorem,
+so the continuous--continuous and mixed parts of the temporal Fourier
+transform of \eqref{eq:density-difference}, after pairing in $x$ with
+$\varphi$, form the absolutely continuous measure
+\[
+ \left(\int_\R G_{\ac}(\delta,x)\varphi(x)\,dx\right)d\delta.
+\]
+A bound--bound product has one fixed temporal frequency
+$E_j-E_m$ and hence contributes a multiple of the Dirac mass
+$\delta_{E_j-E_m}$.  There are only finitely many such terms.  Thus the
+remaining part of the Fourier transform is a finite pure-point measure.
+Since \eqref{eq:density-difference} is the zero distribution, its Fourier
+transform is the zero distribution.  The Lebesgue decomposition of a locally
+finite measure into absolutely continuous and singular parts is unique.
+Therefore the displayed scalar density vanishes for almost every $\delta$.  To choose the exceptional set independently of $x$, take the
+exhausting compact intervals $K_m=[-m,m]$ and, for each $m$, a countable subset
+of $C_c^\infty((-m,m))$ dense in $L^1(K_m)$.  After removing the union of the
+corresponding null sets, as well as the null sets on which the chosen
+$C(K_m)$-valued representatives are undefined, the integral of
+$G_{\ac}(\delta,\cdot)$ against every member of every such dense set is zero.
+For a fixed admissible $\delta$, the function
+$G_{\ac}(\delta,\cdot)$ is continuous on $K_m$.  If it were nonzero at one
+point, continuity would provide an $L^1$ test function for which the integral
+is nonzero.  Approximation of that test function by the chosen countable dense
+family would give the same conclusion for one member of the family, a
+contradiction.  Hence
+\begin{equation}
+ G_{\ac}(\delta,x)=0
+ \quad\text{for every }x\in\R
+ \tag{6.7}\label{eq:fixed-gap-common-null-set}
+\end{equation}
+for almost every $\delta\ne0$.  Intersect this full-measure set with the one
+on which every $q_{\alpha\beta,\delta}$ is integrable.
+
+For each remaining $\delta$, equation
+\eqref{eq:fixed-gap-common-null-set} is precisely a relation of the form
+\eqref{eq:fixed-gap-relation}.  The mixed products are its finitely many
+atomic states in the energy-sum variable: their sums are
+$s_j^+(\delta)=\delta-2\kappa_j^2$ for $\delta>\kappa_j^2$ and
+$s_j^-(\delta)=-\delta-2\kappa_j^2$ for $\delta<-\kappa_j^2$, both strictly
+inside the continuum threshold $|s|<|\delta|$.  Proposition~\ref{prop:fixed-gap}
+therefore gives $q_{\alpha\beta,\delta}=0$ almost everywhere in $s$ and
+$a^\pm_{j\alpha}(\delta)=0$ wherever defined.  This conclusion holds for
+almost every $\delta\ne0$.  Under the diffeomorphism
+$(k,\ell)\mapsto(\delta,s)$, a null set in the $(\delta,s)$ plane pulls back
+to a null set in $(0,\infty)^2$, because the inverse map is locally Lipschitz
+away from the boundary.  Formula \eqref{eq:q-from-Q} now gives
+\begin{equation}
+ Q_{\alpha\beta}(k,\ell)=0
+ \quad\text{for every $\alpha,\beta$ and almost every $(k,\ell)\in\R_+^2$}.
+ \tag{6.8}\label{eq:ac-kernel-recovered}
+\end{equation}
+The omitted set $k^2=\ell^2$ is the diagonal and has two-dimensional measure
+zero.  Since $k\mapsto\pm(k^2+\kappa_j^2)$ is a diffeomorphism away from
+$k=0$, the vanishing of the mixed atomic coefficients gives
+\begin{align}
+ c_j\overline{g_\alpha(k)}
+ &=d_j\overline{h_\alpha(k)},
+ \tag{6.9}\label{eq:mixed-one}\\
+ g_\alpha(k)\overline{c_j}
+ &=h_\alpha(k)\overline{d_j}
+ \tag{6.10}\label{eq:mixed-two}
+\end{align}
+for every $j,\alpha$ and almost every $k>0$.
+
+It remains to recover the finite bound-state block.  Since the part just
+analyzed has an $L^1_{\mathrm{loc}}$ temporal-frequency density, it has no
+point masses.  The pure-point part of the temporal Fourier transform of
+\eqref{eq:density-difference} is therefore the finite sum of the bound--bound
+terms.  Dirac masses at distinct gaps are linearly independent as
+distributions: one tests with a smooth function supported near one gap and
+vanishing near all the others.  Hence, for each fixed gap $\gamma$ and every
+spatial test function $\varphi$,
+\[
+ \int_\R\varphi(x)
+ \sum_{E_j-E_m=\gamma}
+ \left(c_j\overline{c_m}-d_j\overline{d_m}\right)
+ \phi_j(x)\phi_m(x)\,dx=0.
+\]
+The finite sum in the integrand is continuous.  Its vanishing as a
+distribution therefore gives the pointwise identity
+\[
+ \sum_{E_j-E_m=\gamma}
+ \left(c_j\overline{c_m}-d_j\overline{d_m}\right)
+ \phi_j(x)\phi_m(x)=0.
+ \tag{6.11}\label{eq:bound-gap-relation}
+\]
+By \eqref{eq:bound-tail-plus}, the summands have nonzero leading terms with
+rates
+\[
+ e^{-(\kappa_j+\kappa_m)x}
+ \quad (x\to+\infty).
+\]
+For a fixed gap
+\[
+ \gamma=E_j-E_m=\kappa_m^2-\kappa_j^2,
+\]
+these rates are distinct.  Indeed, knowing $\gamma$ and
+$S=\kappa_j+\kappa_m$ determines
+\[
+ \kappa_m-\kappa_j=\frac{\gamma}{S},
+\]
+and hence determines the ordered pair $(\kappa_j,\kappa_m)$.  There are finitely many terms in each fixed-gap sum.  Choose the smallest
+value of $\kappa_j+\kappa_m$, multiply
+\eqref{eq:bound-gap-relation} by $e^{(\kappa_j+\kappa_m)x}$, and let
+$x\to+\infty$.  Every faster-decaying term tends to zero, while the selected
+term tends to its coefficient times the nonzero product of the leading tail
+constants.  Its coefficient must vanish.  Remove that term and repeat.  The
+finiteness of the sum yields
+\[
+ c_j\overline{c_m}=d_j\overline{d_m}
+ \quad\text{for all $j,m$}.
+ \tag{6.12}\label{eq:bound-kernel-recovered}
+\]
+
+\section{Completion of the proof}
+
+Put
+\[
+ U=\mathcal Fu_0,
+ \qquad
+ W=\mathcal Fv_0
+\]
+in
+\[
+ \HH=\C^N\oplus L^2(\R_+;\C^2).
+\]
+For $Y\in\HH$, define the rank-one operator generated by $U$ by
+\[
+ (U\otimes\overline U)Y=\langle Y,U\rangle_{\HH}U.
+\]
+Its kernel has four blocks: bound--bound, bound--continuous,
+continuous--bound, and continuous--continuous.  Equation
+\eqref{eq:bound-kernel-recovered} identifies the first block;
+\eqref{eq:mixed-one}--\eqref{eq:mixed-two} identify the two off-diagonal
+blocks; and \eqref{eq:ac-kernel-recovered} identifies the final block.
+Therefore
+\[
+ U\otimes\overline U=W\otimes\overline W
+ \tag{7.1}\label{eq:rank-one-equality}
+\]
+as operators on $\HH$.
+
+If $U=0$, the left side is zero.  Taking the inner product of the right side
+with $W$ gives $\|W\|_{\HH}^4=0$, so $W=0$; take $\zeta=1$.  Suppose
+$U\ne0$.  The range of $U\otimes\overline U$ is $\operatorname{span}\{U\}$.
+Equality \eqref{eq:rank-one-equality} shows that its range also equals
+$\operatorname{span}\{W\}$, so $W=\zeta U$ for a nonzero scalar $\zeta$.
+Substitution in \eqref{eq:rank-one-equality} gives
+\[
+ U\otimes\overline U=|\zeta|^2U\otimes\overline U.
+\]
+Since the operator on the left is nonzero, $|\zeta|=1$.  In either case,
+since $\mathcal F$ is unitary,
+\[
+ v_0=\zeta u_0.
+\]
+This proves Theorem~\ref{thm:main}.
+
+\part{Further results and remarks}\label{part:further-remarks}
+
+\section{One-sided observation for compactly supported potentials}
+
+We prove Theorem~\ref{thm:half-line}.  We first isolate the Fourier statement
+used in the proof.  For $F\in L^2(\R)$ set
+\[
+ \mathcal E_tF=\int_\R F(k)e^{iky-ik^2t}\,dk
+\]
+as an $L^2_y$ inverse Fourier transform.
+
+\begin{lemma}[Free half-line model]
+\label{lem:free-half-line}
+Let $0<\kappa_1<\cdots<\kappa_N$, let $a_j,b_j\in\C$, and let
+$F,G\in L^2(\R)$.  Suppose
+\begin{align*}
+ U(t,y)&=\sum_{j=1}^Na_je^{-\kappa_jy}e^{i\kappa_j^2t}
+          +\mathcal E_tF(y),\\
+ W(t,y)&=\sum_{j=1}^Nb_je^{-\kappa_jy}e^{i\kappa_j^2t}
+          +\mathcal E_tG(y)
+\end{align*}
+in $L^2((0,\infty)_y)$ for every $t$, and assume
+$|U(t,y)|=|W(t,y)|$ for almost every $(t,y)\in\R\times(0,\infty)$.
+Then there is $\zeta\in\T$ such that
+\[
+ G=\zeta F\quad\text{a.e. on }\R,
+ \qquad b_j=\zeta a_j\quad(1\le j\le N).
+\]
+The assertion includes $N=0$.
+\end{lemma}
+
+\begin{proof}
+Plancherel's theorem gives
+$\|\mathcal E_tF\|_{L^2(\R)}=\sqrt{2\pi}\|F\|_2$, independently of $t$.
+Moreover, dominated convergence in Fourier space shows that
+$t\mapsto\mathcal E_tF$ is continuous into $L^2(\R)$.  The finite bound-state
+sum is also continuous into $L^2(0,\infty)$.  Hence
+$t\mapsto U(t),W(t)$ are continuous into $L^2(0,\infty)$.  The elementary
+estimate
+\[
+ \||a|^2-|b|^2\|_1\le\|a-b\|_2(\|a\|_2+\|b\|_2)
+\]
+shows that $t\mapsto |U(t)|^2-|W(t)|^2$ is continuous into $L^1(0,\infty)$.
+It vanishes for almost every $t$ by hypothesis, and therefore vanishes for
+every $t$.
+
+We first record a Cauchy-transform fact.  If $J\subset\R$ is a bounded open
+interval, $m\in L^1(J)$, and
+\[
+ C_m(z)=\int_J\frac{m(\eta)}{z-i\eta}\,d\eta,
+ \qquad z\in\C\setminus iJ,
+\]
+extends holomorphically through $iJ$, then $m=0$ almost everywhere on $J$.
+Indeed,
+\[
+ H(w):=iC_m(iw)=\int_J\frac{m(\eta)}{w-\eta}\,d\eta
+\]
+extends through $J$.  Let $K\Subset J$ and
+$\phi\in C_c^\infty(K)$.  For $\varepsilon>0$ small enough, Fubini's theorem
+and
+\[
+ \frac1{x+i\varepsilon-\eta}-\frac1{x-i\varepsilon-\eta}
+ =\frac{-2i\varepsilon}{(x-\eta)^2+\varepsilon^2}
+\]
+give
+\begin{align*}
+ &\int_K\bigl(H(x+i\varepsilon)-H(x-i\varepsilon)\bigr)\phi(x)\,dx\\
+ &\qquad=-2\pi i\int_Jm(\eta)(P_\varepsilon*\phi)(\eta)\,d\eta,
+ \qquad
+ P_\varepsilon(x)=\frac1\pi\frac{\varepsilon}{x^2+\varepsilon^2}.
+\end{align*}
+Because the extended function $H$ is uniformly continuous on a compact
+neighborhood of $K$, the left side tends to zero.  The Poisson kernels form
+an approximate identity, so $P_\varepsilon*\phi\to\phi$ uniformly.  Since
+$m\in L^1(J)$, the right side tends to
+$-2\pi i\int_Jm(\eta)\phi(\eta)\,d\eta$.  Thus $m$ vanishes as a
+distribution on every $K\Subset J$, and hence almost everywhere on $J$.
+
+Fix $\chi\in C_c^\infty(\R)$ and define
+\[
+ \check\chi(t)=\frac1{2\pi}\int_\R e^{-i\omega t}\chi(\omega)\,d\omega.
+\]
+The Fourier inversion formula gives
+\[
+ \int_\R \check\chi(t)e^{i\omega t}\,dt=\chi(\omega).
+ \tag{8.0}\label{eq:half-line-frequency-selector}
+\]
+For $\Re z>0$, multiply $|U|^2-|W|^2$ by
+$\check\chi(t)e^{-zy}$ and integrate in $(t,y)$.  This integral is absolutely
+convergent.  Indeed, if $a=\Re z>0$, then
+\[
+ \int_0^\infty e^{-ay}|\mathcal E_tF(y)|^2\,dy
+ \le\|\mathcal E_tF\|_2^2=2\pi\|F\|_2^2
+\]
+uniformly in $t$, and the same estimate holds for $G$.  Each bound-state sum
+has a uniformly bounded exponentially weighted $L^2_y$ norm.  Since
+$\check\chi\in L^1(\R)$, integration in $t$ is legitimate.
+
+For Schwartz $F,G$, expand the density difference into free--free,
+bound--free, free--bound, and bound--bound terms.  For example, the
+free--free term is
+\[
+ \iint_{\R^2}q(k,\ell)
+ e^{i(k-\ell)y}e^{i(\ell^2-k^2)t}\,dk\,d\ell.
+\]
+Using \eqref{eq:half-line-frequency-selector} and
+\[
+ \int_0^\infty e^{-zy}e^{i(k-\ell)y}\,dy
+ =\frac1{z-i(k-\ell)}
+\]
+produces $\Phi_\chi$.  A bound--free term has spatial factor
+$e^{-(\kappa_j+ik)y}$ and temporal frequency $k^2+\kappa_j^2$, producing
+$\Psi^+_{j,\chi}$.  The opposite ordering produces
+$\Psi^-_{j,\chi}$, and two bound states produce $R_\chi$.  Thus
+\begin{equation}
+ 0=\Phi_\chi(z)+\sum_{j=1}^N\bigl(\Psi^+_{j,\chi}(z)
+       +\Psi^-_{j,\chi}(z)\bigr)+R_\chi(z),
+ \tag{8.1}\label{eq:half-line-transform}
+\end{equation}
+where
+\begin{align*}
+ q(k,\ell)&=F(k)\overline{F(\ell)}-G(k)\overline{G(\ell)},\\
+ r_j^+(k)&=a_j\overline{F(k)}-b_j\overline{G(k)},\\
+ r_j^-(k)&=\overline{a_j}F(k)-\overline{b_j}G(k),\\
+ d_{jm}&=a_j\overline{a_m}-b_j\overline{b_m},
+\end{align*}
+and
+\begin{align*}
+ \Phi_\chi(z)
+ &=\iint_{\R^2}q(k,\ell)
+   \frac{\chi(\ell^2-k^2)}{z-i(k-\ell)}\,dk\,d\ell,\\
+ \Psi^+_{j,\chi}(z)
+ &=\int_\R r_j^+(k)
+   \frac{\chi(k^2+\kappa_j^2)}{z+\kappa_j+ik}\,dk,\\
+ \Psi^-_{j,\chi}(z)
+ &=\int_\R r_j^-(k)
+   \frac{\chi(-(k^2+\kappa_j^2))}{z+\kappa_j-ik}\,dk,\\
+ R_\chi(z)
+ &=\sum_{j,m=1}^Nd_{jm}
+   \frac{\chi(\kappa_j^2-\kappa_m^2)}{z+\kappa_j+\kappa_m}.
+\end{align*}
+To justify \eqref{eq:half-line-transform} for arbitrary $L^2$ data, choose
+Schwartz functions $F_n,G_n$ converging to $F,G$ in $L^2$.  Let $U_n,W_n$ be
+the corresponding functions with the bound-state coefficients unchanged.
+Plancherel gives convergence uniformly in $t$ in $L^2_y$, and the inequality
+\[
+ \||p|^2-|q|^2\|_1\le\|p-q\|_2(\|p\|_2+\|q\|_2)
+\]
+shows that the transformed density of $U_n,W_n$ converges to that of $U,W$.
+The factor $e^{-\Re(z)y}$ only improves this estimate, and
+$\check\chi\in L^1_t$ permits integration in time.
+
+It remains to pass to the limit on the spectral side.  If
+$\supp\chi\subset[-M,M]$, the kernel
+$\1_{\{|\ell^2-k^2|\le M\}}$ has uniformly bounded integrals in each
+variable.  Schur's test therefore gives
+\[
+ \iint |F(k)F(\ell)|\,|\chi(\ell^2-k^2)|\,dk\,d\ell
+ \lesssim_{\chi}\|F\|_2^2,
+\]
+and the corresponding bilinear estimate controls the difference between the
+kernels formed from $F_n$ and $F$.  The same statement holds for $G$.
+The mixed factors have compact $k$-support and are controlled by
+Cauchy--Schwarz.  Thus every term in \eqref{eq:half-line-transform} converges
+to the displayed formula.
+
+We next separate the free--free term from the others by analytic
+continuation.  The numerator of $\Psi^+_{j,\chi}$ has compact $k$-support.
+If $|\Re z|<\kappa_j/2$, then
+\[
+ |z+\kappa_j+ik|\ge \Re(z+\kappa_j)>\kappa_j/2.
+\]
+The integrand and all its $z$-derivatives are therefore dominated by
+integrable functions on compact substrips.  Thus $\Psi^+_{j,\chi}$ is
+holomorphic there.  The same argument applies to $\Psi^-_{j,\chi}$.
+The poles of $R_\chi$ are the negative real numbers
+$-(\kappa_j+\kappa_m)$, so $R_\chi$ is holomorphic in a strip around the
+imaginary axis.  Equation \eqref{eq:half-line-transform} now defines a
+holomorphic continuation of $\Phi_\chi$ through that axis.  Put
+\[
+ M_\chi(\xi)=\int_\R q(k,k-\xi)
+                 \chi(\xi^2-2k\xi)\,dk.
+\]
+The preceding Schur estimate and Fubini's theorem give $M_\chi\in L^1(\R)$ and
+\[
+ \Phi_\chi(z)=\int_\R\frac{M_\chi(\xi)}{z-i\xi}\,d\xi.
+\]
+For a bounded interval $J$, split this integral into its parts over $J$ and
+$\R\setminus J$.  The latter is holomorphic near $iJ$, so the
+Cauchy-transform fact applies to the former.  An exhaustion by bounded
+intervals gives $M_\chi=0$ almost everywhere for every $\chi$.
+
+This implies $q=0$ almost everywhere on $\R^2$.  We include the measure-theoretic
+step.  Away from $\xi=0$, the change of variables
+\[
+ \xi=k-\ell,
+ \qquad \omega=\ell^2-k^2
+\]
+has Jacobian $2|\xi|$ and inverse
+\[
+ k=\frac{\xi^2-\omega}{2\xi},
+ \qquad
+ \ell=-\frac{\xi^2+\omega}{2\xi}.
+\]
+Let $I\Subset\R\setminus\{0\}$ and $J\Subset\R$.  For
+$\theta\in C_c^\infty(I)$ and $\eta\in C_c^\infty(J)$, the identity
+$M_\eta=0$ gives
+\[
+ 0=\int_I\theta(\xi)\int_\R q(k,k-\xi)
+ \eta(\xi^2-2k\xi)\,dk\,d\xi.
+\]
+On the support of the integrand, use $(\xi,\omega)$ as variables.  Since
+$dk\,d\xi=(2|\xi|)^{-1}d\omega\,d\xi$, this becomes
+\[
+ \int_{I\times J}
+ \frac{q(k(\xi,\omega),\ell(\xi,\omega))}{2|\xi|}
+ \theta(\xi)\eta(\omega)\,d\xi\,d\omega=0.
+\]
+The pullback of $q$ belongs to $L^2(I\times J)$, and $1/(2|\xi|)$ is bounded
+above and below there.  Finite sums of the tensors
+$\theta(\xi)\eta(\omega)$ are dense in $L^2(I\times J)$.  The weighted
+pullback, and hence the pullback itself, vanishes almost everywhere.  Choose
+countable families of such intervals exhausting
+$(\R\setminus\{0\})\times\R$.  The inverse change of variables then gives
+$q(k,\ell)=0$ away from the diagonal $k=\ell$.  The diagonal has
+Lebesgue measure zero, so $q=0$ almost everywhere on $\R^2$.
+
+Consequently the Hilbert--Schmidt kernels of the two rank-one operators
+coincide:
+\[
+ F(k)\overline{F(\ell)}=G(k)\overline{G(\ell)}
+ \quad\text{for almost every }(k,\ell).
+\]
+If $F=0$, Fubini's theorem shows that $G(k)\overline{G(\ell)}=0$ almost
+everywhere, hence $G=0$.  If $F\ne0$, the two nonzero rank-one operators have
+the same range, so $G=\zeta F$ for some nonzero scalar $\zeta$.  Substitution
+in the kernel identity gives $|\zeta|^2=1$.  Thus $|\zeta|=1$.
+
+It remains to identify the finite sums.  First suppose $F\ne0$.  Replace $W$
+by $\overline\zeta W$; then $G=F$.  We must prove $b_j=a_j$ in this
+normalization.  Set
+\[
+ \Lambda=\{\kappa_j^2-\kappa_m^2:1\le j,m\le N\}.
+\]
+Choose $\chi\in C_c^\infty((0,\infty)\setminus\Lambda)$.  In
+\eqref{eq:half-line-transform}, the free--free, negative-frequency mixed, and
+bound--bound terms vanish.  Hence
+\[
+ \sum_{j=1}^NC_{j,\chi}(z)=0,
+ \qquad
+ C_{j,\chi}(z)=\int_\R
+ \frac{(a_j-b_j)\overline{F(k)}\chi(k^2+\kappa_j^2)}
+      {z+\kappa_j+ik}\,dk.
+ \tag{8.2}\label{eq:bound-induction}
+\]
+The function $C_{j,\chi}$ is holomorphic on the half-plane
+$\Re z>-\kappa_j$.  The sum in \eqref{eq:bound-induction} vanishes on
+$\Re z>0$, so the identity theorem makes it vanish wherever all terms are
+holomorphic.
+
+We begin with $j=1$.  Every $C_{m,\chi}$ with $m>1$ is holomorphic on a
+neighborhood of the line $\Re z=-\kappa_1$, because
+$-\kappa_1>-\kappa_m$.  On the right of that line,
+\[
+ C_{1,\chi}(z)=-\sum_{m=2}^NC_{m,\chi}(z).
+\]
+The right side extends through the line, and therefore so does
+$C_{1,\chi}$.  Put $w=z+\kappa_1$ and change $k$ to $-\eta$.  Then
+$C_{1,\chi}(w-\kappa_1)$ is the Cauchy transform of the compactly supported
+$L^1$ function
+\[
+ \eta\longmapsto
+ (a_1-b_1)\overline{F(-\eta)}
+ \chi(\eta^2+\kappa_1^2).
+\]
+The Cauchy-transform fact gives
+\[
+ (a_1-b_1)\overline{F(k)}\chi(k^2+\kappa_1^2)=0
+ \quad\text{for almost every }k.
+\]
+Thus $C_{1,\chi}=0$.  Remove it from \eqref{eq:bound-induction}.  The same
+argument at $\Re z=-\kappa_2$ gives the result for $j=2$.  Induction gives
+\[
+ (a_j-b_j)\overline{F(k)}\chi(k^2+\kappa_j^2)=0
+ \quad\text{for almost every }k
+\]
+for every $j$.  Varying $\chi$ shows that
+$(a_j-b_j)F(k)=0$ outside the finite set
+$\{k:k^2+\kappa_j^2\in\Lambda\}$.  Since $F\ne0$, one has $a_j=b_j$.
+
+If $F=G=0$, expansion of the modulus identity gives
+\[
+ \sum_{j,m=1}^Nd_{jm}e^{-(\kappa_j+\kappa_m)y}
+ e^{i(\kappa_j^2-\kappa_m^2)t}=0.
+\]
+The left side is continuous, so the almost-everywhere identity holds for all
+$(t,y)$.  Fix $y>0$ and group terms having the same temporal frequency
+$\omega=\kappa_j^2-\kappa_m^2$.  Distinct exponentials $e^{i\omega t}$ are
+linearly independent: evaluating the first $M$ derivatives at one time gives
+a Vandermonde system.  Hence, for every $\omega$,
+\[
+ \sum_{\kappa_j^2-\kappa_m^2=\omega}
+ d_{jm}e^{-(\kappa_j+\kappa_m)y}=0
+ \quad(y>0).
+\]
+Within one frequency class, the numbers $\kappa_j+\kappa_m$ are distinct.
+Indeed, the difference of squares and the sum determine the ordered pair:
+\[
+ \kappa_j-\kappa_m=
+ \frac{\omega}{\kappa_j+\kappa_m}.
+\]
+A second Vandermonde argument, now in $y$, gives $d_{jm}=0$ for all $j,m$.  Hence
+$(a_1,\ldots,a_N)\otimes(\overline a_1,\ldots,\overline a_N)$ equals the
+corresponding rank-one matrix for $b$, and $b=\zeta a$ for some $\zeta\in\T$.
+This completes the proof.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:half-line}]
+Translation reduces the proof to $R=0$.  Standard one-dimensional scattering
+theory gives finitely many simple negative eigenvalues
+$-\kappa_1^2,\ldots,-\kappa_N^2$, real normalized eigenfunctions $\phi_j$,
+and two continuum channels $e_1(\cdot,k),e_2(\cdot,k)$, $k>0$.  Since $V=0$
+on $(0,\infty)$, square integrability excludes the growing exponential and
+therefore
+\[
+ \phi_j(x)=\alpha_je^{-\kappa_jx},\qquad \alpha_j\ne0.
+\]
+The coefficient cannot vanish, since the eigenfunction and its derivative
+would then vanish on $(0,\infty)$ and ODE uniqueness would give
+$\phi_j\equiv0$.
+and the continuum functions may be normalized so that
+\[
+ e_1(x,k)=T(k)e^{ikx},
+ \qquad
+ e_2(x,k)=e^{-ikx}+R_2(k)e^{ikx},
+ \qquad x>0.
+\]
+The coefficients $T,R_2$ are bounded, and $T(k)\ne0$ for $k>0$.  Indeed,
+$T(k_0)=0$ would make $e_1(\cdot,k_0)$ and its derivative vanish on
+$(0,\infty)$; ODE uniqueness would then give $e_1\equiv0$, contradicting its
+nonzero incoming asymptotic at $-\infty$.
+
+Write the spectral coefficients of $u_0$ as
+$c_j;g_1,g_2$ and those of $v_0$ as $d_j;h_1,h_2$.  Suppressing one common
+normalization constant, the spectral expansion on $x>0$ is
+\begin{align*}
+ e^{-itH}u_0(x)
+ ={}&\sum_{j=1}^Nc_j\alpha_je^{-\kappa_jx}e^{i\kappa_j^2t}\\
+ &+\int_0^\infty e^{-ik^2t}
+ \bigl[T(k)g_1(k)e^{ikx}
+ +g_2(k)e^{-ikx}+R_2(k)g_2(k)e^{ikx}\bigr]dk.
+\end{align*}
+Combine the two coefficients of $e^{ikx}$ and change $k$ to $-k$ in the
+coefficient of $e^{-ikx}$.  The continuum integral becomes
+$\int_\R F_u(k)e^{ikx-ik^2t}\,dk$, where
+\[
+ F_u(k)=
+ \begin{cases}
+ T(k)g_1(k)+R_2(k)g_2(k),&k>0,\\
+ g_2(-k),&k<0.
+ \end{cases}
+\]
+Define $F_v$ analogously.  The boundedness of $T$ and $R_2$ implies
+$F_u,F_v\in L^2(\R)$.  Thus the restrictions of the two evolutions to the free
+half-line have exactly the form in Lemma~\ref{lem:free-half-line}.
+The half-line modulus identity and Lemma~\ref{lem:free-half-line} give
+\[
+ F_v=\zeta F_u,
+ \qquad d_j\alpha_j=\zeta c_j\alpha_j.
+\]
+Thus $d_j=\zeta c_j$.  On the negative frequency half-line,
+$F_v=\zeta F_u$ gives $h_2=\zeta g_2$.  On the positive frequency half-line it
+then gives
+\[
+ T(k)(h_1(k)-\zeta g_1(k))=0
+ \quad\text{a.e. }k>0.
+\]
+Since $T(k)\ne0$, $h_1=\zeta g_1$.  All spectral coefficients agree up to
+$\zeta$, and unitarity of the spectral transform gives $v_0=\zeta u_0$.
+\end{proof}
+
+\subsection*{Scope of the decay hypothesis}
+
+The product system only requires $V\in L^1_{\mathrm{loc}}$, and the
+negative-energy argument uses integrable tails.  The first moment in
+Theorem~\ref{thm:main} enters through the scattering representation, its
+uniform threshold bounds, and the finiteness of the negative spectrum.  One
+could replace $V\in L^1_1$ by $V\in L^1$ only after imposing and verifying the
+needed threshold and negative-spectrum hypotheses.  No such extension is
+claimed here.
+
+\section{Phase retrieval from Masuda's theorem}
+
+Let $V:\R\to\R$ be measurable.  We impose the assumptions in
+Masuda's theorem~\cite{Masuda}:
+\begin{enumerate}
+\item $V\in L^2_{\mathrm{loc}}(\R)$;
+\item there is a null set $Q\subset\R$ such that $\R\setminus Q$ is connected
+and open and $V$ is locally essentially bounded on $\R\setminus Q$;
+\item the operator
+\[
+ H_0=-\partial_x^2+V,
+ \qquad D(H_0)=C_c^\infty(\R),
+\]
+is essentially self-adjoint on $L^2(\R)$;
+\item the spectrum of its self-adjoint closure $H$ is bounded from below.
+\end{enumerate}
+Masuda also permits a real $C^2$ magnetic potential.  We only use the
+nonmagnetic case.
+
+A Masuda weak solution of
+\begin{equation}
+ if_t+f_{xx}=Vf
+ \tag{9.1}\label{eq:schrodinger}
+\end{equation}
+is a function $f\in C(\R;L^2(\R))$ satisfying
+\eqref{eq:schrodinger} in distributions.  Thus, for every
+$\varphi\in C_c^\infty(\R^2)$,
+\[
+ \iint_{\R^2}f(t,x)
+ \bigl(-i\varphi_t(t,x)+\varphi_{xx}(t,x)-V(x)\varphi(t,x)\bigr)
+ \,dx\,dt=0,
+\]
+with the usual complex-bilinear distributional pairing.  A preliminary lemma
+in Masuda's proof identifies every such weak solution with the unitary orbit
+\[
+ f(t)=e^{-i(t-t_0)H}f(t_0).
+\]
+The same time-mollification argument on a compact subinterval gives local
+uniqueness; hence a weak solution defined only on an open time interval has a
+unique global unitary extension from any one of its time slices.  Under the
+assumptions above, Masuda proves the following statement.
+
+\begin{proposition}[Masuda]
+\label{prop:masuda}
+If a Masuda weak solution of \eqref{eq:schrodinger} vanishes on a nonempty
+open subset of $\R_t\times\R_x$, then it vanishes identically.
+\end{proposition}
+
+We now prove Theorem~\ref{thm:phase-retrieval}.  Thus $I\subset\R$ is a
+nonempty open interval, $u,v$ are Masuda weak solutions, and
+\[
+ u,v\in C(I;H^1(\R)).
+ \tag{9.2}\label{eq:H1-regularity}
+\]
+The density hypothesis is
+\begin{equation}
+ |u(t,x)|=|v(t,x)|
+ \quad\text{for almost every }(t,x)\in I\times\R.
+ \tag{9.3}\label{eq:modulus}
+\end{equation}
+Equality of the densities first determines the difference of the currents.
+The one-dimensional integrability of that difference is used below.
+
+\section{Density and current}
+
+For $f\in H^1(\R)$ define
+\[
+ \rho_f=|f|^2,
+ \qquad
+ j_f=\operatorname{Im}(\overline f f_x).
+\]
+Then $j_f\in L^1(\R)$ and
+\[
+ \|j_f\|_1\le \|f\|_2\|f_x\|_2.
+\]
+
+\begin{lemma}[Recovery of the current]
+\label{lem:current}
+Under the hypotheses of Theorem~\ref{thm:phase-retrieval},
+\begin{equation}
+ j_u=j_v
+ \quad\text{almost everywhere on }I\times\R.
+ \tag{10.1}\label{eq:equal-current}
+\end{equation}
+Consequently,
+\begin{equation}
+ \overline u\,u_x=\overline v\,v_x
+ \quad\text{almost everywhere on }I\times\R.
+ \tag{10.2}\label{eq:equal-logarithmic-derivative}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Every solution satisfying \eqref{eq:H1-regularity} obeys the continuity
+equation
+\begin{equation}
+ \partial_t|f|^2+2\partial_x
+ \operatorname{Im}(\overline f f_x)=0
+ \quad\text{in }\D'(I\times\R).
+ \tag{10.3}\label{eq:continuity}
+\end{equation}
+For a smooth solution, solve \eqref{eq:schrodinger} for the time derivative:
+$f_t=if_{xx}-iVf$.  Since $V$ is real,
+\begin{align*}
+ \partial_t|f|^2
+ &=f_t\overline f+f\overline{f_t}\\
+ &=i(f_{xx}\overline f-f\overline{f_{xx}})\\
+ &=-2\partial_x\operatorname{Im}(\overline f f_x).
+\end{align*}
+For a solution satisfying \eqref{eq:H1-regularity}, regularize the equation in
+$(t,x)$ and repeat this calculation.  On compact spatial intervals,
+$V\in L^2$, while the one-dimensional embedding
+$H^1\subset L^\infty$ gives $Vf\in L^2_{\mathrm{loc}}$.  Thus the potential
+terms converge and cancel.  The products containing $f_x$ converge in
+$L^1$ by Cauchy--Schwarz and \eqref{eq:H1-regularity}.  Passing to the limit
+proves \eqref{eq:continuity}.
+
+Subtract \eqref{eq:continuity} for $u$ and $v$.  By
+\eqref{eq:modulus},
+\[
+ \partial_x(j_u-j_v)=0
+ \quad\text{in }\D'(I\times\R).
+ \tag{10.4}\label{eq:current-constant}
+\]
+We show that the constant in $x$ is zero.  For $\eta\in C_c^\infty(I)$ put
+\[
+ J_\eta(x)=\int_I\eta(t)(j_u-j_v)(t,x)\,dt.
+\]
+The estimate
+\[
+ \|j_f(t)\|_1\le\|f(t)\|_2\|f_x(t)\|_2
+\]
+and the $C(I;H^1)$ assumption give $J_\eta\in L^1(\R)$.  Testing
+\eqref{eq:current-constant} against $\eta(t)\phi(x)$ shows that
+$J_\eta'=0$ in $\D'(\R)$.  A distribution on $\R$ with zero derivative is a
+constant distribution: for example, it annihilates every test function of
+integral zero, each of which is the derivative of a compactly supported test
+function.  Since $J_\eta$ is represented by an $L^1$ function, this constant
+must be zero.  Thus
+\[
+ \int_I\eta(t)(j_u-j_v)(t,x)\,dt=0
+\]
+for almost every $x$ and every temporal test function $\eta$.  Hence
+\eqref{eq:equal-current} holds.
+
+Finally,
+\[
+ \operatorname{Re}(\overline f f_x)
+ =\frac12\partial_x|f|^2
+\]
+in distributions.  The real parts of $\overline u u_x$ and
+$\overline v v_x$ agree by \eqref{eq:modulus}, and their imaginary parts agree
+by \eqref{eq:equal-current}.  Both products belong locally to $L^1$, so the
+distributional identity is the almost-everywhere identity
+\eqref{eq:equal-logarithmic-derivative}.
+\end{proof}
+
+\section{Local constancy of the relative phase}
+
+Every $H^1(\R)$ function has a continuous representative, since
+\[
+ |f(x)-f(y)|\le |x-y|^{1/2}\|f_x\|_2.
+\]
+Together with the $L^2$ condition, this representative tends to zero at
+infinity.  The embedding $H^1(\R)\hookrightarrow C_0(\R)$ is continuous.
+Thus \eqref{eq:H1-regularity} gives jointly continuous representatives of
+$u$ and $v$: continuity in $t$ holds uniformly in $x$, and continuity in $x$
+holds on every time slice.  Set
+\[
+ \Omega=\{(t,x)\in I\times\R:u(t,x)\ne0\}.
+\]
+By \eqref{eq:modulus}, $v$ has the same nonzero set.  The set $\Omega$ is
+open.
+
+\begin{lemma}[Relative phase]
+\label{lem:relative-phase}
+On every connected component of $\Omega$ there is a constant $\zeta\in\T$
+such that $v=\zeta u$.
+\end{lemma}
+
+\begin{proof}
+Fix an open rectangle $J\times O$ whose closure is contained in $\Omega$.
+There is a constant $c_0>0$ such that
+\[
+ |u(t,x)|\ge c_0
+ \quad ((t,x)\in J\times O).
+\]
+Define $q=v/u$ there.  The map $z\mapsto1/z$ is smooth on
+$\{|z|\ge c_0\}$, so the Sobolev chain and product rules give
+$q\in C(J;H^1(O))$.  Equation \eqref{eq:modulus} and continuity imply
+$|q|=1$ everywhere on the rectangle.  For almost
+every $t\in J$, the quotient rule in $H^1(O)$ and
+\eqref{eq:equal-logarithmic-derivative} give
+\begin{align*}
+ 0
+ &=\overline v v_x-\overline u u_x\\
+ &=|u|^2\overline q\,q_x
+ \quad\text{almost everywhere on }O.
+\end{align*}
+Hence $q(t,\cdot)$ is constant on $O$ for almost every $t$.  Since
+$q\in C(J;H^1(O))\subset C(J\times O)$, approximation by such times gives the
+same conclusion for every $t\in J$.  We may therefore write
+\[
+ v(t,x)=c(t)u(t,x)
+ \quad ((t,x)\in J\times O),
+ \qquad |c(t)|=1.
+ \tag{11.1}\label{eq:local-time-phase}
+\]
+
+It remains to prove that $c$ is independent of $t$.  Choose a nonnegative,
+nonzero function $\chi\in C_c^\infty(O)$ and set
+\[
+ A(t)=\int_\R\chi(x)\overline{u(t,x)}v(t,x)\,dx,
+ \qquad
+ B(t)=\int_\R\chi(x)|u(t,x)|^2\,dx.
+\]
+The lower bound for $|u|$ on $\supp\chi$ gives $B(t)>0$ on $J$, and
+\eqref{eq:local-time-phase} gives
+\[
+ A(t)=c(t)B(t).
+ \tag{11.2}\label{eq:A-cB}
+\]
+We compute their derivatives.  Formally,
+\[
+ u_t=iu_{xx}-iVu,
+ \qquad
+ v_t=iv_{xx}-iVv.
+\]
+Therefore
+\begin{align*}
+ A'
+ &=\int\chi(\overline{u_t}v+\overline u v_t)\\
+ &=i\int\chi(\overline u v_{xx}-\overline{u_{xx}}v),
+\end{align*}
+because the two potential terms cancel.  Integrating each second derivative
+once transfers the remaining derivative to $\chi$ and gives, for almost every
+$t\in J$,
+\begin{align}
+ A'(t)
+ &=i\int_\R\chi'(x)
+   \bigl(\overline{u_x(t,x)}v(t,x)
+         -\overline{u(t,x)}v_x(t,x)\bigr)\,dx,
+ \tag{11.3}\label{eq:A-prime}\\
+ B'(t)
+ &=i\int_\R\chi'(x)
+   \bigl(\overline{u_x(t,x)}u(t,x)
+         -\overline{u(t,x)}u_x(t,x)\bigr)\,dx.
+ \tag{11.4}\label{eq:B-prime}
+\end{align}
+The same calculation with $v=u$ gives \eqref{eq:B-prime}.  All displayed
+integrands belong to $L^1$ by Cauchy--Schwarz.  For the weak solutions, perform
+the calculation after local regularization.  The terms
+$V\overline uv$ are locally integrable because
+$V\in L^2_{\mathrm{loc}}$ and $u,v$ are locally bounded.  The formulas show
+that the distributional derivatives $A'$ and $B'$ belong to
+$L^1_{\mathrm{loc}}(J)$; hence $A$ and $B$ have locally absolutely continuous
+representatives.
+
+On $\supp\chi$, equation \eqref{eq:local-time-phase} and its weak spatial
+derivative give $v=cu$ and $v_x=cu_x$.  Therefore
+\[
+ A'(t)=c(t)B'(t)
+ \quad\text{for almost every }t\in J.
+\]
+Since $B>0$, equation \eqref{eq:A-cB} shows that $c=A/B$ is locally
+absolutely continuous.  Differentiating \eqref{eq:A-cB} gives
+\[
+ c'(t)B(t)=A'(t)-c(t)B'(t)=0
+\]
+for almost every $t$.  Hence $c$ is constant on $J$.
+
+Every point of $\Omega$ lies in a rectangle of the type just considered, so
+$q$ is locally constant on $\Omega$.  Let $\Omega_0$ be a connected
+component and fix one value $\zeta$ attained there.  The set
+$\{(t,x)\in\Omega_0:q(t,x)=\zeta\}$ is nonempty, open, and closed relative to
+$\Omega_0$.  Connectedness implies that it is all of $\Omega_0$.  This proves
+the lemma.
+\end{proof}
+
+\section{Proof of phase retrieval}
+
+\begin{proof}[Proof of Theorem~\ref{thm:phase-retrieval}]
+If $u$ vanishes on $I\times\R$, Proposition~\ref{prop:masuda} gives
+$u\equiv0$.  Equation \eqref{eq:modulus} then shows that $v$ vanishes on the
+same nonempty open set, so Proposition~\ref{prop:masuda} also gives
+$v\equiv0$.  The conclusion holds with $\zeta=1$.
+
+Suppose that $\Omega$ is nonempty.  Choose one connected component
+$\Omega_0$.  By Lemma~\ref{lem:relative-phase}, there is a $\zeta\in\T$ such
+that
+\[
+ v=\zeta u\quad\text{on }\Omega_0.
+\]
+The equation is linear and $u,v$ have the same potential.  Hence the
+difference
+\[
+ w=v-\zeta u
+\]
+belongs to $C(\R;L^2)$ and is a Masuda weak solution of
+\eqref{eq:schrodinger}.  It vanishes on the nonempty open subset
+$\Omega_0$ of spacetime.  Proposition
+\ref{prop:masuda} gives $w\equiv0$ on $\R^2$.  Thus
+$v(t)=\zeta u(t)$ in $L^2(\R)$ for every $t\in\R$.
+\end{proof}
+
+\section{The \texorpdfstring{$L^2$}{L2} endpoint in Masuda's class}
+\label{sec:masuda-L2}
+
+Masuda's unique-continuation theorem is already formulated for
+$C(\R;L^2)$ weak solutions.  It does not, by itself, remove
+\eqref{eq:H1-regularity} from Theorem~\ref{thm:phase-retrieval}.  The missing
+step occurs before unique continuation: one must first construct a constant
+$\zeta$ for which $v-\zeta u$ vanishes on a spacetime-open set.
+
+There is also a minor simplification peculiar to one dimension.  In Masuda's
+original hypothesis, $\R\setminus Q$ is connected and open and has full
+measure.  Such a subset of $\R$ must be all of $\R$.  Thus the literal
+one-dimensional assumption forces $Q=\varnothing$ and
+$V\in L^\infty_{\mathrm{loc}}(\R)$.  This removes potential-product
+singularities, but it does not define the kinetic products used below.
+
+\subsection*{The current is not an \texorpdfstring{$L^2$}{L2} operation}
+
+For $f\in L^2$, one only has $f_x\in H^{-1}$.  The product
+$\overline f f_x$ is not defined by Sobolev duality, and it has no extension
+to all of $L^2$ which is continuous under smooth $L^2$ approximation and
+agrees with the classical product.
+
+We give an explicit obstruction.  Choose a nonzero real Schwartz function
+$\varphi$ whose Fourier transform has sufficiently small compact support, and
+put
+\[
+ \lambda_n=3^n,
+ \qquad
+ a_n=(n\lambda_n)^{-1/2},
+ \qquad
+ f_N(x)=\varphi(x)\sum_{n=1}^Na_ne^{i\lambda_nx}.
+ \tag{13.1}\label{eq:lacunary-current-example}
+\]
+The shifted Fourier supports are disjoint.  Hence $(f_N)$ converges in
+$L^2(\R)$, since
+\[
+ \sum_{n=1}^\infty a_n^2
+ =\sum_{n=1}^\infty\frac1{n3^n}<\infty.
+\]
+Let $\chi\in C_c^\infty(\R)$ be nonnegative and satisfy
+$A_\chi:=\int\chi|\varphi|^2>0$.  The diagonal frequency terms give
+\begin{align}
+ \int_\R\chi\,\Im(\overline{f_N}(f_N)_x)
+ &=A_\chi\sum_{n=1}^N\lambda_na_n^2+R_N \notag\\
+ &=A_\chi\sum_{n=1}^N\frac1n+R_N.
+ \tag{13.2}\label{eq:divergent-current}
+\end{align}
+The remainder $(R_N)$ is bounded.  Indeed, every off-diagonal term contains
+the Fourier transform of either $\chi|\varphi|^2$ or
+$\chi\varphi\varphi'$, evaluated at $\lambda_m-\lambda_n$.  For every
+integer $M\ge1$, both transforms are bounded by
+$C_M(1+|\lambda_m-\lambda_n|)^{-M}$.  Lacunarity gives
+\[
+ |\lambda_m-\lambda_n|
+ \ge\frac23\max(\lambda_m,\lambda_n)
+ \qquad(m\ne n).
+\]
+Pairing the terms indexed by $(m,n)$ and $(n,m)$, their absolute sum is
+bounded by a constant times
+\[
+ \sum_{m>n}
+ \frac{1+\lambda_m}{\sqrt{mn\lambda_m\lambda_n}}
+ (1+\lambda_m)^{-M},
+\]
+which is finite for $M\ge2$ because $\lambda_j=3^j$.  This bound is
+independent of $N$.  Thus the left side of
+\eqref{eq:divergent-current} tends to $+\infty$, although $f_N$ converges in
+$L^2$.  This does not give a phase-retrieval counterexample.  It shows that
+the current required by the $H^1$ proof cannot be obtained by an arbitrary
+smooth $L^2$ approximation.
+
+The other regularizations have the same defect.  A spatial convolution does
+not preserve the equation with the same potential and does not preserve the
+modulus identity.  Spectral cutoffs, resolvents, and the heat operators
+\[
+ \1_{[m,N]}(H),
+ \qquad
+ (1+\varepsilon(H-m))^{-1},
+ \qquad
+ e^{-\varepsilon(H-m)}
+\]
+produce finite-energy vectors, but in general
+\[
+ |u|=|v|\quad\not\Longrightarrow\quad
+ |T(H)u|=|T(H)v|.
+\]
+Time convolution is a spectral multiplier and has the same problem.  Real
+Schr\"odinger evolution supplies no spatial smoothing: already for $V=0$,
+$e^{it\partial_x^2}f_0$ belongs to $H^s$ at one time if and only if
+$f_0\in H^s$.
+
+\subsection*{The exterior-product route}
+
+One part of the argument remains valid at the bare $L^2$ level.  Define
+\[
+ F(t,x,y)=u(t,x)v(t,y)-v(t,x)u(t,y).
+\]
+Then $F\in C(\R;L^2(\R^2))$ and
+\[
+ iF_t+F_{xx}+F_{yy}=(V(x)+V(y))F
+ \tag{13.3}\label{eq:masuda-exterior-equation}
+\]
+in distributions.  The lifted Hamiltonian is
+\[
+ H^{(2)}=H\otimes\Id+\Id\otimes H.
+\]
+It is self-adjoint and semibounded.  The algebraic tensor product of the
+one-dimensional core with itself is a core for $H^{(2)}$, and
+$V(x)+V(y)\in L^2_{\mathrm{loc}}(\R^2)$.  The lifted exceptional set is
+\[
+ (Q\times\R)\cup(\R\times Q),
+\]
+whose complement is connected.  Thus Masuda's theorem applies in two spatial
+dimensions to solutions of \eqref{eq:masuda-exterior-equation}.
+
+In the diagonal coordinates
+\[
+ r=\frac{x+y}{\sqrt2},
+ \qquad
+ s=\frac{x-y}{\sqrt2},
+\]
+the function $F$ is odd in $s$.  Its formal Dirichlet trace at $s=0$ is zero,
+but its formal normal derivative is a nonzero constant multiple of
+\[
+ vu_x-uv_x.
+ \tag{13.4}\label{eq:missing-masuda-wronskian}
+\]
+If one could define the two currents and prove
+\[
+ \overline u\,u_x=\overline v\,v_x,
+ \qquad vu_x-uv_x=0,
+\]
+at the critical endpoint, the scalar trace argument would give zero
+Dirichlet and Neumann traces.  The extension
+\[
+ G=\1_{\{s>0\}}F
+\]
+would then solve \eqref{eq:masuda-exterior-equation} and vanish on an open
+half-space.  After extending this local weak solution by the unitary group for
+$H^{(2)}$, Masuda's theorem would give $G=0$, hence $F=0$.  The rank-one
+argument would finish the proof.
+
+This route identifies the exact missing estimate.  One needs enough
+real-time endpoint regularity, together with a valid bounded-antiderivative
+continuity identity, to define and annihilate
+\eqref{eq:missing-masuda-wronskian}.  For globally bounded-plus-square-integrable potentials, Strichartz and
+local-smoothing estimates~\cite{KeelTao,VegaVisciglia} provide the required
+endpoint identities.  They are
+not consequences of Masuda's local assumptions and semiboundedness alone in
+the present argument.
+
+We therefore retain the $H^1$ hypothesis in Theorem~\ref{thm:phase-retrieval}.
+No counterexample under all of Masuda's assumptions is known here, so the
+corresponding $L^2$ phase-retrieval statement is not declared false.  It
+remains open in this manuscript.  For $V\in L^\infty(\mathbb R)+L^2(\mathbb R)$, the separate
+common-potential argument based on Strichartz estimates proves the $L^2$
+conclusion from measurements on any nonempty open time interval.
+
+Finally, Masuda's theorem concerns vanishing on an open subset of spacetime.
+Compact support at one isolated time does not imply that a Schr\"odinger
+solution is zero.  In the finite-energy proof, the density identity first
+produces the open set $\Omega_0$ on which $v-\zeta u$ vanishes; Masuda's
+theorem is applied only after that step.
+
+\begin{thebibliography}{9}
+
+\bibitem{DeiftTrubowitz}
+P.~Deift and E.~Trubowitz,
+\emph{Inverse scattering on the line},
+Comm. Pure Appl. Math. \textbf{32} (1979), 121--251.
+
+\bibitem{EgorovaKopylovaMarchenkoTeschl}
+I.~Egorova, E.~Kopylova, V.~Marchenko, and G.~Teschl,
+\emph{Dispersion estimates for one-dimensional Schr\"odinger and
+Klein--Gordon equations revisited},
+Russian Math. Surveys \textbf{71} (2016), 3--26.
+
+\bibitem{TeschlBook}
+G.~Teschl,
+\emph{Mathematical Methods in Quantum Mechanics},
+2nd ed., Graduate Studies in Mathematics 157,
+American Mathematical Society, 2014.
+
+\bibitem{KeelTao}
+M.~Keel and T.~Tao,
+\emph{Endpoint Strichartz estimates},
+Amer. J. Math. \textbf{120} (1998), 955--980.
+
+\bibitem{VegaVisciglia}
+L.~Vega and N.~Visciglia,
+\emph{On the local smoothing for the Schr\"odinger equation},
+Proc. Amer. Math. Soc. \textbf{135} (2007), 119--128.
+
+\bibitem{Masuda}
+K.~Masuda,
+\emph{A unique continuation theorem for solutions of the Schr\"odinger
+equations},
+Proc. Japan Acad. \textbf{43} (1967), 361--364.
+
+\end{thebibliography}
+
+\end{document}
