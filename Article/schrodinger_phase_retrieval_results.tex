@@ -553,8 +553,8 @@ quotients are uniformly bounded from $H^{1/2}$ to $H^{-1/2}$, while the two
 local $H^{1/2}$ norms belong to $L^2_t$.  Cauchy--Schwarz in time therefore
 justifies passage to the limit under the temporal integral.  The term obtained by
 differentiating $\psi(t,\sqrt2z+s)$ vanishes at $s=0$ because the bracket in
-the preceding display vanishes there.  Lemma
-\ref{lem:endpoint-wronskian} gives
+the preceding display vanishes there.  Lemma~\ref{lem:endpoint-wronskian}
+gives
 \[
  H_\psi'(0)=2\iint(vu_x-uv_x)(t,z)\psi(t,\sqrt2z)\,dz\,dt=0.
 \]
@@ -810,7 +810,183 @@ $\Phi(x_3,\ldots,x_d)=\exp(-\frac12\sum_{j=3}^dx_j^2)$.  The free propagator
 again factors, so the modulus identity and nonproportionality are preserved.
 \end{proof}
 
+\section{Comments on stationary alternatives}
+\label{sec:stationary-comments}
+
+The companion note contains three proofs for time-independent potentials.
+They are recorded there because their hypotheses and methods differ from the
+time-dependent argument of Theorem~\ref{thm:time-potential}.
+
+\subsection{Masuda's unique-continuation theorem}
+
+Assume that $V$ is time independent and that the two solutions belong to
+$C(I;H^1(\R))$.  For
+$\rho_f=|f|^2$ and $j_f=\operatorname{Im}(\overline f f_x)$, the equation
+with real potential gives
+\[
+ \partial_t\rho_f+2\partial_x j_f=0.
+\]
+Equality of the densities therefore implies
+$\partial_x(j_u-j_v)=0$.  The $H^1$ assumption gives
+$\|j_f(t)\|_1\le \|f(t)\|_2\|f_x(t)\|_2$, so the constant in $x$ must be
+zero.  Since
+$2\operatorname{Re}(\overline f f_x)=\partial_x|f|^2$, the real parts agree
+as well, and hence
+\[
+ \overline u\,u_x=\overline v\,v_x
+ \quad\text{almost everywhere on }I\times\R.
+\]
+
+The $H^1$ regularity also provides jointly continuous representatives.  On
+the open set $\Omega=\{(t,x):u(t,x)\ne0\}$, define $q=v/u$.  Then $|q|=1$
+and
+\[
+ 0=\overline v\,v_x-\overline u\,u_x
+   =|u|^2\overline q\,q_x.
+\]
+Thus $q$ is constant in $x$ on each sufficiently small rectangle contained
+in $\Omega$.  No division at a zero of $u$ is used.
+
+The remaining point is to remove a possible dependence on time.  On such a
+rectangle choose a nonzero, nonnegative $\chi\in C_c^\infty(\R)$ supported
+in its spatial side, and write
+\[
+ A(t)=\int_\R\chi\overline u v\,dx,
+ \qquad B(t)=\int_\R\chi|u|^2\,dx.
+\]
+If $v=c(t)u$ on the rectangle, then $A=cB$ and $B>0$.  Testing the two
+equations and integrating once in $x$ gives $A'=cB'$ almost everywhere.
+Consequently $c'B=0$, so $c$ is constant.  The quotient is therefore
+constant on each connected component of $\Omega$.  For one such component,
+$w=v-\zeta u$ is a solution which vanishes on a nonempty open subset of
+spacetime.  Masuda's theorem~\cite{Masuda} yields $w\equiv0$.
+
+This is the shortest of the three stationary proofs.  It was not used for the
+main theorem because Masuda's result requires a time-independent semibounded
+Hamiltonian, while the common potential arising in a nonlinear equation is
+generally time dependent.  The phase reduction also uses $H^1$ regularity on
+the observation interval.  Theorem~\ref{thm:time-potential}, by contrast,
+allows the stated time-dependent potential class and arbitrary $L^2$ data.
+The Masuda argument therefore has a narrower range for the applications of
+this paper.
+
+\subsection{Faddeev scattering}
+
+For a real potential in $L^1_1(\R)$, one-dimensional scattering
+theory~\cite{DeiftTrubowitz} gives finitely many simple negative eigenvalues
+$-\kappa_j^2$ and two continuous channels.  The corresponding spectral
+expansion has the form
+\[
+ e^{-itH}f
+ =\sum_j c_j e^{it\kappa_j^2}\phi_j
+  +\sum_{\alpha=1}^2\int_0^\infty
+    e^{-itk^2}g_\alpha(k)e_\alpha(\,\cdot\,,k)\,dk.
+\]
+This representation remains valid in the resonant case at zero energy.  The
+bound-state coefficients and the two functions $g_\alpha$ give a unitary
+spectral representation of arbitrary $L^2$ initial data.
+
+The temporal Fourier transform of the density identity separates products by
+their energy difference $\delta=E-F$.  Along a fixed nonzero gap, use the
+energy sum $s=E+F$.  If $y$ and $z$ solve the stationary equations at energies
+$E$ and $F$, their products satisfy
+\[
+ A'=B,\qquad B'=(2V-s)A+2D,\qquad
+ C'=-\delta A,\qquad
+ D'=\left(V-\frac{s}{2}\right)B+\frac{\delta}{2}C,
+\]
+where $A=yz$, $B=y'z+yz'$, $C=y'z-yz'$, and $D=y'z'$.  The system contains
+no derivative of $V$.  Moreover, when $E\ne F$, the four products obtained
+from bases of the two two-dimensional solution spaces are linearly
+independent: if their scalar component $A$ vanishes, the system successively
+forces $B$, $D$, and $C$ to vanish.
+
+To separate the energy sum, one divides a fixed-gap relation by $s-\lambda$
+and integrates in $s$.  The resulting vector solves the same product system
+with sum $\lambda$.  For sufficiently negative $\lambda$, both auxiliary
+energies $(\lambda\pm\delta)/2$ are negative and the lower one lies below
+$\inf\sigma(H)$.  Scattering asymptotics and the Riemann--Lebesgue lemma show
+that its scalar component decays at both spatial infinities.  The
+negative-energy ODE dichotomy then forces the whole vector to vanish: a
+nonzero solution decaying at both ends at the lower energy would be an
+$L^2$ eigenfunction below the spectrum.  Analyticity in $\lambda$ and
+Stieltjes inversion show that the original fixed-gap measure is zero.
+Applying this for almost every $\delta\ne0$, and treating the finite
+bound--bound part separately, recovers
+\[
+ (\mathcal F u_0)\otimes\overline{\mathcal F u_0}
+ =(\mathcal F v_0)\otimes\overline{\mathcal F v_0}.
+\]
+Equality of these rank-one operators gives $v_0=\zeta u_0$.
+
+This proof allows arbitrary $L^2$ data, negative eigenvalues, and a
+zero-energy resonance.  It was left in the companion note because it requires
+a time-independent potential with Faddeev decay, observations for all
+$t\in\R$, and the complete spectral resolution of $H$.  None of these
+spectral reductions is available for the time-dependent potentials arising
+in the nonlinear application.  The argument is therefore more specialized
+than the physical-space proof of Theorem~\ref{thm:time-potential}.
+
+\subsection{Observation on one exterior half-line}
+
+Suppose that $V$ is smooth, compactly supported, and vanishes on
+$(R,\infty)$.  Each negative-energy eigenfunction is then a nonzero multiple
+of $e^{-\kappa_j(x-R)}$ on this half-line.  The two continuous scattering
+channels can also be combined into one Fourier integral, so the restriction
+of an evolution has the form
+\[
+ e^{-itH}f(x)
+ =\sum_j a_j e^{-\kappa_j(x-R)}e^{it\kappa_j^2}
+  +\int_\R F(k)e^{ik(x-R)-ik^2t}\,dk.
+\]
+Thus the half-line problem first reduces to phase retrieval for a free
+Fourier extension coupled to finitely many decaying exponentials.
+
+Test the density difference in time against the inverse Fourier transform of
+$\chi\in C_c^\infty(\R)$, and take the Laplace transform in $y=x-R>0$.
+If
+\[
+ q(k,\ell)=F(k)\overline{F(\ell)}
+           -G(k)\overline{G(\ell)},
+\]
+then the free--free term becomes
+\[
+ \Phi_\chi(z)=\int_\R\frac{M_\chi(\xi)}{z-i\xi}\,d\xi,
+ \qquad
+ M_\chi(\xi)=\int_\R q(k,k-\xi)
+                  \chi(\xi^2-2k\xi)\,dk,
+ \qquad \operatorname{Re}z>0.
+\]
+The compact support of $\chi$ and a Schur estimate make $M_\chi$ integrable,
+so this is an ordinary Cauchy transform.
+
+Every term containing a bound state is holomorphic in a strip across the
+imaginary axis.  The transformed density identity therefore continues
+$\Phi_\chi$ through that axis.  The Cauchy jump formula gives
+$M_\chi=0$ for every $\chi$.  The change of variables
+$\xi=k-\ell$, $\omega=\ell^2-k^2$ then yields $q=0$ away from the diagonal,
+which is a null set.  Hence $F\otimes\overline F=G\otimes\overline G$ and
+$G=\zeta F$.  The mixed terms recover the bound-state coefficients by
+successively crossing the lines $\operatorname{Re}z=-\kappa_j$; when the
+continuous part vanishes, two elementary Vandermonde arguments recover the
+finite bound-state rank-one matrix.  Finally, the transmission coefficient
+has no positive-energy zeros, so the relation on the free half-line recovers
+both original scattering channels.
+
+This theorem uses less spatial data than Theorem~\ref{thm:time-potential},
+but it assumes a time-independent, smooth, compactly supported potential and
+observations for every time.  Its proof depends on an exactly free exterior
+region, on analytic continuation of the associated Laplace transforms, and
+on one-dimensional scattering coefficients.  These ingredients do not
+persist for the time-dependent potentials in the nonlinear problem.  The
+result was therefore retained as a separate auxiliary statement.
+
 \begin{thebibliography}{9}
+
+\bibitem{DeiftTrubowitz}
+P.~Deift and E.~Trubowitz,
+\emph{Inverse scattering on the line},
+Comm. Pure Appl. Math. \textbf{32} (1979), 121--251.
 
 \bibitem{IonescuKenig}
 A.~D.~Ionescu and C.~E.~Kenig,
@@ -822,6 +998,12 @@ Acta Math. \textbf{193} (2004), 193--239.
 M.~Keel and T.~Tao,
 \emph{Endpoint Strichartz estimates},
 Amer. J. Math. \textbf{120} (1998), 955--980.
+
+\bibitem{Masuda}
+K.~Masuda,
+\emph{A unique continuation theorem for solutions of the Schr\"odinger
+equations},
+Proc. Japan Acad. \textbf{43} (1967), 361--364.
 
 \bibitem{VegaVisciglia}
 L.~Vega and N.~Visciglia,
