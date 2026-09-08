@@ -50,27 +50,43 @@ $L^2$ solutions of the one-dimensional Schr\"odinger equation with the same
 real potential are equal up to one constant unimodular factor whenever their
 moduli agree on $I\times\mathbb R$.  The potential may depend on time and is
 assumed locally to belong to
-$L^1_tL^\infty_x+L^2_{t,x}$; no spatial decay is required.  The result yields
-phase retrieval for the cubic nonlinear Schr\"odinger equation in the global
-$L^2$ class.  The conclusion is false for the free equation in every spatial
-dimension at least two, even for Schwartz initial data.
+$L^1_tL^\infty_x+L^2_{t,x}$. 
+
+The result yields
+phase retrieval for the cubic nonlinear Schr\"odinger equation in the global $L^2$ class.  The conclusion is false for the free equation in every spatial dimension at least two, even for Schwartz initial data.
 \end{abstract}
 
 \maketitle
 
-\tableofcontents
 
-\section{Introduction and main results}
+\section{Introduction}
 
-Let $I_0\subset\mathbb R$ be a nonempty open interval.  We consider two
-solutions of
+Let $\Omega \subset \R^n$ be a domain, and $T > 0.$ We say that a function $w : \Omega \times [0,T] \to \C$ solves a Schr\"odinger equation with potential $V:\Omega \times [0,T] \to \R$ if it satisfies 
+\begin{equation}\label{eq:schr-pot}
+i \partial_t w + \Delta w = V \cdot w,
+\end{equation}
+in a suitable sense. Equation \eqref{eq:schr-pot} is of pivotal importance in quantum mechanics, where by adjusting the potential $V$ we may use it to describe the time evolution of the spatial distribution of particles. We refer the reader to (CITE) for the theoretical background in physics of this equation. 
+
+Our question in this manuscript is tightly connected to quantum mechanics, and dates back to the work of Pauli (CITE). Indeed, let us consider first the problem of determining when it is possible to recover a (nice enough) function $f$ up to unitary complex numbers from measurements of the form $|f|, |\widehat{f}|$. This is the so-called \emph{Pauli problem}, which was later solved by (ADD) (CITE), which showed that counterexamples are, as a matter of fact, abundant. 
+
+As it turns out, the Fourier transform is intimately connected to Schr\"odinger equations, and so is the Pauli problem: if we let $u$ be a solution to 
+\begin{equation}\label{eq:free-schr}
+\begin{cases}
+i\partial_t u + \Delta u =0 \text{ in }\R\times\R, \cr 
+u(x,0) = f(x) \text{ on }\R,
+\end{cases}
+\end{equation}
+then we have that 
 \[
- if_t+f_{xx}=Vf
+u(x,t) = \frac{1}{(4\pi i t)^{n/2}} e^{i|x|^2/4t} \widehat{\left( e^{i|\cdot|^2/4t} f\right)} \left(\frac{x}{4\pi t}\right). 
 \]
-with the same real potential.  The principal result requires neither spatial
-decay of $V$ nor finite energy of the solutions.
+In other words, if we are able to solve Pauli's problem at $f$, we should be able to recover the solution $u$ to the free Schr\"odinger equation \eqref{eq:free-schr} above from its values $|u(x,0)|, |u(x,t_0)|$, and vice-versa. Regarding the problem in this particular setting, the counterexamples to Pauli's problem do show also here that recovery of the solution is not possible in general. This led the community to several follow-up questions, such as Wright's conjecture (CITE), which states that there is a third unitary operator $T$ defined on $L^2$ such that any $f \in L^2(\R)$ may be recovered from $|f|,|Tf|, |\widehat{f}|.$ Another closely related question (cite work of Carmeli–Heinosaari–Schultz–Toigo) is that of determining the minimal $N$ such that there are $N$ times $\{t_i\}_{i=1}^N$ for which any solution to \eqref{eq:free-schr} is determined from $\{ |u(x,t_i)|\}_{x \in \R, i=1,\dots,N}.$ To the best of our knowledge, both problems remain open. 
 
-\begin{mainresult}[Common time-dependent potentials]
+As \eqref{eq:free-schr} is a particular case of \eqref{eq:schr-pot}, we may ask more generally if one may recover the solution $w$ to \eqref{eq:schr-pot} from the data $|w(\cdot,0)|, |w(\cdot,t_0)|,$ where $t_0 \in \R$ is a fixed time. In this direction, Jaming (CITE the 2014 article) first showed that if one considers solutions to \eqref{eq:free-schr}, then phase retrieval is possible from $\{ |u(x,t)|\}_{(x,t) \in \R \times \R}$ by connecting the problem to the fractional Fourier transform. Moreover, he later conjectured (CITE the 2025 article) that the same should hold for \eqref{eq:schr-pot} under certain conditions on the potential $V$, and claimed that the same result should hold in higher dimensions. 
+
+The main purpose of this manuscript is to answer some of the latter questions on phase retrieval for solutions to \eqref{eq:schr-pot}. Our main result is the following:
+
+\begin{mainresult}
 \label{thm:time-potential}
 Suppose that the measurable function
 $V:I_0\times\mathbb R\to\mathbb R$ has, on every bounded interval
@@ -82,11 +98,7 @@ $J\Subset I_0$, a decomposition
  \qquad
  V_2\in L^2(J\times\mathbb R).
 \]
-Let $u,v\in C(I_0;L^2(\mathbb R))$ be mild solutions of
-\[
- if_t+f_{xx}=Vf.
-\]
-If
+Let $u,v\in C(I_0;L^2(\mathbb R))$ be mild solutions of \eqref{eq:schr-pot}. If
 \[
  |u(t,x)|=|v(t,x)|
  \quad\text{for almost every }(t,x)\in I_0\times\mathbb R,
@@ -95,23 +107,25 @@ then $v=\zeta u$ on $I_0\times\mathbb R$ for some
 $\zeta\in\mathbb T$.
 \end{mainresult}
 
-If the potential and both solutions extend globally, uniqueness propagates
-the conclusion to every time.  The theorem also applies to nonlinear
-equations whenever equality of the moduli makes their nonlinear potentials
-identical.  This gives the following consequence.
+In particular, the potentials in (CITE JAMING 2025) are all assumed to be time-\emph{independent}, and hence Theorem \ref{thm:time-potential} provides a positive answer to Question I.2 in (CITE JAMING 2025) for a wide class of potentials, namely any potential in $L^2 + L^{\infty}$ of the real line, which includes all $L^p(\R), 2 \leq p \leq \infty.$ 
+
+(INSERT HERE SUMMARY OF THE PROOF OF THEOREM \ref{thm:time-potential}) 
+
+If the potential and both solutions extend globally, uniqueness propagates the conclusion to every time.  The theorem also applies to nonlinear equations whenever equality of the moduli makes their nonlinear potentials
+identical. This gives immediately the following consequence.
 
 \begin{maincorollary}[Cubic nonlinear Schr\"odinger equation]
 \label{cor:cubic-NLS}
 Let $\sigma\in\mathbb R$, and let
 $u,v\in C(\mathbb R;L^2(\mathbb R))$ be global mild solutions of
 \[
- if_t+f_{xx}=\sigma|f|^2f.
+i \partial_t w+ \Delta w = \sigma |w|^2 w.
 \]
 If $|u|=|v|$ almost everywhere on $I_0\times\mathbb R$, then
 $v=\zeta u$ for every time and some $\zeta\in\mathbb T$.
 \end{maincorollary}
 
-The one-dimensional restriction cannot be removed.
+As a final result, we prove that the prediction made by Jaming in (CITE JAMING 2025) regarding the extendability of the results for \eqref{eq:free-schr} to higher dimensions in \emph{false}: 
 
 \setcounter{mainresult}{5}
 \begin{mainresult}[Failure in higher dimensions]
@@ -124,16 +138,9 @@ $f,g\in\mathcal S(\mathbb R^d)$ such that
 \]
 \end{mainresult}
 
-The proof of Theorem~\ref{thm:time-potential} uses the Strichartz and
-local-smoothing estimates and a stripwise form of the Ionescu--Kenig Carleman
-estimate.  These three external inputs are stated in the forms needed below.
-Every deduction from them is proved.
+(INSERT HERE SUMMARY OF THE COUNTEREXAMPLE CONSTRUCTION) 
 
-All nonsmooth identities are distributional unless another meaning is
-specified.  If $f\in H^{1/2}_{\mathrm{loc}}(\mathbb R)$, products such as
-$\overline f f_x$ are interpreted by localized
-$H^{-1/2}$--$H^{1/2}$ duality.  We take Hilbert-space inner products to be
-linear in the first variable.
+This article is organized as follows. In Section 2, we prove Theorem \ref{thm:time-potential}. In Section 3, we deduce Corollary \ref{cor:cubic-NLS} as a consequence of the preceding result. Section 4 is then dedicated to the counterexample construction of Theorem \ref{thm:higher-dimensional-failure}. Finally, we gather, in Section 5 below, some other results obtained in parallel to the ones here. These are results which are mostly superseded/covered by the ones in the present paper, but since their techniques are interesting and beautiful on their own, we decided to keep them in a separate repository for independent consultation by the interested reader. 
 
 
 \section{A physical-space theorem for time-dependent potentials}
