@@ -67,7 +67,7 @@ i\partial_t w+\Delta w=Vw,
 \end{equation}
 in a suitable sense. Equation \eqref{eq:schr-pot} is of pivotal importance in quantum mechanics, where by adjusting the potential $V$ we may use it to describe the time evolution of the spatial distribution of particles. We refer the reader to Teschl~\cite{TeschlBook} for the theoretical background in physics of this equation.
 
-Our question in this manuscript is tightly connected to quantum mechanics, and dates back to the work of Pauli~\cite{Pauli}. Indeed, let us consider first the problem of determining when it is possible to recover a (nice enough) function $f$ up to a unimodular constant from measurements of the form $|f|$, $|\widehat{f}|$. This is the so-called \emph{Pauli problem}. A negative answer was later given by Moroz and Perelomov~\cite{MorozPerelomov}, who showed that counterexamples are, as a matter of fact, abundant.
+Our question in this manuscript is tightly connected to quantum mechanics, and dates back to the work of Pauli~\cite{Pauli}. Indeed, let us consider first the problem of determining when it is possible to recover a (nice enough) function $f$ up to a unimodular constant from measurements of the form $|f|$, $|\widehat{f}|$. This is the so-called \emph{Pauli problem}~\cite{CorbettHurst,Vogt,RamosSousa}. A negative answer was later given by Moroz and Perelomov~\cite{MorozPerelomov}, who showed that counterexamples are, as a matter of fact, abundant.
 
 As it turns out, the Fourier transform is intimately connected to Schr\"odinger equations, and so is the Pauli problem: if we let $u$ be a solution to
 \begin{equation}\label{eq:free-schr}
@@ -83,6 +83,8 @@ u(t,x)=\frac{1}{(4\pi i t)^{n/2}}e^{i|x|^2/(4t)}
 \left(\frac{x}{4\pi t}\right),
 \]
 where $\widehat h(\xi)=\int_{\R^n}e^{-2\pi i x\cdot\xi}h(x)\,dx$. In other words, if we are able to solve Pauli's problem for the corresponding chirped datum, we should be able to recover the solution $u$ to the free Schr\"odinger equation \eqref{eq:free-schr} above from its values $|u(0,\cdot)|$, $|u(t_0,\cdot)|$, and vice-versa. Regarding the problem in this particular setting, the counterexamples to Pauli's problem do show also here that recovery of the solution is not possible in general. This led the community to several follow-up questions, such as Wright's conjecture~\cite{JamingRathmair}, which states that there is a third unitary operator $T$ defined on $L^2$ such that any $f \in L^2(\R)$ may be recovered from $|f|,|Tf|, |\widehat{f}|$. Another closely related question~\cite{CarmeliHeinosaariSchultzToigo} is that of determining the minimal $N$ such that there are $N$ times $\{t_i\}_{i=1}^N$ for which any solution to \eqref{eq:free-schr} is determined up to multiplication by scalars from $\{|u(t_i,x)|:x\in\R,\ i=1,\dots,N\}$. To the best of our knowledge, both problems remain open.
+
+The Pauli problem is one instance of the broader phase retrieval problem: recovering a function or vector, up to a constant phase, from magnitudes of prescribed measurements. This problem also arises in optics, crystallography and signal processing; we refer to~\cite{KlibanovSacksTikhonravov,GrohsKoppensteinerRathmair} for surveys. Finite-dimensional recovery from frame coefficients and convex reconstruction methods are studied in~\cite{BalanCasazzaEdidin,CandesStrohmerVoroninski}, while infinite-dimensional Hilbert- and Banach-space formulations are treated in~\cite{CahillCasazzaDaubechies,AlaifariGrohs}. Stability on subspaces of function spaces is investigated in~\cite{ChristPineauTaylor,FreemanOikhbergPineauTaylor,AbdallaDeDiosRamosTaylor}, and H\"older stability on nonlinear subsets is studied in~\cite{FreemanTaylor}. For short-time Fourier measurements, local stability and its obstructions are considered in~\cite{AlaifariDaubechiesGrohsYin,GrohsRathmair,AlaifariPineauTaylorWellershoff,BertoliniDeDiosPineauRamosTaylor}; square-restricted stability in Fock space is treated in~\cite{BortolottoRamos}.
 
 As \eqref{eq:free-schr} is a particular case of \eqref{eq:schr-pot}, we may ask more generally if one may recover the solution $w$ to \eqref{eq:schr-pot} from the data $|w(0,\cdot)|$, $|w(t_0,\cdot)|$, where $t_0\in\R$ is a fixed time. In this direction, Jaming~\cite{Jaming2014} first showed that if one considers solutions to \eqref{eq:free-schr}, then phase retrieval is possible from $\{|u(t,x)|\}_{(t,x)\in\R\times\R}$ by connecting the problem to the fractional Fourier transform. Moreover, he later conjectured~\cite{Jaming2025} that the same should hold for \eqref{eq:schr-pot} under certain conditions on the potential $V$, and claimed that the same result should hold in higher dimensions.
 
@@ -125,7 +127,7 @@ by H\"older's inequality and the fact that $w\in C(I;L^2)$. The Duhamel integral
 We remark that, in particular, the potentials in~\cite{Jaming2025} are all assumed to be time-\emph{independent}, and hence Theorem \ref{thm:time-potential} provides a positive answer to Question I.2 in~\cite{Jaming2025} for a wide class of potentials, namely any potential in $L^2(\R)+L^\infty(\R)$, which includes all $L^p(\R)$,
 $2\leq p\leq\infty$.
 
-The proof of Theorem \ref{thm:time-potential} starts with the endpoint Strichartz and local smoothing estimates. On each compact time interval,  we have
+The proof of Theorem \ref{thm:time-potential} starts with the endpoint Strichartz and local smoothing estimates~\cite{KeelTao,VegaVisciglia}. On each compact time interval,  we have
 \[
  u,v\in L^4_tL^\infty_x,
  \qquad
@@ -147,7 +149,7 @@ for almost every time. The next step is then to introduce the exterior product
 \]
 Our goal is to show this vanishes identically, as this proves the asserted claim about linear dependence of the two solutions. In order to do so, note that it solves a two-dimensional Schr\"odinger equation with potential $V(t,x)+V(t,y)$. In the coordinates $r=(x+y)/\sqrt2$ and $s=(x-y)/\sqrt2$, the function $F$ is odd in $s$. Its Dirichlet trace at $s=0$ vanishes by oddness, and its normal trace vanishes by the Wronskian identity. The zero extension of $F$ from $s>0$ therefore solves the same equation without a boundary source.
 
-Finally, a stripwise version of the Ionescu--Kenig Carleman estimate propagates this zero half-space through the whole $(r,s)$-plane. The $L^1_tL^\infty_x$ part of the potential is made small by shortening the time interval, while the restriction of the $L^2_{t,x}$ part to a strip of width $h$ has norm of order $h^{1/2}$. Taking $h$ small then allows us to iterate the estimate and gives $F=0$. Thus $u$ and $v$ are linearly dependent at one time, and equality of their moduli makes the proportionality constant unimodular, with uniqueness propagating the same phase throughout $I_0$.
+Finally, a stripwise version of the Ionescu--Kenig Carleman estimate~\cite{IonescuKenig} propagates this zero half-space through the whole $(r,s)$-plane. The $L^1_tL^\infty_x$ part of the potential is made small by shortening the time interval, while the restriction of the $L^2_{t,x}$ part to a strip of width $h$ has norm of order $h^{1/2}$. Taking $h$ small then allows us to iterate the estimate and gives $F=0$. Thus $u$ and $v$ are linearly dependent at one time, and equality of their moduli makes the proportionality constant unimodular, with uniqueness propagating the same phase throughout $I_0$.
 
 If the potential and both solutions extend globally, uniqueness propagates the conclusion to every time.  The theorem also applies to nonlinear equations whenever equality of the moduli makes their nonlinear potentials
 identical. This gives immediately the following consequence.
@@ -344,7 +346,7 @@ interval, we also obtain
  &\le \|V_\infty\|_{L^1_tL^\infty_x}
        \|w\|_{L^\infty_tL^2_x}<\infty.
 \end{align*}
-The local-smoothing estimate~\cite{VegaVisciglia} states that, for
+The local-smoothing estimate~\cite{Vega,VegaVisciglia} states that, for
 $\chi\in C_c^\infty(\R)$,
 \[
  \|\chi e^{it\partial_x^2}g\|_{L^2(I;H^{1/2})}
@@ -429,7 +431,7 @@ term in each logarithmic derivative is the same because $|p|=|q|$.  Put
  \quad s_\varepsilon=\frac{\rho}{\rho+\varepsilon},
  \quad h_\varepsilon=\frac{pq}{\rho+\varepsilon}.
 \]
-The Gagliardo seminorm is
+The Gagliardo seminorm~\cite{DiNezzaPalatucciValdinoci} is
 \[
  [a]_{H^{1/2}}^2=\iint_{\R^2}
  \frac{|a(x)-a(y)|^2}{|x-y|^2}\,dx\,dy.
@@ -684,7 +686,7 @@ We prove Corollary~\ref{cor:cubic-NLS}.  Its equation is
  \tag{2.1}\label{eq:cubic-NLS}
 \]
 The mild solutions are the standard $L^2$ Strichartz solutions obtained from
-the Duhamel formula.
+the Duhamel formula~\cite{Cazenave}.
 
 \begin{proof}[Proof of Corollary~\ref{cor:cubic-NLS}]
 Fix a bounded interval $I$.  A pair $(q,r)$ is Schr\"odinger-admissible in
@@ -916,7 +918,7 @@ this paper.
 \subsection{Faddeev scattering}
 
 For a real potential in $L^1_1(\R)$, one-dimensional scattering
-theory~\cite{DeiftTrubowitz} gives finitely many simple negative eigenvalues
+theory~\cite{DeiftTrubowitz,EgorovaKopylovaMarchenkoTeschl} gives finitely many simple negative eigenvalues
 $-\kappa_j^2$ and two continuous channels.  The corresponding spectral
 expansion has the form
 \[
@@ -1013,7 +1015,7 @@ $G=\zeta F$.  The mixed terms recover the bound-state coefficients by
 successively crossing the lines $\operatorname{Re}z=-\kappa_j$; when the
 continuous part vanishes, two elementary Vandermonde arguments recover the
 finite bound-state rank-one matrix.  Finally, the transmission coefficient
-has no positive-energy zeros, so the relation on the free half-line recovers
+has no positive-energy zeros~\cite{DeiftTrubowitz}, so the relation on the free half-line recovers
 both original scattering channels.
 
 This theorem uses less spatial data than Theorem~\ref{thm:time-potential},
@@ -1026,16 +1028,108 @@ result was therefore retained as a separate auxiliary statement.
 
 \begin{thebibliography}{99}
 
+\bibitem{AbdallaDeDiosRamosTaylor}
+P.~Abdalla, J.~de Dios Pont, J.~P.~G.~Ramos, and M.~A.~Taylor,
+\emph{Stable phase retrieval for spans of independent random variables},
+preprint (2026), \href{https://arxiv.org/abs/2607.06693}{arXiv:2607.06693}.
+
+\bibitem{AlaifariDaubechiesGrohsYin}
+R.~Alaifari, I.~Daubechies, P.~Grohs, and R.~Yin,
+\emph{Stable phase retrieval in infinite dimensions},
+Found. Comput. Math. \textbf{19} (2019), 869--900.
+
+\bibitem{AlaifariGrohs}
+R.~Alaifari and P.~Grohs,
+\emph{Phase retrieval in the general setting of continuous frames for Banach spaces},
+SIAM J. Math. Anal. \textbf{49} (2017), 1895--1911.
+
+\bibitem{AlaifariPineauTaylorWellershoff}
+R.~Alaifari, B.~Pineau, M.~A.~Taylor, and M.~Wellershoff,
+\emph{Cheeger's constant for the Gabor transform and ripples},
+preprint (2025), \href{https://arxiv.org/abs/2512.18058}{arXiv:2512.18058}.
+
+\bibitem{BalanCasazzaEdidin}
+R.~Balan, P.~G.~Casazza, and D.~Edidin,
+\emph{On signal reconstruction without phase},
+Appl. Comput. Harmon. Anal. \textbf{20} (2006), 345--356.
+
+\bibitem{BertoliniDeDiosPineauRamosTaylor}
+S.~Bertolini, J.~de Dios Pont, B.~Pineau, J.~P.~G.~Ramos, and M.~A.~Taylor,
+\emph{$L^2$-stability for STFT phase retrieval},
+preprint (2026), \href{https://arxiv.org/abs/2605.20527}{arXiv:2605.20527}.
+
+\bibitem{BortolottoRamos}
+C.~Bortolotto and J.~P.~G.~Ramos,
+\emph{A complex-analytic proof of square-restricted stable phase retrieval in Fock space},
+preprint (2026), \href{https://arxiv.org/abs/2608.26365}{arXiv:2608.26365}.
+
+\bibitem{CahillCasazzaDaubechies}
+J.~Cahill, P.~G.~Casazza, and I.~Daubechies,
+\emph{Phase retrieval in infinite-dimensional Hilbert spaces},
+Trans. Amer. Math. Soc. Ser. B \textbf{3} (2016), 63--76.
+
+\bibitem{CandesStrohmerVoroninski}
+E.~J.~Cand\`es, T.~Strohmer, and V.~Voroninski,
+\emph{PhaseLift: exact and stable signal recovery from magnitude measurements via convex programming},
+Comm. Pure Appl. Math. \textbf{66} (2013), 1241--1274.
+
 \bibitem{CarmeliHeinosaariSchultzToigo}
 C.~Carmeli, T.~Heinosaari, J.~Schultz, and A.~Toigo,
 \emph{Nonuniqueness of phase retrieval for three fractional Fourier
 transforms},
 Appl. Comput. Harmon. Anal. \textbf{39} (2015), 339--346.
 
+\bibitem{Cazenave}
+T.~Cazenave,
+\emph{Semilinear Schr\"odinger Equations},
+Courant Lecture Notes in Mathematics 10,
+New York University, Courant Institute of Mathematical Sciences, and
+American Mathematical Society, 2003.
+
+\bibitem{ChristPineauTaylor}
+M.~Christ, B.~Pineau, and M.~A.~Taylor,
+\emph{Examples of H\"older-stable phase retrieval},
+Math. Res. Lett. \textbf{31} (2024), 1339--1352.
+
+\bibitem{CorbettHurst}
+J.~V.~Corbett and C.~A.~Hurst,
+\emph{Are wave functions uniquely determined by their position and momentum distributions?},
+J. Austral. Math. Soc. Ser. B \textbf{20} (1977), 182--201.
+
 \bibitem{DeiftTrubowitz}
 P.~Deift and E.~Trubowitz,
 \emph{Inverse scattering on the line},
 Comm. Pure Appl. Math. \textbf{32} (1979), 121--251.
+
+\bibitem{DiNezzaPalatucciValdinoci}
+E.~Di Nezza, G.~Palatucci, and E.~Valdinoci,
+\emph{Hitchhiker's guide to the fractional Sobolev spaces},
+Bull. Sci. Math. \textbf{136} (2012), 521--573.
+
+\bibitem{EgorovaKopylovaMarchenkoTeschl}
+I.~E.~Egorova, E.~A.~Kopylova, V.~A.~Marchenko, and G.~Teschl,
+\emph{Dispersion estimates for one-dimensional Schr\"odinger and Klein--Gordon equations revisited},
+Russian Math. Surveys \textbf{71} (2016), 391--415.
+
+\bibitem{FreemanOikhbergPineauTaylor}
+D.~Freeman, T.~Oikhberg, B.~Pineau, and M.~A.~Taylor,
+\emph{Stable phase retrieval in function spaces},
+Math. Ann. \textbf{390} (2024), 1--43.
+
+\bibitem{FreemanTaylor}
+D.~Freeman and M.~A.~Taylor,
+\emph{The Cahill--Casazza--Daubechies problem on H\"older stable phase retrieval},
+preprint (2025), \href{https://arxiv.org/abs/2512.08806}{arXiv:2512.08806}.
+
+\bibitem{GrohsKoppensteinerRathmair}
+P.~Grohs, S.~Koppensteiner, and M.~Rathmair,
+\emph{Phase retrieval: uniqueness and stability},
+SIAM Rev. \textbf{62} (2020), 301--350.
+
+\bibitem{GrohsRathmair}
+P.~Grohs and M.~Rathmair,
+\emph{Stable Gabor phase retrieval and spectral clustering},
+Comm. Pure Appl. Math. \textbf{72} (2019), 981--1043.
 
 \bibitem{IonescuKenig}
 A.~D.~Ionescu and C.~E.~Kenig,
@@ -1064,6 +1158,11 @@ M.~Keel and T.~Tao,
 \emph{Endpoint Strichartz estimates},
 Amer. J. Math. \textbf{120} (1998), 955--980.
 
+\bibitem{KlibanovSacksTikhonravov}
+M.~V.~Klibanov, P.~E.~Sacks, and A.~V.~Tikhonravov,
+\emph{The phase retrieval problem},
+Inverse Problems \textbf{11} (1995), 1--28.
+
 \bibitem{Masuda}
 K.~Masuda,
 \emph{A unique continuation theorem for solutions of the Schr\"odinger
@@ -1081,16 +1180,32 @@ W.~Pauli,
 in H.~Geiger and K.~Scheel (eds.), Handbuch der Physik, Vol.~24,
 Springer-Verlag, Berlin, 1933, 83--272.
 
+\bibitem{RamosSousa}
+J.~P.~G.~Ramos and M.~Sousa,
+\emph{On Pauli pairs and Fourier uniqueness problems},
+J. Lond. Math. Soc. (2) \textbf{112} (2025), Paper No.~e70358.
+
 \bibitem{TeschlBook}
 G.~Teschl,
 \emph{Mathematical Methods in Quantum Mechanics},
 2nd ed., Graduate Studies in Mathematics 157,
 American Mathematical Society, 2014.
 
+\bibitem{Vega}
+L.~Vega,
+\emph{Schr\"odinger equations: pointwise convergence to the initial data},
+Proc. Amer. Math. Soc. \textbf{102} (1988), 874--878.
+
 \bibitem{VegaVisciglia}
 L.~Vega and N.~Visciglia,
 \emph{On the local smoothing for the Schr\"odinger equation},
 Proc. Amer. Math. Soc. \textbf{135} (2007), 119--128.
+
+\bibitem{Vogt}
+A.~Vogt,
+\emph{Position and momentum distributions do not determine the quantum mechanical state},
+in A.~R.~Marlow (ed.), Mathematical Foundations of Quantum Theory,
+Academic Press, New York, 1978, 365--372.
 
 \end{thebibliography}
 
