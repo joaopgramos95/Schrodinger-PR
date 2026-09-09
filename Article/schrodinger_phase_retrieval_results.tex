@@ -33,7 +33,7 @@
 \newcommand{\D}{\mathcal D}
 \newcommand{\1}{\mathbf 1}
 \newcommand{\loc}{\mathrm{loc}}
-\setstretch{1.2}
+\setstretch{1.25}
 
 \title{Phase retrieval for Schr\"odinger evolutions}
 \author{Ben Pineau}
@@ -102,11 +102,7 @@ $J\Subset I_0$, a decomposition
  \qquad
  V_2\in L^2(J\times\mathbb R).
 \]
-Let $u,v\in C(I_0;L^2(\mathbb R))$ be mild solutions of
-\[
- i\partial_t w+\partial_x^2w=Vw.
-\]
-If
+Let $u,v\in C(I_0;L^2(\mathbb R))$ be mild solutions of\eqref{eq:schr-pot}. If
 \[
  |u(t,x)|=|v(t,x)|
  \quad\text{for almost every }(t,x)\in I_0\times\mathbb R,
@@ -115,35 +111,50 @@ then $v=\zeta u$ on $I_0\times\mathbb R$ for some
 $\zeta\in\mathbb T$.
 \end{mainresult}
 
-In particular, the potentials in~\cite{Jaming2025} are all assumed to be time-\emph{independent}, and hence Theorem \ref{thm:time-potential} provides a positive answer to Question I.2 in~\cite{Jaming2025} for a wide class of potentials, namely any potential in $L^2(\R)+L^\infty(\R)$, which includes all $L^p(\R)$,
+Here, a solution $w$ to \eqref{eq:schr-pot} is said to be ``mild'' if it satisfies the Duhamel formula. That is, for $t_0,t\in I_0$, we have
+\[
+ w(t)=e^{i(t-t_0)\partial_x^2}w(t_0)
+ -i\int_{t_0}^t e^{i(t-s)\partial_x^2}(V(s)w(s))\,ds
+\]
+in the sense of distributions. The products of $w$ with each part of the potential satisfy
+\[
+ V_\infty w\in L^1(I;L^2),
+ \qquad
+ V_2w\in L^2(I;L^1)\subset L^{4/3}(I;L^1),
+\]
+by H\"older's inequality and the fact that $w\in C(I;L^2)$. The Duhamel integral above is then interpreted using this decomposition.
+
+We remark that, in particular, the potentials in~\cite{Jaming2025} are all assumed to be time-\emph{independent}, and hence Theorem \ref{thm:time-potential} provides a positive answer to Question I.2 in~\cite{Jaming2025} for a wide class of potentials, namely any potential in $L^2(\R)+L^\infty(\R)$, which includes all $L^p(\R)$,
 $2\leq p\leq\infty$.
 
-The proof of Theorem \ref{thm:time-potential} starts with the endpoint Strichartz and local smoothing estimates. On each compact time interval, these give
+The proof of Theorem \ref{thm:time-potential} starts with the endpoint Strichartz and local smoothing estimates. On each compact time interval,  we have
 \[
  u,v\in L^4_tL^\infty_x,
  \qquad
  \chi u,\chi v\in L^2_tH^{1/2}_x
  \quad(\chi\in C_c^\infty(\R)).
 \]
-This is enough to justify the continuity equation at the $L^2$ endpoint. Since $|u|=|v|$, the two solutions have the same current. A regularization argument which does not divide by either solution at its zeros then gives
+This is enough to justify the continuity equation
+\[
+ \partial_t|w|^2+2\partial_x\Im(\overline w\,\partial_xw)=0
+ \]
+in $L^2$. A regularization argument together with $|u| = |v|$ then gives
 \[
  v\,\partial_xu-u\,\partial_xv=0
  \quad\text{in }\mathcal D'(\R_x)
 \]
-for almost every time.
-
-The next step is to introduce the exterior product
+for almost every time. The next step is then to introduce the exterior product
 \[
  F(t,x,y)=u(t,x)v(t,y)-v(t,x)u(t,y).
 \]
-It solves a two-dimensional Schr\"odinger equation with potential $V(t,x)+V(t,y)$. In the coordinates $r=(x+y)/\sqrt2$ and $s=(x-y)/\sqrt2$, the function $F$ is odd in $s$. Its Dirichlet trace at $s=0$ vanishes by oddness, and its normal trace vanishes by the Wronskian identity. The zero extension of $F$ from $s>0$ therefore solves the same equation without a boundary source.
+Our goal is to show this vanishes identically, as this proves the asserted claim about linear dependence of the two solutions. In order to do so, note that it solves a two-dimensional Schr\"odinger equation with potential $V(t,x)+V(t,y)$. In the coordinates $r=(x+y)/\sqrt2$ and $s=(x-y)/\sqrt2$, the function $F$ is odd in $s$. Its Dirichlet trace at $s=0$ vanishes by oddness, and its normal trace vanishes by the Wronskian identity. The zero extension of $F$ from $s>0$ therefore solves the same equation without a boundary source.
 
-Finally, a stripwise version of the Ionescu--Kenig Carleman estimate propagates this zero half-space through the whole $(r,s)$-plane. The $L^1_tL^\infty_x$ part of the potential is made small by shortening the time interval, while the restriction of the $L^2_{t,x}$ part to a strip of width $h$ has norm of order $h^{1/2}$. Taking $h$ small permits iteration of the estimate and gives $F=0$. Thus $u$ and $v$ are linearly dependent at one time; equality of their moduli makes the proportionality constant unimodular, and uniqueness propagates the same phase throughout $I_0$.
+Finally, a stripwise version of the Ionescu--Kenig Carleman estimate propagates this zero half-space through the whole $(r,s)$-plane. The $L^1_tL^\infty_x$ part of the potential is made small by shortening the time interval, while the restriction of the $L^2_{t,x}$ part to a strip of width $h$ has norm of order $h^{1/2}$. Taking $h$ small permits iteration of the estimate and gives $F=0$. Thus $u$ and $v$ are linearly dependent at one time, and equality of their moduli makes the proportionality constant unimodular, with uniqueness propagating the same phase throughout $I_0$.
 
 If the potential and both solutions extend globally, uniqueness propagates the conclusion to every time.  The theorem also applies to nonlinear equations whenever equality of the moduli makes their nonlinear potentials
 identical. This gives immediately the following consequence.
 
-\begin{maincorollary}[Cubic nonlinear Schr\"odinger equation]
+\begin{maincorollary}
 \label{cor:cubic-NLS}
 Let $\sigma\in\mathbb R$, let $I_0\subset\R$ be a nonempty open interval, and let
 $u,v\in C(\mathbb R;L^2(\mathbb R))$ be global mild solutions of
@@ -157,7 +168,7 @@ $v=\zeta u$ for every time and some $\zeta\in\mathbb T$.
 As a final result, we prove that the prediction made by Jaming in~\cite{Jaming2025} regarding the extendability of the results for \eqref{eq:free-schr} to higher dimensions is \emph{false}:
 
 \setcounter{mainresult}{5}
-\begin{mainresult}[Failure in higher dimensions]
+\begin{mainresult}
 \label{thm:higher-dimensional-failure}
 For every $d\ge2$ there are nonproportional functions
 $f,g\in\mathcal S(\mathbb R^d)$ such that
@@ -184,43 +195,22 @@ The two expressions have the same modulus for every point and every time. For $d
 
 This article is organized as follows. In Section 2, we prove Theorem \ref{thm:time-potential}. In Section 3, we deduce Corollary \ref{cor:cubic-NLS} as a consequence of the preceding result. Section 4 is then dedicated to the counterexample construction of Theorem \ref{thm:higher-dimensional-failure}. Finally, we gather, in Section 5 below, some other results obtained in parallel to the ones here. These are results which are mostly superseded/covered by the ones in the present paper, but since their techniques are interesting and beautiful on their own, we decided to keep them in a separate repository for independent consultation by the interested reader.
 
+\subsection*{LLM Usage.} Large language models have been of great importance in the production of this manuscript. Below is a brief narration of how they contributed to the current work. 
 
-\section{A physical-space theorem for time-dependent potentials}
+We started from the first idea of considering the continuity equation $ \partial_t|w|^2+2\partial_x\Im(\overline w\,\partial_xw)=0$, together with integration by parts, in order to show that, if we had $w(t,x) = |w(t,x)| \cdot e^{i \phi(t,x)},$ with $\phi$ smooth enough on each connected component where $w$ does not vanish, then $\phi$ must be constant on each such component. Our initial argument then ran through classical works (see e.g. \cite{Masuda}) to obtain uniqueness of the phase overall. 
 
-Fix the potential, the solutions, and the interval $I_0$ from
-Theorem~\ref{thm:time-potential}.  On every bounded interval
-$I\Subset I_0$ we use a decomposition
-\[
- V=V_\infty+V_2,
- \qquad
- V_\infty\in L^1(I;L^\infty(\R)),
- \qquad
- V_2\in L^2(I\times\R).
- \tag{1.1}\label{eq:potential-decomposition}
-\]
-The common equation is
-\[
- i\partial_t w+\partial_x^2w=Vw.
- \tag{1.2}\label{eq:linear-time-potential}
-\]
-Here ``mild'' means that, for $t_0,t\in I$,
-\[
- w(t)=e^{i(t-t_0)\partial_x^2}w(t_0)
- -i\int_{t_0}^t e^{i(t-s)\partial_x^2}(V(s)w(s))\,ds.
-\]
-The products satisfy
-\[
- V_\infty w\in L^1(I;L^2),
- \qquad
- V_2w\in L^2(I;L^1)\subset L^{4/3}(I;L^1),
-\]
-by H\"older's inequality and $w\in C(I;L^2)$.  The Duhamel integral is
-interpreted using this decomposition.
+This argument, however, only works in high enough regularity. In order to remove such regularity, we needed to get rid of the assumptions on the phase. At that point, we started exploring with the aid of GPT 5.4/Claude Opus 4.6. It gave us several different directions, many of which are described in the end of this manuscript, such as ones based on scattering theory. 
 
-We use the following local form of the half-space propagation argument of
+By exploiting and exhausting several paths towards the general $L^2$ case with GPT 5.4 and 5.5, as well as Claude Opus 4.6, 4.7, 4.8 and Fable 5.0, we had the idea of working at the level of currents. By doing so, we were naturally led to the idea of lifting our equation one dimension higher. The details on how to finish from there, such as applying specific unique continuation lemmas, were then provided by several different LLMs. Finally, Claude Fable 5.0 was also used in order to obtain a lean verification of Corollary \ref{cor:cubic-NLS}; see (add). 
+
+Most of the other attempts and results through different methods have been written down and are kept in the following repository (add). Apart from that note -- which is mostly LLM-written --, the results and proofs here have all been written and verified by humans. We take full responsibility for the contents of both manuscripts. 
+
+\section{Proof of Theorem \ref{thm:time-potential}}
+
+We start with the following local form of the half-space propagation argument of
 Ionescu--Kenig~\cite{IonescuKenig}.
 
-\begin{proposition}[Stripwise half-space propagation]
+\begin{proposition}
 \label{prop:strip-propagation}
 Let $J$ be a compact interval, $z=(z_1,z_2)\in\R^2$, and
 $\mathcal H=i\partial_t+\Delta_z$.  Put
@@ -288,7 +278,7 @@ is the only place where the Ionescu--Kenig Carleman estimate is imported.
 
 We next recover the normal Cauchy data needed to create a half-space solution.
 
-\begin{lemma}[Endpoint current and Wronskian]
+\begin{lemma}
 \label{lem:endpoint-wronskian}
 Under the hypotheses of Theorem~\ref{thm:time-potential}, on every bounded
 interval $I\Subset I_0$ one has
@@ -322,7 +312,7 @@ Strichartz estimates~\cite{KeelTao} give
  \right\|_{L^4_tL^\infty_x(I)}
  &\lesssim\|F\|_{L^1_tL^2_x+L^{4/3}_tL^1_x}.
 \end{align*}
-Apply these estimates to the Duhamel formula.  For either solution $w$, this
+Apply these estimates to the Duhamel formula.  For either solution $w \in \{u,v\}$, this
 gives
 \begin{align*}
  \|w\|_{L^4_tL^\infty_x(I)}
@@ -370,23 +360,20 @@ For $w\in H^{1/2}_{\loc}\cap L^\infty_{\loc}$ define
  :=\langle\partial_xw,\phi\overline w\rangle_{H^{-1/2},H^{1/2}},
  \qquad \phi\in C_c^\infty(\R).
 \]
-This pairing is well-defined.  After inserting a cutoff equal to one on
+This pairing is well-defined. Indeed, after inserting a cutoff equal to one on
 $\supp\phi$, multiplication by $\phi$ maps
 $H^{1/2}\cap L^\infty$ into $H^{1/2}$, while differentiation maps
 $H^{1/2}$ into $H^{-1/2}$.  Its time integral is finite because the local
 $H^{1/2}$ norm belongs to $L^2(I)$.
-The continuity equation
+
+With that object being well-defined, the continuity equation
 \[
  \partial_t|w|^2+2\partial_x\Im(\overline w\,\partial_xw)=0
  \tag{1.7}\label{eq:continuity-general}
 \]
-holds in distributions.  It follows by smoothing the equation; the potential
-term cancels because $V$ is real, and all remaining terms converge by
-\eqref{eq:linear-endpoint-regularity}.  If $\phi\in C_c^\infty(\R)$ and
-$a(x)=\int_{-\infty}^x\phi(y)\,dy$, then $a$ is bounded and $a'=\phi$.
-Although $a$ need not have compact support, it is a bounded Lipschitz
-multiplier and $a'=\phi$ is compactly supported.  One may therefore test the
-weak equation directly against a temporal regularization of
+holds in distributions. Let now $\phi\in C_c^\infty(\R)$ and
+$a(x)=\int_{-\infty}^x\phi(y)\,dy$. It follows that $a$ is bounded and $a'=\phi$. Although $a$ need not have compact support, it is a bounded Lipschitzmultiplier and $a'=\phi$ is compactly supported.  One may therefore test the
+weak equation \eqref{eq:continuity-general} directly against a regularization of
 $\eta(t)a(x)\overline{w(t,x)}$.  Multiplication by $a$ is bounded on
 $H^{1/2}$, the potential contribution is real and cancels after taking the
 imaginary part, and all remaining pairings are integrable in time by
@@ -403,7 +390,7 @@ Equivalently,
  =2\langle\Im(\overline w\,\partial_xw),\phi\rangle
  \tag{1.8}\label{eq:localized-continuity-general}
 \]
-in $\D'(I)$.  The left sides for $u$ and $v$ agree because their densities agree.  Hence
+in $\D'(I)$.  The left-hand sides for $u$ and $v$ agree, since their absolute values agree.  Hence
 \[
  \int_I\eta(t)
  \langle\Im(\overline u\,\partial_xu-\overline v\,\partial_xv),\phi\rangle\,dt=0
@@ -421,7 +408,7 @@ local $L^\infty$ bound, or directly from the Gagliardo product estimate.  We
 have proved the first identity in \eqref{eq:current-wronskian} for almost every
 time.
 
-We prove the second identity without division by $u$ at its zeros.  The
+We now prove the second identity.  The
 following one-dimensional fact is used at almost every time.  Suppose
 $p,q\in H^{1/2}_{\loc}\cap L^\infty_{\loc}$,
 $|p|=|q|$, and
@@ -455,7 +442,7 @@ $h_\varepsilon\phi$ gives
  \langle\partial_xp,s_\varepsilon q\phi\rangle
  -\langle\partial_xq,s_\varepsilon p\phi\rangle=0.
 \]
-Thus, with $T_\varepsilon(z)=\varepsilon z/(|z|^2+\varepsilon)$,
+Thus, letting $T_\varepsilon(z)=\varepsilon z/(|z|^2+\varepsilon)$,
 \[
  \langle q\,\partial_xp-p\,\partial_xq,\phi\rangle
  =\langle\partial_xp,T_\varepsilon(q)\phi\rangle
@@ -480,12 +467,12 @@ multiplication by the fixed test function $\phi$, duality gives
  &\le \|\partial_xq\|_{H^{-1/2}(K)}
        \|T_\varepsilon(p)\phi\|_{H^{1/2}},
 \end{align*}
-where $K$ contains $\supp\phi$.  Both right sides tend to zero.  Passing to
-the limit proves $q\,\partial_xp-p\,\partial_xq=0$.  Apply this with
-$p=u(t)$ and $q=v(t)$ on the common full-measure set supplied by
-\eqref{eq:linear-endpoint-regularity} and the first identity in
-\eqref{eq:current-wronskian}.
+where $K$ contains $\supp\phi$.  Both right-hand sides above tend to zero.  It follows thus by passing to
+the limit that $q\,\partial_xp-p\,\partial_xq=0$. The first identity in
+\eqref{eq:current-wronskian} then follows at once. 
 \end{proof}
+
+We are now ready to prove our main result. 
 
 \begin{proof}[Proof of Theorem~\ref{thm:time-potential}]
 Fix a bounded interval $I$ with $\overline I\subset I_0$.  On this interval
@@ -495,7 +482,7 @@ set $\rho=|u|^2=|v|^2$ and define the exterior product
  \tag{1.9}\label{eq:exterior-product}
 \]
 The two tensor products in \eqref{eq:exterior-product} belong to
-$C(I;L^2(\R^2))$, because
+$C(I;L^2(\R^2))$, as
 $\|a\otimes b\|_{L^2(\R^2)}=\|a\|_2\|b\|_2$.  Apply
 $i\partial_t+\partial_x^2+\partial_y^2$ to each term.  For instance,
 \begin{align*}
@@ -544,10 +531,9 @@ $v\in L^\infty_tL^2_x$.  For $V_\infty$, use
  \|V_\infty(t,x)u(t,x)v(t,y)\|_2
  \le\|V_\infty(t)\|_\infty\|u(t)\|_2\|v(t)\|_2
 \]
-and $V_\infty\in L^1_tL^\infty_x$.  The terms with $x$ and $y$ interchanged
-are identical.
+and $V_\infty\in L^1_tL^\infty_x$.  The terms with $x$ and $y$ interchanged follow by identical means.
 
-Introduce orthogonal coordinates
+Let us now introduce orthogonal coordinates:
 \[
  r=\frac{x+y}{\sqrt2},
  \qquad s=\frac{x-y}{\sqrt2}.
@@ -608,7 +594,7 @@ local $H^{1/2}$ norms belong to $L^2_t$.  Cauchy--Schwarz in time therefore
 justifies passage to the limit under the temporal integral.  The term obtained by
 differentiating $\psi(t,\sqrt2z+s)$ vanishes at $s=0$ because the bracket in
 the preceding display vanishes there.  Lemma~\ref{lem:endpoint-wronskian}
-gives
+then gives
 \[
  H_\psi'(0)=2\iint
  \bigl(v\,\partial_xu-u\,\partial_xv\bigr)(t,z)
@@ -625,16 +611,14 @@ jump formula is
  =\1_{\{s>0\}}\partial_s^2F
   +\delta_{s=0}(\partial_sF)|_{s=0}+\delta'_{s=0}F|_{s=0}.
 \]
-Both boundary distributions vanish by the two trace identities.  Therefore
+Both boundary distributions vanish by the two trace identities proved above.  Therefore, it follows that $G$ satisfies
 \[
  i\partial_tG+\partial_r^2G+\partial_s^2G=QG.
 \]
 Multiplication by a half-space characteristic function is a bounded operator
 on $L^2$, so $G\in C(I;L^2)$.  It also preserves the $L^4$ bound, and
-$QG\in L^1_tL^2$ by the estimate already proved for $QF$.
-
-It remains to apply Proposition~\ref{prop:strip-propagation}.  Choose a compact
-subinterval $J\subset I$ so short that
+$QG\in L^1_tL^2$ by the estimate already proved for $QF$. It remains hence to apply Proposition~\ref{prop:strip-propagation}.  Choose a compact
+subinterval $J\subset I$ with sufficiently small length, so that
 \[
  2\|V_\infty\|_{L^1(J;L^\infty)}<\varepsilon_*/2.
 \]
@@ -651,26 +635,13 @@ $x=(r+s)/\sqrt2$, for which $dr=\sqrt2\,dx$, give
 \end{align*}
 and the same identity holds for the second ridge.  Choose $h>0$ so that their
 combined $L^2$ norm is below $\varepsilon_*/2$.  After reflecting $s$ to make
-the zero half-space $z_1>0$, estimates \eqref{eq:ridge-strip} and
-\eqref{eq:potential-decomposition} verify \eqref{eq:strip-smallness}.
-Proposition~\ref{prop:strip-propagation} gives $G=0$.  Oddness then gives
-$F=0$ almost everywhere on $J\times\R^2$.  Since
+the zero half-space $z_1>0$, \eqref{eq:ridge-strip} and
+the hypotheses on the potential show that \eqref{eq:strip-smallness} holds.
+Proposition~\ref{prop:strip-propagation} then gives at once that $G=0$.  By oddness, it follows then that $F=0$ almost everywhere on $J\times\R^2$.  Finally, since 
 $F\in C(J;L^2(\R^2))$, it follows that $F(t)=0$ in $L^2(\R^2)$ for every
 $t\in J$.
 
-Choose $t_0\in J$.  If $u(t_0)=0$, equal density gives $v(t_0)=0$; the
-uniqueness argument below then gives $u=v=0$ on $I_0$, and one may take
-$\zeta=1$.  Suppose instead that $u(t_0)\ne0$.  Choose $x_0$ in a full-measure
-set on which $u(t_0,x_0)\ne0$ and the identity
-$F(t_0,x_0,y)=0$ holds for almost every $y$.  Then
-\[
- v(t_0,y)=\frac{v(t_0,x_0)}{u(t_0,x_0)}u(t_0,y)
- \quad\text{for almost every }y.
-\]
-Thus $v(t_0)=\zeta u(t_0)$ for a scalar $\zeta$.  Equality of the densities,
-or merely of the $L^2$ norms, gives $|\zeta|=1$.
-
-We finally spell out uniqueness.  If two mild solutions have the same value at
+Choose now $t_0\in J$.  If $u(t_0)=0$, since $|u(t_0)| = |v(t_0)|$, it follows at once that $v(t_0)=0$. We then recall that if two mild solutions have the same value at
 one endpoint of a sufficiently short interval $K$, their difference $w$
 satisfies the homogeneous Duhamel equation.  The homogeneous and inhomogeneous
 Strichartz estimates, together with the estimates used in
@@ -682,15 +653,23 @@ Lemma~\ref{lem:endpoint-wronskian}, give
  +|K|^{1/4}\|V_2\|_{L^2_{t,x}(K)}\bigr)
  \|w\|_{L^\infty_tL^2_x(K)\cap L^4_tL^\infty_x(K)}.
 \]
-By absolute continuity of the two potential norms, $K$ may be chosen so that
-the coefficient on the right is less than one.  Hence $w=0$ on $K$.
+By absolute continuity of the two potential norms, $K$ may be chosen so that the coefficient on the right is less than one.  Hence $w=0$ on $K$.
 Partitioning each compact subinterval of $I_0$ into finitely many such pieces
 extends uniqueness forward and backward from $t_0$.  Since multiplication by a
 constant commutes with the linear equation, $v$ and $\zeta u$ have the same
 initial value at $t_0$ and therefore agree throughout $I_0$.
+
+Suppose instead that $u(t_0)\ne0$.  Choose $x_0$ in a full-measure
+set on which $u(t_0,x_0)\ne0$ and the identity
+$F(t_0,x_0,y)=0$ holds for almost every $y$.  Then
+\[
+ v(t_0,y)=\frac{v(t_0,x_0)}{u(t_0,x_0)}u(t_0,y)
+ \quad\text{for almost every }y.
+\]
+Thus $v(t_0)=\zeta u(t_0)$ for a scalar $\zeta$.  The hypotheses then directly imply that $|\zeta|=1$.
 \end{proof}
 
-\section{The cubic nonlinear equation}
+\section{Cubic NLS: Proof of Corollary \ref{cor:cubic-NLS}}
 
 We prove Corollary~\ref{cor:cubic-NLS}.  Its equation is
 \[
@@ -791,9 +770,9 @@ $\zeta$ at $t_0$, gauge covariance and uniqueness give
 $v=\zeta u$ for every time.
 \end{proof}
 
-\section{Failure in dimensions at least two}
+\section{Failure in dimensions at least two: Proof of Theorem \ref{thm:higher-dimensional-failure}}
 
-We prove Theorem~\ref{thm:higher-dimensional-failure}.
+As a final contribution, we build a simple family of counterexamples showing Theorem~\ref{thm:higher-dimensional-failure}. This, incidentally, provides both a \emph{negative} answer to the higher-dimensional assertion in \cite{Jaming2025}, and an example showing that the one-dimensional case of the four-time problem mentioned previously is genuinely special, as the same result in higher dimensions fails even for a continuum of times. 
 
 \begin{proof}[Proof of Theorem~\ref{thm:higher-dimensional-failure}]
 It suffices to work in $d=2$.  Let

@@ -1,0 +1,2 @@
+import CubicNLSPhaseRetrieval
+#print axioms CubicNLSPhaseRetrieval.phase_retrieval_interval

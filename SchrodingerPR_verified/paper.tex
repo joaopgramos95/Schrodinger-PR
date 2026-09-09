@@ -1,0 +1,4953 @@
+\documentclass[11pt,oneside]{book}
+
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=1.02in,headheight=14pt]{geometry}
+\usepackage{enumitem}
+\usepackage{booktabs,longtable,array}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+\usepackage[colorlinks=true,linkcolor=blue!55!black,citecolor=blue!55!black,urlcolor=blue!55!black]{hyperref}
+\usepackage[nameinlink,capitalise,noabbrev]{cleveref}
+
+\setstretch{1.055}
+\setlength{\parindent}{1.35em}
+\setlength{\parskip}{0.18em}
+\setlist{itemsep=0.25em,topsep=0.35em}
+\sloppy
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small Phase retrieval for cubic NLS}
+\fancyhead[R]{\small Self-contained proof}
+\fancyfoot[C]{\thepage}
+
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{claim}[theorem]{Claim}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{convention}[theorem]{Convention}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{checkpoint}[theorem]{Dependency checkpoint}
+
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\T}{\mathbb T}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\D}{\mathcal D}
+\newcommand{\Ssch}{\mathcal S}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\1}{\mathbf 1}
+\newcommand{\loc}{\mathrm{loc}}
+\newcommand{\sgn}{\operatorname{sgn}}
+\newcommand{\esssup}{\operatorname*{ess\,sup}}
+\newcommand{\Rea}{\operatorname{Re}}
+\newcommand{\Ima}{\operatorname{Im}}
+\newcommand{\dd}{\,\mathrm d}
+\newcommand{\norm}[1]{\left\lVert #1\right\rVert}
+\newcommand{\abs}[1]{\left\lvert #1\right\rvert}
+\newcommand{\pair}[2]{\left\langle #1,#2\right\rangle}
+\newcommand{\FT}{\mathcal F}
+\newcommand{\Pfree}{i\partial_t+\Delta}
+\newcommand{\NLS}{\mathrm{NLS}}
+\newcommand{\e}{\mathrm e}
+\newcommand{\iu}{\mathrm i}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\weakto}{\rightharpoonup}
+
+\title{\textbf{Phase Retrieval for the One-Dimensional Cubic NLS}\\[0.45em]
+A self-contained proof in the global $L^2$ solution class\\[0.8em]
+\large Expanded formalization-ready edition with endpoint and closure details}
+\author{}
+\date{July 2026}
+
+\hypersetup{
+  pdftitle={Phase Retrieval for the One-Dimensional Cubic NLS},
+  pdfsubject={Expanded self-contained proof and autoformalization specification},
+  pdfkeywords={nonlinear Schrodinger equation, phase retrieval, Carleman estimate, unique continuation}
+}
+
+\begin{document}
+\frontmatter
+\hypersetup{pageanchor=false}
+\maketitle
+\clearpage
+\hypersetup{pageanchor=true}
+\setcounter{page}{1}
+
+\chapter*{Abstract}
+\addcontentsline{toc}{chapter}{Abstract}
+We prove the following phase-retrieval statement for the one-dimensional
+cubic nonlinear Schr\"odinger equation:
+\[
+  i\partial_tu+\partial_x^2u=\sigma |u|^2u,
+  \qquad \sigma\in\R.
+\]
+If two global mild solutions $u,v\in C(\R;L^2(\R))$ have the same modulus
+almost everywhere on a nonempty open time interval, then
+$v=\zeta u$ for one constant $\zeta\in\C$ with $|\zeta|=1$; in particular
+the conclusion holds when the moduli agree almost everywhere in all of
+spacetime.
+
+This expanded edition is organized as a closed mathematical development and
+as a no-invention handoff for Lean autoformalization.  In addition to the
+PDE argument, it supplies the measure-theoretic endpoint infrastructure that
+was compressed in the earlier draft: jointly measurable scalar definitions
+of $L^p_tL^\infty_x$, completeness, restriction, Minkowski integration, and
+a countable norming predual; compatibility of the $L^1\to L^\infty$ kernel
+propagator with the $L^2$ Fourier group; the exact Fourier--Gagliardo identity;
+a separate endpoint $TT^*$ proof; full $H^k$ persistence and the
+Gelfand-triple mass chain rule; simultaneous critical/uniform approximation;
+an extended quadratic-form test algebra; a local $H^2\Rightarrow C^1$ trace
+theorem; the time-integrated Neumann difference-quotient limit; and a
+step-by-step graph closure for the explicit Carleman inverse.
+
+The only background layer left implicit is the ordinary foundational
+analysis pinned in the formalization contract: scalar Lebesgue and Bochner
+integration, complete normed spaces, basic Hilbert-space algebra,
+Plancherel, standard approximation, the maximum-modulus principle, and Banach's
+fixed-point theorem.  No external Strichartz, smoothing, trace, Carleman, or
+unique-continuation theorem is used as a premise of the main result.
+\chapter*{How to read the phrase ``modulo Mathlib''}
+\addcontentsline{toc}{chapter}{How to read the phrase ``modulo Mathlib''}
+This document is a mathematical proof manuscript and an autoformalization
+specification; it is not itself a Lean proof term.  The reproducible target is
+Lean $4.32.0$ with Mathlib tag \texttt{v4.32.0}, release commit
+\texttt{81a5d25}.  A translation may use \texttt{import Mathlib}, but it may
+leave implicit only the ordinary foundational layer enumerated precisely in
+\cref{app:formalization-contract}: scalar measure theory and integration,
+complete normed and Hilbert spaces, elementary Fourier/Plancherel theory,
+standard approximation, and Banach's fixed-point theorem.
+
+No Schr\"odinger estimate, nonlinear-flow theorem, critical product rule,
+trace theorem, Carleman estimate, or unique-continuation theorem is included
+in that imported layer.  Those statements are proved in the body of the
+manuscript.  Endpoint mixed norms are defined on jointly measurable scalar
+representatives rather than as $L^\infty$-valued Bochner spaces.  The
+Carleman graph closure is proved by spatial mollification, almost-everywhere
+Fourier sections, and a scalar compact-support ODE.  Distributional traces
+are constructed by scalarization and a proved local $H^2$ theorem rather than
+by an external trace package.
+
+Mathlib's Fourier character has a different normalization from the unitary
+convention used in the displayed analysis.  The exact rescaling is stated in
+\eqref{eq:mathlib-fourier-rescaling}; a formalizer may either implement that
+rescaling or rewrite all multipliers in Mathlib's convention.  The final
+appendix gives the version pin, object representations, exact existing
+Fourier/Sobolev entry points, and a no-invention gate for the next stage.
+
+Compiling this TeX file checks typography and internal references only.  A
+kernel certificate still requires translating the numbered definitions and
+proofs and running Lean with no admitted propositions.  The purpose of the
+expanded detail is that the translator should face implementation work, not
+an unstated mathematical lemma.
+
+\tableofcontents
+
+\mainmatter
+
+\chapter{The theorem and the proof architecture}
+
+\section{Equation and solution class}
+Fix $\sigma\in\R$.  We study
+\begin{equation}
+  i\partial_tu+\partial_x^2u=\sigma |u|^2u,
+  \qquad (t,x)\in\R\times\R.
+  \label{eq:NLS-main}
+\end{equation}
+The free Schr\"odinger group is denoted by
+\[
+  S(t)=\e^{it\partial_x^2}.
+\]
+With the Fourier convention fixed in \cref{chap:fourier}, its multiplier is
+$\e^{-it\xi^2}$.  A function $u\in C(I;L^2(\R))$ is a mild solution on an
+interval $I$ if, for one and hence every $t_0\in I$,
+\begin{equation}
+ u(t)=S(t-t_0)u(t_0)
+ -i\sigma\int_{t_0}^{t}S(t-s)(|u|^2u)(s)\,\dd s
+ \quad\text{in }L^2(\R).                         \label{eq:mild-main}
+\end{equation}
+In the fixed-point construction the retarded term is first defined as the
+continuous extension of the smooth-forcing operator from
+$L^{6/5}_{t,x}$ to $C_tL^2_x\cap L^6_{t,x}$; see
+\cref{lem:retarded-continuous}.  After the solution has been constructed,
+\cref{prop:endpoint} proves $|u|^2u\in L^1_tL^2_x$, and the same lemma then
+identifies the retarded term with the ordinary $L^2$-valued Bochner integral.
+Thus \eqref{eq:mild-main} has its usual Bochner meaning a posteriori, without
+using that stronger integrability circularly.  The construction below proves
+that every $u_0\in L^2$ generates a unique global mild solution and that on
+every bounded interval
+\begin{equation}
+ u\in L^6_{t,x}\cap L^4_tL^\infty_x\cap L^8_tL^4_x. \label{eq:solution-class-preview}
+\end{equation}
+
+\begin{theorem}[Main phase-retrieval theorem]\label{thm:main}
+Let $u,v\in C(\R;L^2(\R))$ be the global mild solutions of
+\eqref{eq:NLS-main} with initial data $u_0,v_0\in L^2(\R)$.  Assume
+\begin{equation}
+  |u(t,x)|=|v(t,x)|
+  \quad\text{for almost every }(t,x)\in\R^2.       \label{eq:equal-modulus-main}
+\end{equation}
+Then there is a scalar $\zeta\in\C$ such that $|\zeta|=1$ and
+\[
+  v(t)=\zeta u(t)\quad\text{in }L^2(\R)
+  \quad\text{for every }t\in\R.
+\]
+Equivalently, after choosing measurable representatives,
+$v(t,x)=\zeta u(t,x)$ for almost every $(t,x)$.
+\end{theorem}
+
+\section{The chain of implications}
+The proof is easier to audit when separated into seven logically independent
+links.
+
+\begin{enumerate}[label=\textbf{Step \arabic*.},leftmargin=5.2em]
+\item Construct the global $L^2$ flow and establish the local spacetime norms
+      in \eqref{eq:solution-class-preview}.
+\item Use local smoothing to make the current
+      $\Ima(\overline u\,u_x)$ meaningful as an $H^{-1/2}$--$H^{1/2}$
+      quadratic form.  The continuity equation then shows that equal density
+      implies equal current.
+\item Prove a critical Wronskian lemma which does not divide by $u$ or $v$ at
+      their common zero set.  It yields
+      $uv_x-vu_x=0$ for almost every time.
+\item Form the exterior product
+      $F(t,x,y)=u(t,x)v(t,y)-v(t,x)u(t,y)$.  It solves a two-dimensional
+      linear Schr\"odinger equation with a real ridge potential.
+\item Show that $F$ has zero Dirichlet and Neumann traces on the diagonal
+      $x=y$, even though the traces are only distribution-valued a priori.
+\item Extend the restriction of $F$ from one side of the diagonal by zero.
+      The two vanishing traces remove both jump distributions.  A
+      half-space propagation theorem forces the extension, hence $F$, to
+      vanish.
+\item A zero Hilbert-space exterior product means that $u(0)$ and $v(0)$ are
+      linearly dependent.  Equal norms make the scalar unimodular, and gauge
+      covariance propagates the relation to all times.
+\end{enumerate}
+
+Every step is stable under smooth approximation.  This stability is not a
+cosmetic point: it is what turns identities first computed for Schwartz data
+into identities in the global $L^2$ solution class.
+
+\section{Why no pointwise division is used}
+At a fixed time, equality of moduli suggests writing $v=q u$ with $|q|=1$.
+This is harmless where $u$ is bounded away from zero, but it loses information
+at nodal points.  Different connected components of $\{u\ne0\}$ may carry
+different constant phases.  For example, the pair $f(x)=x$ and $g(x)=|x|$
+shows that a phase jump across a zero is compatible with equal modulus and a
+vanishing classical Wronskian away from the zero.  The proof must therefore
+use the evolution to glue phases.  The exterior product carries all component
+phases at once and is the natural quantity for that task.
+
+\begin{checkpoint}
+The main theorem will use no statement not proved later in the document,
+except the foundational analysis listed in the front matter.
+\end{checkpoint}
+
+\chapter{Measurable representatives and mixed norms}\label{chap:mixed-norms}
+
+The endpoint space $L^4_tL^\infty_x$ occurs in the nonlinear flow and again
+in the Carleman argument.  It is not treated here as a Bochner space with
+values in the nonseparable Banach space $L^\infty$.  Instead, every mixed norm
+is defined directly on jointly measurable scalar representatives.  This
+removes all ambiguity about sections, essential suprema, restriction, and
+Minkowski integration.
+
+\section{Joint representatives and section norms}
+
+\begin{convention}[Spacetime representatives]\label{conv:joint-representatives}
+A scalar spacetime function on $I\times\R^d$ means an equivalence class of
+jointly Lebesgue-measurable maps $f:I\times\R^d\to\C$, where two maps are
+identified when they agree almost everywhere for product measure.  A
+representative is fixed only for the duration of a calculation.  Fubini's
+theorem implies that two representatives determine the same spatial section
+for almost every time, so all section norms below are independent of the
+choice of representative.
+\end{convention}
+
+For $1\le q<\infty$ put
+\[
+ m_qf(t)=\left(\int_{\R^d}|f(t,x)|^q\,\dd x\right)^{1/q},
+\]
+and put
+\[
+ m_\infty f(t)=\esssup_{x\in\R^d}|f(t,x)|.
+\]
+
+\begin{lemma}[Measurability of the endpoint section norm]
+\label{lem:measurable-esssup-section}
+If $f$ is jointly measurable, then $t\mapsto m_\infty f(t)$ is measurable.
+\end{lemma}
+
+\begin{proof}
+Choose once and for all a strictly positive integrable weight, for example
+$\omega(x)=c_d\exp(-|x|)$ with $\int\omega=1$.  For every rational $a\ge0$,
+Tonelli's theorem shows that
+\[
+ t\longmapsto A_a(t)
+ :=\int_{\R^d}\omega(x)\1_{\{|f(t,x)|>a\}}\,\dd x
+\]
+is measurable.  Since $\omega>0$ almost everywhere,
+\[
+ m_\infty f(t)>a \quad\Longleftrightarrow\quad A_a(t)>0.
+\]
+Thus the inverse image of $(a,\infty]$ is measurable for every rational
+$a\ge0$, which proves the claim.
+\end{proof}
+
+\begin{definition}[Scalar mixed norm]\label{def:scalar-mixed-norm}
+For $1\le p\le\infty$ and $1\le q\le\infty$, define
+\[
+ \norm f_{L^p_tL^q_x(I\times\R^d)}
+ :=\norm{m_qf}_{L^p(I)}.
+\]
+The resulting space is the quotient of the jointly measurable functions of
+finite norm by the zero-norm relation.  If $E\subset I\times\R^d$ is
+measurable, the restricted norm means the norm of $\1_Ef$.
+\end{definition}
+
+For finite $q$, measurability of $m_qf$ follows directly from Tonelli.  The
+previous lemma supplies the only endpoint case.  Fubini also shows that the
+zero-norm relation is exactly equality almost everywhere on the product
+space.
+
+\begin{lemma}[Completeness of the scalar endpoint space]
+\label{lem:scalar-endpoint-complete}
+For $1\le p\le\infty$, the scalar space $L^p_tL^\infty_x$ of
+\cref{def:scalar-mixed-norm} is complete.
+\end{lemma}
+
+\begin{proof}
+Let $(f_n)$ be Cauchy.  Choose a subsequence $(f_{n_k})$ such that
+\[
+ \norm{f_{n_{k+1}}-f_{n_k}}_{L^p_tL^\infty_x}\le2^{-k}.
+\]
+Set
+\[
+ a_k(t)=m_\infty(f_{n_{k+1}}-f_{n_k})(t).
+\]
+Minkowski's inequality for the scalar $L^p(I)$ norm gives
+\[
+ \norm{\sum_{k=1}^\infty a_k}_{L^p_t}
+ \le\sum_{k=1}^\infty\norm{a_k}_{L^p_t}<\infty,
+\]
+with the same statement in the essential-supremum sense when $p=\infty$.
+Hence $\sum_ka_k(t)<\infty$ for almost every $t$.
+
+For every $k$, the inequality
+\[
+ |f_{n_{k+1}}(t,x)-f_{n_k}(t,x)|\le a_k(t)
+\]
+holds for almost every $(t,x)$.  After deleting the countable union of the
+exceptional sets, the telescoping series converges absolutely for almost
+every $(t,x)$.  Define $f$ to be its sum there and zero elsewhere.  It is
+jointly measurable.  Moreover,
+\[
+ m_\infty(f-f_{n_k})(t)\le\sum_{j\ge k}a_j(t)
+\]
+for almost every $t$, so $f_{n_k}\to f$ in the mixed norm.  Since the
+original sequence is Cauchy, the whole sequence converges to $f$.
+\end{proof}
+
+\begin{lemma}[Restriction and scalar Minkowski]
+\label{lem:scalar-mixed-minkowski}
+Let $(S,\nu)$ be a $\sigma$-finite measure space and let
+$F:S\times I\times\R^d\to\C$ be jointly measurable.  Assume
+\[
+ \int_S\norm{F(s,\cdot,\cdot)}_{L^p_tL^\infty_x}\,\dd\nu(s)<\infty.
+\]
+Then the scalar integral $H(t,x)=\int_SF(s,t,x)\,\dd\nu(s)$ is defined for
+almost every $(t,x)$ and
+\begin{equation}
+ \norm H_{L^p_tL^\infty_x}
+ \le\int_S\norm{F(s)}_{L^p_tL^\infty_x}\,\dd\nu(s).
+ \label{eq:scalar-minkowski-endpoint}
+\end{equation}
+Multiplication by an indicator of a measurable subset has norm at most one in
+every scalar mixed norm.
+\end{lemma}
+
+\begin{proof}
+Put $B(t)=\int_Sm_\infty(F(s))(t)\,\dd\nu(s)$.  Ordinary scalar
+Minkowski gives $B\in L^p(I)$.  After removing one product-null set by
+Tonelli, $|F(s,t,x)|\le m_\infty(F(s))(t)$ for almost every
+$(s,t,x)$; hence the scalar integral defining $H$ is absolutely convergent
+for almost every $(t,x)$.  For almost every $t$, the definition of essential
+supremum then gives
+\[
+ m_\infty H(t)
+ \le\int_Sm_\infty(F(s))(t)\,\dd\nu(s)=B(t).
+\]
+Taking the scalar $L^p(I)$ norm proves \eqref{eq:scalar-minkowski-endpoint}.  The restriction statement is pointwise.
+\end{proof}
+
+\section{A norming predual at the spatial endpoint}
+
+We never identify the full Banach dual of $L^4_tL^\infty_x$.  Only a
+norming family of $L^{4/3}_tL^1_x$ functions is needed, and that statement has
+an elementary measurable proof.
+
+Choose a countable dense subset $(g_n)_{n\ge1}$ of the closed unit ball of
+$L^1(\R^d)$.  One may take compactly supported step functions on rational
+boxes with coefficients in $\Q+i\Q$, followed by normalization.
+
+\begin{lemma}[Countable norming of $L^\infty$]\label{lem:countable-norming-Linfty}
+For every $h\in L^\infty(\R^d)$,
+\begin{equation}
+ \norm h_\infty
+ =\sup_{n\ge1}\left|\int_{\R^d}h(x)g_n(x)\,\dd x\right|.
+ \label{eq:countable-norming-Linfty}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+The right side is at most $\norm h_\infty$.  Conversely, let
+$M=\norm h_\infty$ and $\eps>0$.  The set
+$E=\{|h|>M-\eps\}$ has positive measure.  Intersect it with a sufficiently
+large ball and, if necessary, with a subset of finite positive measure.  The
+function
+\[
+ g=\frac{\1_E\overline{h}/|h|}{|E|},
+\]
+with value zero where $h=0$, belongs to the unit ball of $L^1$ and satisfies
+$|\int hg|\ge M-\eps$.  Approximate $g$ in $L^1$ by one of the $g_n$ and let
+$\eps\downarrow0$.
+\end{proof}
+
+\begin{proposition}[Endpoint norming identity]
+\label{prop:endpoint-norming}
+Let $1<p<\infty$ and $p'=p/(p-1)$.  For every jointly measurable
+$H\in L^p_tL^\infty_x$,
+\begin{equation}
+ \norm H_{L^p_tL^\infty_x}
+ =\sup\left\{
+ \left|\iint H(t,x)G(t,x)\,\dd x\,\dd t\right|:
+ \norm G_{L^{p'}_tL^1_x}\le1
+ \right\}.
+ \label{eq:endpoint-norming}
+\end{equation}
+It is enough in the supremum to use jointly measurable functions which, at
+each time, are a scalar multiple of one of the countably many $g_n$.
+\end{proposition}
+
+\begin{proof}
+H\"older gives the upper bound.  Put
+\[
+ a_n(t)=\int H(t,x)g_n(x)\,\dd x,
+ \qquad M_N(t)=\max_{1\le n\le N}|a_n(t)|.
+\]
+Every $a_n$ is measurable by Fubini, and by
+\cref{lem:countable-norming-Linfty},
+$M_N(t)\uparrow m_\infty H(t)$ for almost every $t$.
+Let $n_N(t)$ be the least index realizing the finite maximum; its level sets
+are measurable.  Define
+\[
+ \theta_N(t)=
+ \begin{cases}
+  \overline{a_{n_N(t)}(t)}/|a_{n_N(t)}(t)|,&M_N(t)>0,\\
+  0,&M_N(t)=0.
+ \end{cases}
+\]
+If $M_N\not\equiv0$, put
+\[
+ b_N(t)=\frac{M_N(t)^{p-1}}{\norm{M_N}_{L^p}^{p-1}},
+ \qquad
+ G_N(t,x)=b_N(t)\theta_N(t)g_{n_N(t)}(x).
+\]
+Then $G_N$ is jointly measurable,
+$\norm{G_N}_{L^{p'}_tL^1_x}\le1$, and
+\[
+ \iint HG_N=\int b_N(t)M_N(t)\,\dd t=\norm{M_N}_{L^p}.
+\]
+The case $M_N\equiv0$ is trivial.  Monotone convergence gives
+$\norm{M_N}_p\uparrow\norm H_{L^pL^\infty}$, proving the reverse inequality.
+\end{proof}
+
+\begin{remark}
+\Cref{prop:endpoint-norming} is a norming statement, not a claim that every
+continuous functional on $L^{p'}_tL^1_x$ is represented by a strongly
+measurable $L^\infty$-valued map.  This distinction is exactly what is needed
+at the endpoint Strichartz step.
+\end{remark}
+
+\section{Almost-everywhere uniform convergence of continuous slices}
+
+\begin{lemma}[Mixed-norm subsequence lemma]
+\label{lem:mixed-subsequence-uniform}
+Let $1\le p<\infty$ and suppose $f_n\to f$ in
+$L^p(I;L^\infty(\R^d))$ in the scalar sense.  There is a subsequence
+$(f_{n_k})$ such that for almost every $t$,
+\[
+ \sum_{k=1}^\infty
+ \norm{f_{n_{k+1}}(t,\cdot)-f_{n_k}(t,\cdot)}_{L^\infty_x}<\infty.
+\]
+If every spatial slice $f_n(t,\cdot)$ is continuous, then the essential
+supremum in the series equals the ordinary supremum and the subsequence is
+uniformly Cauchy in $x$ for almost every $t$.
+\end{lemma}
+
+\begin{proof}
+Choose the subsequence so that the $k$th mixed-norm difference is at most
+$2^{-k}$.  The proof of \cref{lem:scalar-endpoint-complete} shows that the
+sum of the section essential suprema is finite for almost every $t$.  A
+continuous function whose absolute value exceeds a number at one point
+exceeds it on a set of positive measure, so its supremum and essential
+supremum agree.
+\end{proof}
+
+\begin{lemma}[Identification of the continuous limit]
+\label{lem:C0-limit-identification}
+Suppose, in addition, that $f_n(t,\cdot)\in C_0(\R^d)$, that
+$f_n\to f$ in $C(I;L^2_x)$, and that a subsequence converges uniformly in
+$x$ for a given time $t$.  Then its uniform limit belongs to $C_0$ and
+represents the $L^2$ class $f(t)$.
+\end{lemma}
+
+\begin{proof}
+The space $C_0$ is closed in the uniform norm.  The same subsequence converges
+to $f(t)$ in $L^2$, while uniform convergence implies convergence locally in
+$L^2$.  Uniqueness of an $L^2$ limit on every bounded set identifies the two
+limits almost everywhere; the continuous uniform limit is therefore a
+representative of $f(t)$.
+\end{proof}
+
+\section{Sum and intersection spaces}
+
+The Carleman argument uses sums and intersections of scalar mixed-norm
+spaces.  If $A$ and $B$ are Banach spaces continuously embedded in the same
+Hausdorff topological vector space, define
+\[
+ A+B=\{a+b:a\in A,\ b\in B\},
+ \qquad
+ \norm h_{A+B}=\inf_{h=a+b}(\norm a_A+\norm b_B),
+\]
+and
+\[
+ A\cap B=\{h:h\in A\text{ and }h\in B\},
+ \qquad
+ \norm h_{A\cap B}=\max(\norm h_A,\norm h_B).
+\]
+
+\begin{lemma}[Completeness of sums and intersections]
+\label{lem:sum-intersection-complete}
+With the preceding hypotheses, $A+B$ and $A\cap B$ are Banach spaces.
+Multiplication by an indicator is contractive whenever it is contractive on
+each component.
+\end{lemma}
+
+\begin{proof}
+The sum is the quotient of the Banach space $A\oplus_1B$ by the closed kernel
+of the continuous addition map $(a,b)\mapsto a+b$.  The intersection is
+isometric to the closed diagonal subspace
+$\{(a,b)\in A\oplus_\infty B:a=b\}$.  The restriction statement follows by
+applying the componentwise contractions before taking an infimum or a
+maximum.
+\end{proof}
+
+\section{Formal meaning of the mild equation}
+
+\begin{lemma}[Joint representative for a continuous $L^2$ path]
+\label{lem:joint-representative-L2}
+Let $I$ be an interval and let $u:I\to L^2(\R^d)$ be continuous.  There is a
+jointly measurable scalar function $U:I\times\R^d\to\C$ such that, for almost
+every $t$, the section $U(t,\cdot)$ represents the $L^2$ class $u(t)$.  On a
+bounded interval $I$, the representative can be obtained as an
+$L^2(I\times\R^d)$ limit of jointly measurable simple-in-time functions whose
+sections converge to $u(t)$ uniformly in the $L^2$ norm.
+\end{lemma}
+
+\begin{proof}
+First let $I=[a,b]$.  Uniform continuity of $u$ gives, for every $n$, a
+finite measurable partition $I=\bigcup_jE_{n,j}$ and points $t_{n,j}\in I$
+such that the simple $L^2$-valued map
+\[
+ u_n(t)=\sum_j\1_{E_{n,j}}(t)u(t_{n,j})
+\]
+satisfies $\sup_t\norm{u_n(t)-u(t)}_2\le2^{-n}$.  Choose a measurable scalar
+representative $g_{n,j}$ of each of the finitely many $L^2$ classes
+$u(t_{n,j})$, and put
+\[
+ U_n(t,x)=\sum_j\1_{E_{n,j}}(t)g_{n,j}(x).
+\]
+This is jointly measurable and represents $u_n(t)$ for every section.  The
+uniform estimate implies
+\[
+ \norm{U_n-U_m}_{L^2(I\times\R^d)}
+ \le |I|^{1/2}(2^{-n}+2^{-m}),
+\]
+so $U_n$ converges in product $L^2$ to a jointly measurable function $U$.
+Choose a subsequence, still denoted $U_n$, whose successive product-$L^2$
+differences have summable norms.  Minkowski then shows that the sum of the
+section $L^2_x$ norms of those differences is finite for almost every $t$.
+Thus $U_n(t,\cdot)\to U(t,\cdot)$ in $L^2_x$ for almost every $t$.  For every
+$t$, however, the classes represented by $U_n(t,\cdot)$ converge in $L^2$ to
+$u(t)$.  Uniqueness of the $L^2$ limit therefore identifies the section of
+$U$ with $u(t)$ outside one null set of times.
+
+For an arbitrary interval, apply the construction on a countable increasing
+exhaustion by bounded intervals.  On overlaps the representatives agree
+product-almost everywhere because their sections represent the same $L^2$
+classes.  Modify on the countable union of overlap null sets and paste the
+representatives along disjoint annular pieces of the exhaustion.
+\end{proof}
+
+A map $u:I\to L^2(\R)$ is always understood as a continuous map into the
+Mathlib $L^2$ quotient.  We use the jointly measurable representative
+supplied by \cref{lem:joint-representative-L2}.  If
+$u\in L^6(I\times\R)$, the scalar function $|u|^2u$ is independent of the
+chosen representative and defines an element of $L^{6/5}(I\times\R)$ by the
+estimate proved later.  The retarded Duhamel term is first defined for smooth compactly supported
+forcing and then completed in the norm supplied by
+\cref{thm:inhom-str}; \cref{lem:retarded-continuous} proves that the completed
+object has a unique continuous $L^2$ representative, is independent of the
+approximating sequence, and satisfies the base-time identity.  Consequently
+\eqref{eq:mild-main} is an equality in the $L^2$ quotient for every time; no
+pointwise representative is part of the definition.  When the forcing also
+belongs to $L^1_tL^2_x$, the completed operator agrees with the ordinary
+Bochner integral.
+
+\begin{checkpoint}
+All uses of $L^4_tL^\infty_x$, endpoint duality, restriction, Minkowski
+integration, and almost-everywhere uniform convergence now refer to explicit
+scalar constructions.  No nonseparable Bochner-space identification is used
+anywhere below.
+\end{checkpoint}
+
+\chapter{Fourier analysis and Sobolev spaces}\label{chap:fourier}
+
+\section{Fourier convention}
+For $f\in L^1(\R^d)$ define
+\begin{equation}
+ \widehat f(\xi)=(2\pi)^{-d/2}\int_{\R^d}\e^{-ix\cdot\xi}f(x)\,\dd x.
+ \label{eq:FT-convention}
+\end{equation}
+The inverse transform uses $\e^{ix\cdot\xi}$ with the same normalization.
+The transform extends by density to a unitary operator on $L^2(\R^d)$.
+We use Plancherel in the form
+\[
+  \norm{f}_{L^2}=\norm{\widehat f}_{L^2},
+  \qquad
+  \pair{f}{g}_{L^2}=\pair{\widehat f}{\widehat g}_{L^2}.
+\]
+For Schwartz functions,
+$\widehat{\partial_jf}=i\xi_j\widehat f$ and
+$\widehat{\Delta f}=-|\xi|^2\widehat f$.
+
+\section{Bessel and homogeneous multipliers}
+For $s\in\R$ let
+\[
+  \langle D\rangle^sf
+  =\FT^{-1}(\langle\xi\rangle^s\widehat f),
+  \qquad
+  |D|^sf=\FT^{-1}(|\xi|^s\widehat f),
+  \qquad \langle\xi\rangle=(1+|\xi|^2)^{1/2}.
+\]
+Define
+\[
+  H^s(\R^d)=\{f\in\Ssch'(\R^d):\langle\xi\rangle^s\widehat f\in L^2\},
+  \qquad
+  \norm{f}_{H^s}=\norm{\langle D\rangle^sf}_2.
+\]
+Only $s=\pm\tfrac12$ and $s=1$ are needed.  Local membership means
+$\chi f\in H^s$ for every $\chi\in C_c^\infty$.
+
+For $0<s<1$ set
+\[
+ c_s=\int_{\R}\frac{|\e^{ih}-1|^2}{|h|^{1+2s}}\,\dd h.
+\]
+The integral is finite and strictly positive: near zero the numerator is
+$O(h^2)$, while at infinity it is bounded.
+
+\begin{theorem}[Exact Fourier--Gagliardo identity]
+\label{thm:fourier-gagliardo}
+For $0<s<1$ and every $f\in L^2(\R)$, the following are equivalent:
+\begin{enumerate}
+\item $|\xi|^s\widehat f(\xi)\in L^2_\xi$;
+\item
+\[
+ \iint_{\R^2}\frac{|f(x)-f(y)|^2}{|x-y|^{1+2s}}\,\dd x\,\dd y<\infty.
+\]
+\end{enumerate}
+Whenever either condition holds,
+\begin{equation}
+ \iint_{\R^2}\frac{|f(x)-f(y)|^2}{|x-y|^{1+2s}}\,\dd x\,\dd y
+ =c_s\int_\R|\xi|^{2s}|\widehat f(\xi)|^2\,\dd\xi.
+ \label{eq:exact-gagliardo-fourier}
+\end{equation}
+In particular, the norm obtained from the $L^2$ norm and the Gagliardo
+seminorm is equivalent to the Bessel-potential $H^s$ norm.
+\end{theorem}
+
+\begin{proof}
+First let $f$ be Schwartz.  Put $h=y-x$.  Tonelli and Plancherel give
+\begin{align*}
+ \iint\frac{|f(x+h)-f(x)|^2}{|h|^{1+2s}}\,\dd x\,\dd h
+ &=\int_\R\frac1{|h|^{1+2s}}
+   \int_\R|\e^{ih\xi}-1|^2|\widehat f(\xi)|^2\,\dd\xi\,\dd h\\
+ &=\int_\R|\widehat f(\xi)|^2
+   \left(\int_\R\frac{|\e^{ih\xi}-1|^2}{|h|^{1+2s}}\,\dd h\right)\dd\xi.
+\end{align*}
+For $\xi\ne0$, the substitution $k=h\xi$ makes the inner integral equal to
+$c_s|\xi|^{2s}$; it is zero at $\xi=0$.  This proves
+\eqref{eq:exact-gagliardo-fourier} for Schwartz functions.
+
+Now suppose $|\xi|^s\widehat f\in L^2$.  Approximate $\widehat f$ in the
+weighted norm
+\[
+ \int(1+|\xi|^{2s})|\widehat f(\xi)|^2\,\dd\xi
+\]
+by functions in $C_c^\infty$ and take inverse Fourier transforms $f_n$.
+Then $f_n$ is Schwartz, $f_n\to f$ in $L^2$, and
+$|D|^s(f_n-f_m)\to0$ in $L^2$.  The identity already proved shows that
+\[
+ \frac{f_n(x)-f_n(y)}{|x-y|^{(1+2s)/2}}
+\]
+is Cauchy in $L^2(\R^2)$.  After passing to a subsequence, $f_n\to f$ almost
+everywhere, so the $L^2(\R^2)$ limit is the displayed difference quotient
+of $f$.  Passing to the limit proves the identity.
+
+Conversely, suppose the Gagliardo integral of $f$ is finite.  Let
+$f_\eps=\varphi_\eps*f$ with a compactly supported smooth approximate
+identity.  Jensen's inequality and translation invariance give
+\[
+ [f_\eps]_{\dot H^s}\le[f]_{\dot H^s}.
+\]
+We now justify the Schwartz approximation in both norms rather than taking it
+as a density theorem.  Choose $\chi\in C_c^\infty(\R)$ with
+$0\le\chi\le1$ and $\chi=1$ near zero, and put
+$\chi_R(x)=\chi(x/R)$ and $g_R=\chi_Rf_\eps$.  Then
+$g_R\in C_c^\infty(\R)\subset\mathcal S(\R)$ and
+$g_R\to f_\eps$ in $L^2$.  For the Gagliardo seminorm, write
+\begin{align*}
+ g_R(x)-g_R(y)
+ &=\chi_R(x)(f_\eps(x)-f_\eps(y))
+   +f_\eps(y)(\chi_R(x)-\chi_R(y)).
+\end{align*}
+The first summand converges to $f_\eps(x)-f_\eps(y)$ in the weighted
+$L^2(\R^2)$ space by dominated convergence.  For the second, scaling and
+the Lipschitz bound for $\chi$ give, uniformly in $y$,
+\begin{align}
+ \int_\R\frac{|\chi_R(x)-\chi_R(y)|^2}{|x-y|^{1+2s}}\,\dd x
+ &=R^{-2s}\int_\R
+   \frac{|\chi(y/R+z)-\chi(y/R)|^2}{|z|^{1+2s}}\,\dd z\notag\\
+ &\le C_{\chi,s}R^{-2s}.                         \label{eq:cutoff-gagliardo-error}
+\end{align}
+Indeed, on $|z|\le1$ the numerator is $O(|z|^2)$, and on
+$|z|>1$ it is bounded.  Therefore the squared weighted norm of the second
+summand is at most
+$C_{\chi,s}R^{-2s}\norm{f_\eps}_2^2$, which tends to zero.  Hence
+$g_R\to f_\eps$ in $L^2$ and in the Gagliardo seminorm.
+
+Apply the Schwartz identity to $g_R-g_{R'}$.  The preceding convergence shows
+that $|\xi|^s\widehat{g_R}$ is Cauchy in $L^2_\xi$, while ordinary
+Plancherel gives $\widehat{g_R}\to\widehat{f_\eps}$ in $L^2$.  On every
+annulus $\{a\le|\xi|\le b\}$ the two limits identify, so the weighted
+limit is $|\xi|^s\widehat{f_\eps}$.  Passing to the limit in the Schwartz
+identity yields
+\[
+ c_s\int|\xi|^{2s}|\widehat{f_\eps}(\xi)|^2\,\dd\xi
+ =[f_\eps]_{\dot H^s}^2
+ \le[f]_{\dot H^s}^2.
+\]
+With the unitary convention \eqref{eq:FT-convention}, the convolution
+formula contains the factor $(2\pi)^{1/2}$.  Thus
+\[
+ \widehat{f_\eps}(\xi)=m_\eps(\xi)\widehat f(\xi),
+ \qquad
+ m_\eps(\xi)=(2\pi)^{1/2}\widehat\varphi(\eps\xi).
+\]
+Because $\int\varphi=1$, one has $m_\eps(\xi)\to1$ pointwise.
+Fatou's lemma therefore yields
+$|\xi|^s\widehat f\in L^2$ with the same bound.  The identity for $f$
+then follows from the already proved implication from the weighted Fourier
+condition to the Gagliardo condition.
+\end{proof}
+
+\begin{remark}[Normalization relative to Mathlib]\label{rem:mathlib-fourier-normalization}
+Mathlib's standard Fourier character uses the phase $\e^{-2\pi i x\cdot\eta}$.
+If $\FT_{\mathrm M}$ denotes that transform and $\FT$ denotes
+\eqref{eq:FT-convention}, then in dimension $d$
+\begin{equation}
+ (\FT f)(\xi)=(2\pi)^{-d/2}
+ (\FT_{\mathrm M}f)\!\left(\frac{\xi}{2\pi}\right).
+ \label{eq:mathlib-fourier-rescaling}
+\end{equation}
+The change of variables $\xi=2\pi\eta$ shows that the right side is unitary
+on $L^2$.  A Lean implementation may either define this rescaled transform or
+retain Mathlib's convention and replace every occurrence of $\xi$ by
+$2\pi\eta$.  No analytic estimate depends on which choice is made.
+\end{remark}
+
+\begin{lemma}[Smooth multipliers on $H^{1/2}$]\label{lem:smooth-multiplier}
+If $\chi\in C_c^\infty(\R)$, multiplication by $\chi$ is bounded on
+$H^{1/2}(\R)$ and on $H^{-1/2}(\R)$.
+\end{lemma}
+
+\begin{proof}
+For $H^{1/2}$, the $L^2$ term is immediate.  From
+\[
+ \chi(x)f(x)-\chi(y)f(y)
+ =\chi(x)(f(x)-f(y))+f(y)(\chi(x)-\chi(y))
+\]
+and $|\chi(x)-\chi(y)|\le \norm{\chi'}_\infty|x-y|$, the first term is
+controlled by $\norm{\chi}_\infty[f]_{\dot H^{1/2}}$.  In the second term,
+the region $|x-y|\le1$ is controlled by $\norm{\chi'}_\infty\norm f_2$ and
+the region $|x-y|>1$ by boundedness and compact support of $\chi$.  The
+$H^{-1/2}$ statement follows by duality.
+\end{proof}
+
+\begin{lemma}[Translation difference quotients]\label{lem:translation-dq}
+For $f\in H^{1/2}(\R)$,
+\[
+ \frac{f(\cdot+h)-f}{h}\longrightarrow f_x
+ \quad\text{strongly in }H^{-1/2}(\R)
+ \quad(h\to0).
+\]
+Moreover the difference quotients are uniformly bounded from
+$H^{1/2}$ to $H^{-1/2}$.
+\end{lemma}
+
+\begin{proof}
+The Fourier multiplier of the difference quotient is
+$(\e^{ih\xi}-1)/h$.  After multiplying by $\langle\xi\rangle^{-1/2}$, its
+absolute value is bounded by $C\langle\xi\rangle^{1/2}$.  It converges
+pointwise to $i\xi$.  Dominated convergence in $L^2_\xi$ proves the claim.
+\end{proof}
+
+\begin{lemma}[Difference quotients in $W^{1,p}$]
+\label{lem:Wp-difference-quotient}
+Let $1\le p<\infty$ and $f\in W^{1,p}(\R)$.  Then
+\begin{equation}
+ \frac{f(\cdot+h)-f}{h}\longrightarrow f'
+ \quad\text{strongly in }L^p(\R)\quad(h\to0),       \label{eq:Wp-difference-quotient}
+\end{equation}
+and the difference quotients have norm at most $\norm{f'}_p$.
+The same assertion holds after integration in an auxiliary variable.
+\end{lemma}
+
+\begin{proof}
+Use the locally absolutely continuous representative of $f$.  For almost
+every $x$,
+\[
+ \frac{f(x+h)-f(x)}h=\int_0^1 f'(x+\theta h)\,\dd\theta.
+\]
+Minkowski gives the uniform bound.  Subtract $f'(x)$, apply Minkowski again,
+and use strong continuity of translations in scalar $L^p$:
+\[
+ \left\|\frac{\tau_hf-f}{h}-f'\right\|_p
+ \le\int_0^1\norm{\tau_{\theta h}f'-f'}_p\,\dd\theta\longrightarrow0
+\]
+by dominated convergence in $\theta$.  For an auxiliary variable, apply the
+same identity to almost every section and use the identical domination in
+the product $L^p$ norm.
+\end{proof}
+
+\begin{lemma}[One-dimensional $H^1$ representative]
+\label{lem:H1-C0}
+Every $f\in H^1(\R)$ has a unique continuous representative in $C_0(\R)$.
+It is locally absolutely continuous and satisfies
+\begin{equation}
+ \norm f_\infty^2\le2\norm f_2\norm{f'}_2.          \label{eq:H1-Linfty}
+\end{equation}
+More precisely, for every $x$,
+\begin{align}
+ |f(x)|^2&\le2\norm f_{L^2(x,\infty)}\norm{f'}_{L^2(x,\infty)},\label{eq:H1-tail-plus}\\
+ |f(x)|^2&\le2\norm f_{L^2(-\infty,x)}\norm{f'}_{L^2(-\infty,x)}.\label{eq:H1-tail-minus}
+\end{align}
+\end{lemma}
+
+\begin{proof}
+The one-dimensional weak fundamental theorem gives a locally absolutely
+continuous representative.  Since $f\in L^2$, the numbers
+$\int_n^{n+1}|f|^2$ tend to zero.  Choose a Lebesgue point
+$R_n\in[n,n+1]$ with
+$|f(R_n)|^2\le\int_n^{n+1}|f|^2$; then $f(R_n)\to0$.  The same construction
+on $[-n-1,-n]$ gives $L_n\to-\infty$ with $f(L_n)\to0$.  For fixed $x$
+and $R_n>x$, the ordinary product rule gives
+\[
+ |f(R_n)|^2-|f(x)|^2
+ =2\Rea\int_x^{R_n}f'(y)\overline{f(y)}\,\dd y.
+\]
+Let $n\to\infty$ and apply Cauchy--Schwarz to obtain
+\eqref{eq:H1-tail-plus}.  Integrating from $L_n$ to $x$ gives
+\eqref{eq:H1-tail-minus}; either estimate implies \eqref{eq:H1-Linfty}.
+The tail norms in \eqref{eq:H1-tail-plus} and
+\eqref{eq:H1-tail-minus} tend to zero at the corresponding infinity, so the
+representative lies in $C_0$.  Two continuous representatives agreeing
+almost everywhere agree everywhere.
+\end{proof}
+
+\section{Tensor products}
+For $f,g\in L^2(\R)$, the function $(f\otimes g)(x,y)=f(x)g(y)$ belongs to
+$L^2(\R^2)$ and
+\begin{equation}
+  \norm{f\otimes g}_{L^2(\R^2)}=\norm f_2\norm g_2. \label{eq:tensor-norm}
+\end{equation}
+This is Tonelli followed by factorization of the integral.  Consequently the
+map $(f,g)\mapsto f\otimes g$ is jointly continuous from $L^2\times L^2$ to
+$L^2(\R^2)$ on bounded sets.  The orthogonal coordinate change
+\[
+ r=\frac{x+y}{\sqrt2},\qquad s=\frac{x-y}{\sqrt2}
+\]
+preserves Lebesgue measure and the Laplacian:
+$\partial_x^2+\partial_y^2=\partial_r^2+\partial_s^2$.
+
+\chapter{The free Schr\"odinger group and Strichartz estimates}
+
+\section{The propagator}
+For $f\in L^2(\R)$ define
+\begin{equation}
+ \widehat{S(t)f}(\xi)=\e^{-it\xi^2}\widehat f(\xi). \label{eq:free-group}
+\end{equation}
+Plancherel gives $\norm{S(t)f}_2=\norm f_2$, the group law, and strong
+continuity in $t$.  For $f\in\Ssch$, differentiation under the Fourier
+integral gives $(i\partial_t+\partial_x^2)S(t)f=0$.
+
+
+\begin{lemma}[Complex Gaussian and the free kernel]
+\label{lem:complex-gaussian-kernel}
+Let $z\in\C$ satisfy $\Rea z>0$, and choose the holomorphic square root on
+the right half-plane which is positive on $(0,\infty)$.  For every
+$a\in\R$,
+\begin{equation}
+ \int_\R \e^{-z\xi^2+ia\xi}\,\dd\xi
+ =\sqrt\pi\,z^{-1/2}\exp\!\left(-\frac{a^2}{4z}\right).
+ \label{eq:complex-gaussian}
+\end{equation}
+Consequently, for $t\ne0$ and $f\in\mathcal S(\R)$,
+\begin{equation}
+ S(t)f(x)=(4\pi it)^{-1/2}\int_\R
+ \exp\!\left(\frac{i|x-y|^2}{4t}\right)f(y)\,\dd y,
+ \label{eq:free-kernel-explicit}
+\end{equation}
+where the square root is the boundary value from $\Rea z>0$.
+\end{lemma}
+
+\begin{proof}
+For $\Rea z>0$, the integral
+$I(z,0)=\int_\R\e^{-z\xi^2}\,\dd\xi$ is holomorphic in $z$: on every
+compact subset of the right half-plane, the integrand and its $z$ derivative
+are dominated by a polynomial times $\e^{-c\xi^2}$.  For positive real $z$,
+the substitution $y=\sqrt z\,\xi$ and the real Gaussian integral give
+$I(z,0)=\sqrt\pi z^{-1/2}$.  The identity theorem extends this equality to
+the whole right half-plane.
+
+Fix such a $z$ and put
+$I_z(a)=\int\e^{-z\xi^2+ia\xi}\,\dd\xi$.  Differentiation under the integral
+is legitimate.  Integration by parts, with vanishing boundary terms because
+$\Rea z>0$, gives
+\[
+ 0=\int_\R(-2z\xi+ia)\e^{-z\xi^2+ia\xi}\,\dd\xi,
+ \qquad
+ I_z'(a)=i\int_\R\xi\e^{-z\xi^2+ia\xi}\,\dd\xi
+        =-\frac a{2z}I_z(a).
+\]
+Solving this scalar ODE and using the value at $a=0$ proves
+\eqref{eq:complex-gaussian}.
+
+Now take $z=\eps+it$ with $\eps>0$.  Insert the Fourier definition of
+$\widehat f$, use Fubini (the Gaussian damping makes the double integral
+absolutely convergent), and apply \eqref{eq:complex-gaussian} with
+$a=x-y$.  This gives
+\[
+ (2\pi)^{-1}\iint
+  \e^{i(x-y)\xi-(\eps+it)\xi^2}f(y)\,\dd y\,\dd\xi
+ =(4\pi(\eps+it))^{-1/2}\int
+  \exp\!\left(-\frac{|x-y|^2}{4(\eps+it)}\right)f(y)\,\dd y.
+\]
+On the Fourier side, dominated convergence against
+$|\widehat f|\in L^1$ gives the inverse transform defining $S(t)f$, uniformly
+in $x$.  On the physical side, the exponential has modulus at most one and
+the prefactor stays bounded as $\eps\downarrow0$; dominated convergence
+against $|f(y)|$ therefore gives the right side of
+\eqref{eq:free-kernel-explicit}.  The boundary value of the chosen square
+root fixes the phase for both signs of $t$.
+\end{proof}
+
+\begin{lemma}[Dispersive estimate]\label{lem:dispersive-1d}
+For $t\ne0$ and $f\in L^1(\R)$,
+\[
+  \norm{S(t)f}_{L^\infty}\le (4\pi|t|)^{-1/2}\norm f_{L^1}.
+\]
+\end{lemma}
+
+\begin{proof}
+For Schwartz $f$, the formula is \eqref{eq:free-kernel-explicit}.  Its
+kernel has constant modulus $(4\pi|t|)^{-1/2}$, which gives the estimate.
+For general $f\in L^1$, choose Schwartz $f_n\to f$ in $L^1$.  The kernel
+integrals converge uniformly in $x$, so they define the unique
+$L^1\to L^\infty$ extension and preserve the same bound.
+\end{proof}
+
+\begin{lemma}[Compatibility of the $L^2$ and kernel propagators]
+\label{lem:propagator-compatibility}
+For $t\ne0$, let $S_2(t)$ be the $L^2$ Fourier multiplier
+\eqref{eq:free-group}, and let $S_{1,\infty}(t)$ be the integral operator with
+kernel
+\[
+ K_t(x-y)=(4\pi it)^{-1/2}\exp\!\left(\frac{i|x-y|^2}{4t}\right).
+\]
+If $f\in L^1\cap L^2$, then the two outputs agree almost everywhere.  Thus
+they are compatible endpoint realizations of one linear operator.
+\end{lemma}
+
+\begin{proof}
+The equality holds for Schwartz functions by \cref{lem:complex-gaussian-kernel}.  Given $f\in L^1\cap L^2$, choose Schwartz $f_n$ converging
+to $f$ simultaneously in $L^1$ and $L^2$; convolution followed by spatial
+cutoff gives such a sequence.  The kernel formula gives uniform convergence
+$S_{1,\infty}(t)f_n\to S_{1,\infty}(t)f$, while unitarity gives convergence
+$S_2(t)f_n\to S_2(t)f$ in $L^2$.  A subsequence of the latter converges almost
+everywhere.  The two limits therefore agree almost everywhere.
+\end{proof}
+
+
+\begin{lemma}[Hadamard three-lines estimate]\label{lem:three-lines-explicit}
+Let $F$ be bounded and continuous on the closed strip
+$\{z:0\le\Rea z\le1\}$ and holomorphic in its interior.  Put
+\[
+ M_j=\sup_{y\in\R}|F(j+iy)|\qquad(j=0,1).
+\]
+Then, for $0\le\theta\le1$,
+\begin{equation}
+ |F(\theta)|\le M_0^{1-\theta}M_1^\theta.          \label{eq:three-lines-explicit}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+The boundary cases are tautological.  Fix $0<\theta<1$.  First suppose
+$M_0,M_1>0$, and use the real logarithms of these positive numbers to define
+\[
+ G(z)=F(z)\exp\big((z-1)\log M_0-z\log M_1\big).
+\]
+Thus $|G(iy)|\le1$ and $|G(1+iy)|\le1$.  Let
+$B=\sup_{0\le\Rea z\le1}|G(z)|<\infty$.  For $\delta>0$ set
+\[
+ G_\delta(z)=G(z)\e^{\delta z^2}.
+\]
+On the two vertical sides of the rectangle
+$[0,1]\times[-R,R]$, its modulus is at most $\e^\delta$.  On a horizontal
+side $z=x\pm iR$,
+\[
+ |G_\delta(z)|\le B\exp\big(\delta(x^2-R^2)\big)
+ \le B\exp\big(\delta(1-R^2)\big),
+\]
+which is at most $\e^\delta$ once $R$ is sufficiently large.  The maximum
+modulus principle on this rectangle therefore gives
+$|G_\delta(\theta)|\le\e^\delta$.  Since
+$|G_\delta(\theta)|=|G(\theta)|\e^{\delta\theta^2}$, letting
+$\delta\downarrow0$ yields $|G(\theta)|\le1$, which is exactly
+\eqref{eq:three-lines-explicit}.
+
+If one of the $M_j$ is zero, fix $\eps>0$ and repeat the same rectangle
+argument with the positive boundary majorants
+$A_j=M_j+\eps$ in place of $M_j$.  Since $|F(j+iy)|\le A_j$, it gives
+$|F(\theta)|\le A_0^{1-\theta}A_1^\theta$.  Letting
+$\eps\downarrow0$ proves the asserted inequality, including the case in
+which the right side is zero.
+\end{proof}
+
+\begin{lemma}[Riesz--Thorin interpolation in the form used here]
+\label{lem:riesz-thorin-used}
+Let a linear operator $T$ be defined on simple functions and have compatible
+extensions
+\[
+ T:L^{p_0}\to L^{q_0},\qquad \norm T\le M_0,
+ \quad\text{and}\quad
+ T:L^{p_1}\to L^{q_1},\qquad \norm T\le M_1,
+\]
+where $1\le p_j<\infty$ and $1\le q_j\le\infty$.  If
+$0<\theta<1$ and
+\[
+ \frac1{p_\theta}=\frac{1-\theta}{{p_0}}+\frac\theta{p_1},
+ \qquad
+ \frac1{q_\theta}=\frac{1-\theta}{q_0}+\frac\theta{q_1},
+\]
+then
+\[
+ \norm{Tf}_{q_\theta}
+ \le M_0^{1-\theta}M_1^\theta\norm f_{p_\theta}.
+\]
+\end{lemma}
+
+\begin{proof}
+We first reduce the interpolation estimate to the proved three-lines lemma.  It is enough to
+consider simple $f$ and simple dual test functions $g$, normalized by
+$\norm f_{p_\theta}=\norm g_{q_\theta'}=1$.  On the strip
+$0\le\Re z\le1$, define
+\[
+ \alpha(z)=\frac{1-z}{p_0}+\frac z{p_1},
+ \qquad
+ \gamma(z)=\frac{1-z}{q_0'}+\frac z{q_1'},
+\]
+and, on the nonzero level sets of the simple functions,
+\[
+ f_z=|f|^{p_\theta\alpha(z)}\frac f{|f|},
+ \qquad
+ g_z=|g|^{q_\theta'\gamma(z)}\frac g{|g|}.
+\]
+Zero values are left zero.  The finite-sum expression
+\[
+ \Phi(z)=\int (Tf_z)g_z
+\]
+is analytic in the open strip and continuous on its closure.  On
+$\Re z=j$, direct calculation gives
+$\norm{f_z}_{p_j}=\norm{g_z}_{q_j'}=1$, hence
+$|\Phi(z)|\le M_j$.  \Cref{lem:three-lines-explicit} yields
+$|\Phi(\theta)|\le M_0^{1-\theta}M_1^\theta$.  At $z=\theta$ we have
+$f_z=f$ and $g_z=g$.  Taking the supremum over simple dual test functions and then completing
+proves the estimate.  If $q_j=\infty$, then $q_j'=1$ and the corresponding
+boundary estimate is simply the $L^\infty$--$L^1$ H\"older inequality; the
+same formulas remain literal because $1/q_j=0$.  Thus no limiting argument
+at the output endpoint is being suppressed.  Input exponents are finite in
+the stated form, which is exactly the case used below.
+\end{proof}
+
+Applying \cref{lem:riesz-thorin-used} to the compatible operators in
+\cref{lem:propagator-compatibility}, with
+$(p_0,q_0)=(1,\infty)$, $(p_1,q_1)=(2,2)$, and
+$\theta=2/r$, yields, for $2\le r\le\infty$,
+\begin{equation}
+ \norm{S(t)f}_{L^r}
+ \le C_r|t|^{-(1/2-1/r)}\norm f_{L^{r'}}.
+ \label{eq:disp-interp}
+\end{equation}
+The extension on $L^{r'}$ is unique because $L^1\cap L^2$ is dense in
+$L^{r'}$ when $1<r'<2$, and it is compatible with both endpoint
+realizations.
+
+\section{A one-dimensional fractional-integration estimate}
+We need one scalar convolution theorem.  A proof is included to keep the
+Strichartz argument closed.
+
+\begin{lemma}[Hardy--Littlewood--Sobolev on the time line]\label{lem:HLS-time}
+Let $0<\alpha<1$, $1<p<q<\infty$, and
+$1/q=1/p-(1-\alpha)$.  Then
+\[
+ \left\|\int_\R |t-s|^{-\alpha}F(s)\,\dd s\right\|_{L^q_t}
+ \le C_{p,\alpha}\norm F_{L^p_t}.
+\]
+\end{lemma}
+
+\begin{proof}
+We include the maximal-function input.  For $F\in L^1_{\loc}(\R)$ set
+\[
+ MF(t)=\sup_{R>0}\frac1{2R}\int_{t-R}^{t+R}|F(s)|\,\dd s.
+\]
+The centered maximal operator is of weak type $(1,1)$:
+\begin{equation}
+ \big|\{MF>\lambda\}\big|\le \frac{C}{\lambda}\norm F_1.
+ \label{eq:maximal-weak11}
+\end{equation}
+Indeed, let $K$ be a compact subset of $\{MF>\lambda\}$.  For every
+$t\in K$ choose an interval centered at $t$ on which the average of $|F|$
+is larger than $\lambda$.  Compactness gives a finite cover.  Select from it,
+greedily in decreasing order of length, a pairwise disjoint subfamily.  Every
+unselected interval is contained in the triple of a selected one, so the
+triples cover $K$.  Therefore
+\[
+ |K|\le3\sum_j|I_j|
+ <\frac3\lambda\sum_j\int_{I_j}|F|
+ \le\frac3\lambda\norm F_1.
+\]
+Inner regularity gives \eqref{eq:maximal-weak11}.
+
+For $1<p<\infty$, this weak estimate implies the strong bound
+\begin{equation}
+ \norm{MF}_p\le C_p\norm F_p.                      \label{eq:maximal-strongp}
+\end{equation}
+To see this without invoking an interpolation theorem, fix $\lambda>0$ and
+write
+$F=F\1_{\{|F|>\lambda/2\}}+F\1_{\{|F|\le\lambda/2\}}$.
+The maximal function of the second summand is at most $\lambda/2$, hence
+\[
+ |\{MF>\lambda\}|
+ \le\frac C\lambda\int_{\{|F|>\lambda/2\}}|F(s)|\,\dd s.
+\]
+Multiply by $p\lambda^{p-1}$, integrate in $\lambda$, and use Tonelli:
+\begin{align*}
+ \norm{MF}_p^p
+ &\le Cp\int_0^\infty\lambda^{p-2}
+       \int_{\{|F|>\lambda/2\}}|F(s)|\,\dd s\,\dd\lambda\\
+ &=Cp\int_\R |F(s)|
+      \int_0^{2|F(s)|}\lambda^{p-2}\,\dd\lambda\,\dd s
+ \le C_p\norm F_p^p.
+\end{align*}
+
+Now fix $R>0$ and split the fractional integral into
+$|t-s|<R$ and $|t-s|\ge R$.  Dyadic decomposition of the near part gives
+\[
+ \int_{|t-s|<R}|t-s|^{-\alpha}|F(s)|\,\dd s
+ \le C R^{1-\alpha}MF(t).
+\]
+For the far part, H\"older gives
+\[
+ \int_{|t-s|\ge R}|t-s|^{-\alpha}|F(s)|\,\dd s
+ \le C R^{1-\alpha-1/p}\norm F_p.
+\]
+Choose $R=(\norm F_p/MF(t))^p$ when $MF(t)>0$; the cases
+$MF(t)=0$ and $\norm F_p=0$ are immediate.  Since
+$p(1-\alpha)=1-p/q$, the two estimates yield the Hedberg inequality
+\[
+ I_{1-\alpha}F(t)
+ \le C(MF(t))^{p/q}\norm F_p^{1-p/q}.
+\]
+Raise to the $q$th power, integrate, and apply
+\eqref{eq:maximal-strongp}.
+\end{proof}
+
+\section{Homogeneous estimates}
+A pair $(q,r)$ is called one-dimensional Schr\"odinger admissible if
+\begin{equation}
+  2\le q,r\le\infty,
+  \qquad \frac2q+\frac1r=\frac12.                 \label{eq:admissible}
+\end{equation}
+
+\begin{theorem}[Homogeneous Strichartz estimates]\label{thm:hom-strichartz}
+For every admissible pair $(q,r)$,
+\begin{equation}
+  \norm{S(t)f}_{L^q_t(\R;L^r_x)}\le C_{q,r}\norm f_2. \label{eq:hom-str}
+\end{equation}
+In particular,
+\[
+ \norm{S(t)f}_{L^6_{t,x}}+\norm{S(t)f}_{L^4_tL^\infty_x}
+ \le C\norm f_2.
+\]
+\end{theorem}
+
+\begin{proof}
+We first treat $2<q<\infty$ and $r<\infty$.  On compactly supported smooth
+spacetime functions define
+\[
+ Tf(t)=S(t)f,
+ \qquad
+ T^*F=\int_\R S(-s)F(s)\,\dd s.
+\]
+The latter is an $L^2$ Bochner integral for such $F$.  The full convolution is
+\[
+ TT^*F(t)=\int_\R S(t-s)F(s)\,\dd s.
+\]
+By \eqref{eq:disp-interp} and Minkowski,
+\[
+ \norm{TT^*F(t)}_{L^r_x}
+ \le C\int_\R|t-s|^{-(1/2-1/r)}
+              \norm{F(s)}_{L^{r'}_x}\,\dd s.
+\]
+Admissibility says $1/2-1/r=2/q$.  The time-line HLS estimate with
+$p=q'$ and $\alpha=2/q$ therefore gives
+\begin{equation}
+ \norm{TT^*F}_{L^q_tL^r_x}
+ \le C\norm F_{L^{q'}_tL^{r'}_x}.                 \label{eq:TTstar-finite}
+\end{equation}
+Consequently,
+\[
+ \norm{T^*F}_2^2
+ =\left|\iint (TT^*F)(t,x)\overline{F(t,x)}\,\dd x\,\dd t\right|
+ \le C\norm F_{L^{q'}L^{r'}}^2.
+\]
+Thus $T^*$ extends boundedly to $L^{q'}L^{r'}$, and ordinary finite-exponent
+duality yields \eqref{eq:hom-str}.
+
+It remains to justify $(q,r)=(4,\infty)$ without identifying a nonseparable
+Bochner dual.  For smooth compactly supported $F$, the dispersive estimate
+gives directly
+\[
+ m_\infty(TT^*F)(t)
+ \le C\int_\R|t-s|^{-1/2}\norm{F(s)}_{L^1_x}\,\dd s.
+\]
+HLS therefore yields the scalar endpoint estimate
+\begin{equation}
+ \norm{TT^*F}_{L^4_tL^\infty_x}
+ \le C\norm F_{L^{4/3}_tL^1_x}.                  \label{eq:TTstar-endpoint}
+\end{equation}
+The same quadratic identity as above gives
+\[
+ \norm{T^*F}_2\le C\norm F_{L^{4/3}_tL^1_x}.
+\]
+Now let $f$ be Schwartz.  Before applying the norming identity, note that
+$S(t)f$ already has finite scalar endpoint norm: Fourier inversion gives
+\[
+ \norm{S(t)f}_\infty\le(2\pi)^{-1/2}\norm{\widehat f}_1
+ \quad(|t|\le1),
+\]
+while \cref{lem:dispersive-1d} gives
+$\norm{S(t)f}_\infty\le C|t|^{-1/2}\norm f_1$ for $|t|>1$.
+The fourth power of the latter bound is integrable at infinity.  Thus
+$S(t)f\in L^4_tL^\infty_x$ in the scalar sense.  For every smooth compactly
+supported $G$,
+\[
+ \left|\iint S(t)f(x)\overline{G(t,x)}\,\dd x\,\dd t\right|
+ =|\pair f{T^*G}_{L^2}|
+ \le C\norm f_2\norm G_{L^{4/3}_tL^1_x}.
+\]
+Smooth compactly supported functions are dense in the norming class of
+\cref{prop:endpoint-norming}; approximation in $L^{4/3}_tL^1_x$ and the last
+bound extend the inequality to that class.  The norming identity then gives
+\[
+ \norm{S(t)f}_{L^4_tL^\infty_x}\le C\norm f_2.
+\]
+
+For a general $f\in L^2$, choose Schwartz $f_n\to f$ in $L^2$.  The estimate
+makes $S(t)f_n$ Cauchy in the complete scalar space
+$L^4_tL^\infty_x$, so it converges there to some jointly measurable $H$.
+On every bounded time interval, unitarity also gives
+\[
+ \int_I\norm{S(t)(f_n-f)}_2^2\,\dd t
+ =|I|\norm{f_n-f}_2^2\longrightarrow0.
+\]
+Choose a subsequence whose successive differences are summable both in
+$L^4_tL^\infty_x$ and in $L^2(I\times\R)$.  By
+\cref{lem:mixed-subsequence-uniform}, for almost every $t$ this subsequence
+converges in the spatial essential-supremum norm to the section $H(t)$.  By
+the ordinary summable-subsequence argument in $L^2(I\times\R)$, after a
+further subsequence it converges pointwise almost everywhere to the canonical
+spacetime representative of $S(t)f$.  The further subsequence retains the
+sectionwise uniform convergence.  Hence the two limits agree for almost every
+$(t,x)$.  This identifies $H$ with $S(t)f$ and proves the endpoint estimate
+for all $f\in L^2$.  A countable exhaustion of the time axis makes the
+identification global.
+
+Finally, $(q,r)=(\infty,2)$ is unitarity.  These cases exhaust the admissible
+pairs, with the finite pairs handled by \eqref{eq:TTstar-finite} and the sole
+spatial endpoint handled separately above.
+\end{proof}
+
+\section{Retarded estimates}
+We first isolate the elementary time-ordering lemma.
+
+\begin{lemma}[Christ--Kiselev time ordering]\label{lem:CK}
+Let $1\le p<q\le\infty$ and let
+$K:L^p(I;A)\to L^q(I;B)$ be a bounded integral operator
+\[
+ KF(t)=\int_I K(t,s)F(s)\,\dd s
+\]
+between Banach-valued function spaces.  Then the retarded operator
+\[
+ K_{<}F(t)=\int_{s<t}K(t,s)F(s)\,\dd s
+\]
+is bounded from $L^p(I;A)$ to $L^q(I;B)$, with norm depending only on
+$p,q$ and the norm of $K$.
+\end{lemma}
+
+\begin{proof}
+Normalize $\norm F_{L^p}=1$ and define
+$\Phi(t)=\int_{I\cap(-\infty,t)}\norm{F(s)}_A^p\,\dd s$.  Up to null sets,
+$\Phi$ is nondecreasing and takes values in $[0,1]$.  At generation $n$,
+pair the two sibling dyadic intervals
+\[
+ E^-_{n,j}=[2j2^{-n},(2j+1)2^{-n}),
+ \qquad
+ E^+_{n,j}=[(2j+1)2^{-n},(2j+2)2^{-n}),
+\]
+and set $I^\pm_{n,j}=\Phi^{-1}(E^\pm_{n,j})$.  Every pair
+$(s,t)$ with $s<t$ and $\Phi(s)<\Phi(t)$ belongs to exactly one rectangle
+$I^-_{n,j}\times I^+_{n,j}$: take the first binary generation at which the
+two values lie in different children.  The remaining pairs lie on level sets
+of $\Phi$, where $F=0$ almost everywhere, so they do not affect the integral.
+Thus the retarded operator is the sum over $n,j$ of
+\[
+ \1_{I^+_{n,j}}(t)
+ \int_{I^-_{n,j}}K(t,s)F(s)\,\dd s.
+\]
+For fixed $n$ the output sets are disjoint, and every input piece has
+$L^p$ norm at most $2^{-n/p}$.  If the norm of the full operator is $M$, the
+$L^q$ norm of the $n$th generation is therefore at most
+\[
+ M\left(\sum_j 2^{-nq/p}\right)^{1/q}
+ \le CM2^{n/q}2^{-n/p},
+\]
+When $q=\infty$, disjointness is replaced by taking the maximum over $j$,
+and the same bound reads $M2^{-n/p}$ because $2^{n/q}=1$.  Summing in $n$
+gives the convergent geometric series
+$\sum_n2^{-n(1/p-1/q)}$.
+\end{proof}
+
+\begin{theorem}[Inhomogeneous estimates used below]\label{thm:inhom-str}
+For every interval $I$ and every $F\in L^{6/5}(I\times\R)$,
+\begin{align}
+ \left\|\int_{t_0}^tS(t-s)F(s)\,\dd s\right\|_{L^6(I\times\R)}
+ &\le C\norm F_{L^{6/5}(I\times\R)},                 \label{eq:inhom66}\\
+ \left\|\int_{t_0}^tS(t-s)F(s)\,\dd s\right\|_{L^\infty_tL^2_x(I)}
+ &\le C\norm F_{L^{6/5}(I\times\R)}.               \label{eq:inhomL2}
+\end{align}
+The constants do not depend on $I$ or $t_0\in I$.
+\end{theorem}
+
+\begin{proof}
+The full convolution estimate from $L^{6/5}_{t,x}$ to $L^6_{t,x}$ is the
+$TT^*$ estimate in the proof of \cref{thm:hom-strichartz}.  Apply
+\cref{lem:CK} with time exponents $6/5<6$ to restrict to $s<t$; reversing
+time handles $t<t_0$.  For the $L^\infty_tL^2_x$ estimate, duality and the
+homogeneous $(6,6)$ estimate give
+\[
+ \left\|\int_I S(-s)F(s)\,\dd s\right\|_2
+ \le C\norm F_{6/5}.
+\]
+The corresponding full operator
+\[
+ F\longmapsto S(t)\int_I S(-s)F(s)\,\dd s
+\]
+maps $L^{6/5}_{t,x}$ to $L^\infty_tL^2_x$.  Apply
+\cref{lem:CK} with input time exponent $6/5$ and output exponent $\infty$
+to restrict the integral to $s<t$; reversing time handles the other
+orientation around $t_0$.  This proves \eqref{eq:inhomL2}.
+\end{proof}
+
+\begin{lemma}[Continuous retarded operator, base time, and Bochner compatibility]
+\label{lem:retarded-continuous}
+Let $I$ be a bounded interval and $t_0\in I$.  For smooth compactly supported
+$F$ put
+\[
+ (\mathcal R_{t_0}F)(t)=\int_{t_0}^tS(t-s)F(s)\,\dd s.
+\]
+This operator extends uniquely to a bounded map
+\begin{equation}
+ \mathcal R_{t_0}:L^{6/5}(I\times\R)
+ \longrightarrow C(I;L^2(\R))\cap L^6(I\times\R),               \label{eq:retarded-continuous-map}
+\end{equation}
+with the estimates of \cref{thm:inhom-str}.  If $t_1\in I$, then
+\begin{equation}
+ \mathcal R_{t_0}F(t)
+ =\mathcal R_{t_1}F(t)+S(t-t_1)\mathcal R_{t_0}F(t_1)             \label{eq:retarded-base-time}
+\end{equation}
+for every $t\in I$.  If in addition
+$F\in L^1(I;L^2)\cap L^{6/5}(I\times\R)$, the completed operator is the
+ordinary $L^2$-valued Bochner integral displayed above.
+\end{lemma}
+
+\begin{proof}
+For smooth compactly supported $F$, the displayed integral is an ordinary
+Bochner integral in $L^2$.  Strong continuity of $S(t)$ and dominated
+convergence show that it is continuous in $t$.  Let $F_n$ be smooth compactly
+supported and Cauchy in $L^{6/5}$.  By \cref{thm:inhom-str},
+$\mathcal R_{t_0}F_n$ is Cauchy in both $L^6_{t,x}$ and
+$L^\infty_tL^2_x$.  The difference of two such outputs is a continuous
+$L^2$-valued function, so the essential supremum of its $L^2$ norm equals the
+ordinary supremum.  Hence the sequence is uniformly Cauchy in
+$C(I;L^2)$ and converges there to a continuous limit.  Density and the two
+inhomogeneous estimates prove existence, uniqueness, and
+\eqref{eq:retarded-continuous-map}.
+
+For smooth forcing, split the oriented integral at $t_1$ and use the group
+law:
+\begin{align*}
+ \int_{t_0}^tS(t-s)F(s)\,\dd s
+ &=\int_{t_1}^tS(t-s)F(s)\,\dd s
+   +S(t-t_1)\int_{t_0}^{t_1}S(t_1-s)F(s)\,\dd s.
+\end{align*}
+Approximation in $L^{6/5}$, continuity of evaluation on $C(I;L^2)$, and
+strong continuity of $S(t-t_1)$ give \eqref{eq:retarded-base-time} for all
+forcing in the completed domain.
+
+Finally suppose $F$ belongs also to $L^1_tL^2_x$.  Approximate it by smooth
+compactly supported functions in the intersection norm
+$\norm\cdot_{L^{6/5}}+\norm\cdot_{L^1L^2}$.  Unitarity and scalar Minkowski
+give
+\[
+ \sup_{t\in I}\left\|\int_{t_0}^tS(t-s)(F_n-F)(s)\,\dd s\right\|_2
+ \le\norm{F_n-F}_{L^1_tL^2_x}.
+\]
+Thus the Bochner integrals converge uniformly in $L^2$ to the same continuous
+limit as the Strichartz completion.
+\end{proof}
+
+\begin{checkpoint}
+The free estimates required for the nonlinear flow have now been proved from
+Plancherel, the dispersive kernel, scalar fractional integration, and time
+ordering.  No endpoint or inhomogeneous Strichartz theorem remains external.
+\end{checkpoint}
+
+\chapter{Global \texorpdfstring{$L^2$}{L2} well-posedness for the cubic flow}\label{chap:wellposed}
+
+\section{The fixed-point space}
+Let $I=[t_0-T,t_0+T]$.  Set
+\[
+  \mathcal X(I)=C(I;L^2(\R))\cap L^6(I\times\R),
+  \qquad
+  \norm u_{\mathcal X(I)}
+  =\norm u_{L^\infty_tL^2_x(I)}+\norm u_{L^6_{t,x}(I)}.
+\]
+The space is Banach.  Indeed, it is the closed diagonal subspace of
+$C(I;L^2)\oplus_1L^6(I\times\R)$ after identifying the two components as
+distributions; equality of the two distributional limits follows from
+convergence against compactly supported smooth tests.
+The nonlinear map associated with initial data $u_0$ is
+\begin{equation}
+ \Phi_{u_0}(u)(t)
+ =S(t-t_0)u_0-i\sigma\int_{t_0}^tS(t-s)(|u|^2u)(s)\,\dd s.  \label{eq:Phi}
+\end{equation}
+Here the integral denotes the completed retarded operator of
+\cref{lem:retarded-continuous}; after \cref{prop:endpoint} it is also the
+ordinary Bochner integral.  The key smallness is supplied by the length of
+$I$, not by the mass.
+
+\begin{lemma}[Cubic estimate]\label{lem:cubic-65}
+For $u\in\mathcal X(I)$,
+\begin{equation}
+ \norm{|u|^2u}_{L^{6/5}_{t,x}(I)}
+ \le |I|^{1/2}\norm u_{L^\infty_tL^2_x(I)}
+                    \norm u_{L^6_{t,x}(I)}^2.       \label{eq:cubic65}
+\end{equation}
+If $u,v\in\mathcal X(I)$, then
+\begin{align}
+ \norm{|u|^2u-|v|^2v}_{L^{6/5}_{t,x}(I)}
+ \le C|I|^{1/2}
+  (&\norm u_{\mathcal X(I)}^2+\norm v_{\mathcal X(I)}^2)
+  \norm{u-v}_{\mathcal X(I)}.                      \label{eq:cubic-lip}
+\end{align}
+\end{lemma}
+
+\begin{proof}
+At each time, H\"older in space gives
+\[
+ \norm{|u|^2u}_{L^{6/5}_x}
+ \le \norm u_2\norm u_6^2,
+ \qquad \frac56=\frac12+\frac16+\frac16.
+\]
+The function $t\mapsto\norm{u(t)}_6^2$ belongs to $L^3(I)$.  Embedding
+$L^3(I)$ into $L^{6/5}(I)$ costs the factor
+$|I|^{5/6-1/3}=|I|^{1/2}$, which proves \eqref{eq:cubic65}.
+For the difference, use
+\[
+ ||u|^2u-|v|^2v|
+ \le C(|u|^2+|v|^2)|u-v|
+\]
+and assign one of the three factors to $L^2_x$ and the other two to
+$L^6_x$.  The same time estimate completes the proof.
+\end{proof}
+
+\begin{theorem}[Local existence, uniqueness, and Lipschitz dependence]
+\label{thm:LWP}
+For every $M>0$ there is $T_M>0$ such that whenever
+$\norm{u_0}_2\le M$, equation \eqref{eq:NLS-main} has a unique mild solution
+on $[t_0-T_M,t_0+T_M]$.  It belongs to $\mathcal X(I)$, and the data-to-solution
+map is locally Lipschitz from the $L^2$ ball of radius $M$ to
+$\mathcal X(I)$.  One may take $T_M=c(1+|\sigma|M^2)^{-2}$ with a sufficiently
+small absolute $c$.
+\end{theorem}
+
+\begin{proof}
+By \cref{thm:hom-strichartz,thm:inhom-str},
+\[
+ \norm{\Phi_{u_0}(u)}_{\mathcal X(I)}
+ \le C\norm{u_0}_2+C|\sigma|\norm{|u|^2u}_{6/5}.
+\]
+Fix $R=2CM$ and consider the closed ball
+$B_R\subset\mathcal X(I)$.  By \cref{lem:cubic-65},
+\[
+ \norm{\Phi_{u_0}(u)}_{\mathcal X(I)}
+ \le CM+C|\sigma||I|^{1/2}R^3.
+\]
+Choose $|I|$ so that $C|\sigma||I|^{1/2}R^2\le1/4$.  The same choice and
+\eqref{eq:cubic-lip} make $\Phi_{u_0}$ a strict contraction on $B_R$.
+Banach's theorem gives a unique fixed point in $B_R$.  The difference
+estimate with two initial data gives
+\[
+ \norm{u-v}_{\mathcal X(I)}
+ \le C\norm{u_0-v_0}_2+\tfrac12\norm{u-v}_{\mathcal X(I)},
+\]
+which proves local Lipschitz dependence for the constructed solutions.
+\Cref{lem:retarded-continuous} shows directly that the fixed point belongs to
+$C(I;L^2)$.
+
+It remains to record uniqueness among all mild solutions in
+$\mathcal X(I)$, not only fixed points lying in the chosen ball.  Let
+$u$ and $v$ be two such solutions with the same value at some time $s\in I$.
+Their $\mathcal X(I)$ norms are finite.  Choose a subinterval $J\subset I$
+containing $s$ so short that
+\[
+ C|\sigma||J|^{1/2}
+   (\norm u_{\mathcal X(I)}^2+\norm v_{\mathcal X(I)}^2)<\frac12.
+\]
+The base-time identity \eqref{eq:retarded-base-time} writes both mild
+formulas with base time $s$.  The cubic difference estimate on $J$ then gives
+$\norm{u-v}_{\mathcal X(J)}\le\tfrac12\norm{u-v}_{\mathcal X(J)}$, so the
+solutions agree on $J$.  Repeating this argument along a finite chain of
+short overlapping intervals covers $I$.  This proves unconditional
+uniqueness in the stated solution class and also justifies the phrase ``for
+one and hence every base time'' in the definition of a mild solution.
+\end{proof}
+
+\section{Local persistence of one derivative}
+We first prove persistence on one mass-controlled fixed-point interval.  Mass
+conservation will then globalize the statement without any circular use of
+higher regularity.
+
+\begin{lemma}[Derivative estimate for the cubic map]
+\label{lem:cubic-derivative-map}
+Let $J$ be bounded and let $u,w\in\mathcal X(J)$.  Define the real-linear
+expression
+\[
+ DN(u)[w]=2\Rea(\overline u\,w)u+|u|^2w.
+\]
+Then
+\begin{equation}
+ \norm{DN(u)[w]}_{L^{6/5}_{t,x}(J)}
+ \le C|J|^{1/2}\norm u_{\mathcal X(J)}^2
+                      \norm w_{\mathcal X(J)}.     \label{eq:DN-bound}
+\end{equation}
+Moreover,
+\begin{align}
+ \norm{DN(u)[w]-DN(\widetilde u)[\widetilde w]}_{6/5}
+ \le C|J|^{1/2}\Big[&
+ (\norm u_{\mathcal X}^2+\norm{\widetilde u}_{\mathcal X}^2)
+ \norm{w-\widetilde w}_{\mathcal X}\notag\\
+ &+(\norm u_{\mathcal X}+\norm{\widetilde u}_{\mathcal X})
+ (\norm w_{\mathcal X}+\norm{\widetilde w}_{\mathcal X})
+ \norm{u-\widetilde u}_{\mathcal X}\Big].          \label{eq:DN-Lipschitz}
+\end{align}
+\end{lemma}
+
+\begin{proof}
+Pointwise, $|DN(u)[w]|\le3|u|^2|w|$.  At each time assign one $u$
+factor to $L^2_x$, the other $u$ factor to $L^6_x$, and $w$ to
+$L^6_x$; the alternative allocation with $w$ in $L^2_x$ is also
+available.  The spatial exponents add to $5/6$.  The two $L^6_t$
+factors give an $L^3_t$ product, and
+$L^3(J)\hookrightarrow L^{6/5}(J)$ costs $|J|^{1/2}$.  This proves
+\eqref{eq:DN-bound}.  Expanding the difference and using
+\[
+ |DN(u)[w]-DN(\widetilde u)[\widetilde w]|
+ \le C(|u|^2+|\widetilde u|^2)|w-\widetilde w|
+  +C(|u|+|\widetilde u|)(|w|+|\widetilde w|)|u-\widetilde u|
+\]
+gives \eqref{eq:DN-Lipschitz} by the same allocation.
+\end{proof}
+
+\begin{lemma}[Local $H^1$ persistence]
+\label{lem:H1-persistence}
+Let $J$ be a local fixed-point interval centered at $t_0$ on which
+$u\in\mathcal X(J)$ and
+\begin{equation}
+ C|\sigma||J|^{1/2}\norm u_{\mathcal X(J)}^2\le\frac14. \label{eq:H1-smallness}
+\end{equation}
+If $u(t_0)\in H^1(\R)$, then
+\[
+ u\in C(J;H^1)\cap L^6(J;W^{1,6}).
+\]
+The equation holds in $C(J;H^{-1})$.  The size of $J$ needed here depends
+only on an upper bound for the $L^2$ mass, not on the $H^1$ norm.
+\end{lemma}
+
+\begin{proof}
+For $z\in\mathcal X(J)$ define
+\begin{equation}
+ \Psi_u(z)(t)=S(t-t_0)u(t_0)'
+ -i\sigma\int_{t_0}^tS(t-s)DN(u(s))[z(s)]\,\dd s.  \label{eq:derivative-fixed-point}
+\end{equation}
+By \cref{thm:inhom-str,lem:cubic-derivative-map} and
+\eqref{eq:H1-smallness}, this is a strict contraction on
+$\mathcal X(J)$.  It has a unique fixed point $z$ and
+\[
+ \norm z_{\mathcal X(J)}\le 2C\norm{u(t_0)'}_2.
+\]
+
+We identify $z$ with the distributional derivative without assuming in
+advance that smooth data generate smooth solutions.  Write
+$\tau_hf(x)=f(x+h)$ and
+\[
+ q_h=\frac{\tau_hu-u}{h},\qquad
+ q_{0,h}=\frac{\tau_hu(t_0)-u(t_0)}h.
+\]
+Translation invariance and uniqueness imply that $\tau_hu$ is the solution
+with datum $\tau_hu(t_0)$.  Since translations are strongly continuous on
+$L^2$, local flow stability gives
+\begin{equation}
+ \tau_hu\longrightarrow u\quad\text{in }\mathcal X(J). \label{eq:translation-flow-convergence}
+\end{equation}
+The pointwise fundamental theorem of calculus for the polynomial map
+$N(a)=|a|^2a$, viewed as a $C^1$ map on the real plane, gives
+\[
+ \frac{N(\tau_hu)-N(u)}h=A_h[q_h],
+ \qquad
+ A_h[w]=\int_0^1DN\bigl(u+\theta(\tau_hu-u)\bigr)[w]\,\dd\theta.
+\]
+Consequently $q_h$ satisfies
+\begin{equation}
+ q_h(t)=S(t-t_0)q_{0,h}
+ -i\sigma\int_{t_0}^tS(t-s)A_h[q_h](s)\,\dd s.      \label{eq:qh-equation}
+\end{equation}
+For every $\theta\in[0,1]$, spatial translation invariance and the
+triangle inequality give
+\[
+ \norm{(1-\theta)u+\theta\tau_hu}_{\mathcal X(J)}
+ \le\norm u_{\mathcal X(J)}.
+\]
+Thus \eqref{eq:DN-bound} and \eqref{eq:H1-smallness} make the linear part of
+\eqref{eq:qh-equation} a contraction with constant at most $1/4$, uniformly
+in $h$.  Also $q_{0,h}\to u(t_0)'$ in $L^2$.  Subtract
+\eqref{eq:derivative-fixed-point} from \eqref{eq:qh-equation}; then
+\eqref{eq:DN-Lipschitz} and \eqref{eq:translation-flow-convergence} give
+\[
+ \norm{q_h-z}_{\mathcal X(J)}
+ \le C\norm{q_{0,h}-u(t_0)'}_2
+   +\frac12\norm{q_h-z}_{\mathcal X(J)}+o(1).
+\]
+Thus $q_h\to z$ in $\mathcal X(J)$.  On the other hand, translation
+difference quotients converge to $u_x$ in distributions.  Hence $z=u_x$,
+which proves $u\in C H^1\cap L^6W^{1,6}$.
+
+Finally,
+$u_t=i u_{xx}-i\sigma|u|^2u$.  We have $u_{xx}\in C H^{-1}$, while the
+one-dimensional estimate in \cref{lem:H1-C0} gives
+$H^1\hookrightarrow L^\infty$, so $|u|^2u\in C L^2\subset C H^{-1}$.
+This proves the last assertion.
+\end{proof}
+
+\section{Mass conservation and globalization}
+
+\begin{lemma}[Gelfand-triple chain rule]\label{lem:gelfand-chain-rule}
+Let $V\hookrightarrow H\hookrightarrow V^*$ be a dense continuous Gelfand
+triple, with $H$ identified with its anti-dual in the usual way.  Suppose
+$w\in C([a,b];V)$ and its distributional time derivative belongs to
+$C([a,b];V^*)$.  Then $t\mapsto\norm{w(t)}_H^2$ is continuously
+differentiable and
+\begin{equation}
+ \frac{\dd}{\dd t}\norm{w(t)}_H^2
+ =2\Rea\pair{w_t(t)}{w(t)}_{V^*,V}.                \label{eq:gelfand-chain-rule}
+\end{equation}
+The same conclusion, with absolute continuity instead of continuous
+differentiability, holds when $w\in L^p(a,b;V)$ and
+$w_t\in L^{p'}(a,b;V^*)$ in the usual dual-exponent formulation and $w$
+has its standard continuous $H$ representative.
+\end{lemma}
+
+\begin{proof}
+Extend $w$ constantly a short distance beyond each endpoint and extend
+$w_t$ by zero there.  Because the extended $w$ is continuous, its
+distributional derivative is exactly the zero extension of $w_t$; no endpoint
+Dirac mass occurs.  Convolve both in time with a smooth approximate identity.
+The mollified map $w_\eps$ is smooth with values in $V$, and its classical
+derivative agrees in $V^*$ with $(w_t)_\eps$.  The Hilbert-space product rule
+gives
+\[
+ \norm{w_\eps(t)}_H^2-\norm{w_\eps(s)}_H^2
+ =2\Rea\int_s^t
+   \pair{(w_t)_\eps(\tau)}{w_\eps(\tau)}_{V^*,V}\,\dd\tau.
+\]
+Uniform continuity on compact subintervals gives
+$w_\eps\to w$ uniformly in $V$ and $(w_t)_\eps\to w_t$ uniformly in
+$V^*$.  The dual pairings converge uniformly, so passage to the limit gives
+the integrated form of \eqref{eq:gelfand-chain-rule}; continuity of its
+right side gives the pointwise derivative.  In the integrable case, first
+work on compact subintervals and use convergence in the corresponding
+Bochner spaces together with H\"older.  The integrated identity supplies the
+continuous $H$ representative and absolute continuity.
+\end{proof}
+
+\begin{lemma}[Mass conservation for local $H^1$ solutions]\label{lem:mass-H1}
+If $u\in C(J;H^1)$ solves \eqref{eq:NLS-main} on $J$, then
+\[
+  \norm{u(t)}_2=\norm{u(t_0)}_2\qquad(t,t_0\in J).
+\]
+\end{lemma}
+
+\begin{proof}
+Apply \cref{lem:gelfand-chain-rule} to
+$H^1\hookrightarrow L^2\hookrightarrow H^{-1}$.  Since
+$u_t=i u_{xx}-i\sigma|u|^2u$ in $H^{-1}$,
+\begin{align*}
+ \frac{\dd}{\dd t}\norm u_2^2
+ &=2\Rea\pair{i u_{xx}-i\sigma|u|^2u}{u}_{H^{-1},H^1}\\
+ &=2\Rea\left(-i\norm{u_x}_2^2-i\sigma\norm u_4^4\right)=0.
+\end{align*}
+Integration by parts in the first pairing is the defining weak-derivative
+identity.  Both quantities in parentheses are real.
+\end{proof}
+
+\begin{proposition}[Mass conservation in $L^2$]\label{prop:mass-L2}
+Every $L^2$ mild solution satisfies
+\begin{equation}
+  \norm{u(t)}_2=\norm{u(t_0)}_2\qquad(t,t_0\text{ in its lifespan}).
+  \label{eq:mass-conservation}
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+Fix a mass-controlled local interval centered at $t_0$.  Choose
+$u_{0,n}\in H^1$ with $u_{0,n}\to u(t_0)$ in $L^2$ and with uniformly
+bounded $L^2$ norms.  The local construction gives all approximating
+solutions on the same interval.  By \cref{lem:H1-persistence} they are
+$H^1$ there, and by \cref{lem:mass-H1} their masses are constant.  Local
+flow stability gives $u_n\to u$ in $C_tL^2_x$, so passing to the limit proves
+\eqref{eq:mass-conservation} on that interval.  Restarting the same argument
+at any point in the lifespan and chaining overlapping intervals proves the
+identity throughout the lifespan.
+\end{proof}
+
+\begin{theorem}[Global $L^2$ well-posedness]\label{thm:GWP}
+For every $u_0\in L^2(\R)$ and every $\sigma\in\R$, there is a unique global
+mild solution
+\[
+ u\in C(\R;L^2)\cap L^6_{\loc}(\R^2).
+\]
+The flow map $\Phi_t:u_0\mapsto u(t)$ is continuous, obeys the group law, and
+is gauge covariant:
+\begin{equation}
+  \Phi_t(\zeta u_0)=\zeta\Phi_t(u_0)
+  \qquad(|\zeta|=1).                               \label{eq:gauge-cov}
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+The local lifespan in \cref{thm:LWP} depends only on an upper bound for the
+$L^2$ norm.  By \cref{prop:mass-L2}, that norm remains equal to
+$\norm{u_0}_2$.  The local construction can therefore be iterated indefinitely
+in both time directions.  Uniqueness makes overlapping pieces agree and gives
+the group law.  Continuity follows by iterating the local Lipschitz estimate
+on any fixed compact time interval.  Finally, if $u$ solves the equation, then
+$\zeta u$ solves it with initial data $\zeta u_0$ whenever $|\zeta|=1$;
+uniqueness gives \eqref{eq:gauge-cov}.
+\end{proof}
+
+\section{Persistence of all integer derivatives}
+
+For an integer $k\ge0$ and a bounded interval $J$, write
+\[
+ \mathcal X_k(J)=C(J;H^k(\R))\cap L^6(J;W^{k,6}(\R)),
+ \qquad
+ \norm u_{\mathcal X_k(J)}
+ =\sum_{j=0}^k\norm{\partial_x^ju}_{\mathcal X(J)}.
+\]
+This is a Banach space because each weak derivative is a closed operator and
+$\mathcal X(J)$ is Banach.
+
+\begin{lemma}[Cubic Leibniz decomposition and lower-order bound]
+\label{lem:cubic-Hk-leibniz}
+Let $k\ge1$.  For a smooth complex-valued $u$,
+\begin{equation}
+ \partial_x^k(|u|^2u)=DN(u)[\partial_x^ku]+R_k(u), \label{eq:top-derivative-split}
+\end{equation}
+where
+\begin{equation}
+ R_k(u)=
+ \sum_{\substack{a+b+c=k\\0\le a,b,c\le k-1}}
+ \frac{k!}{a!b!c!}
+ (\partial_x^au)(\partial_x^b\overline u)(\partial_x^cu).       \label{eq:Rk-explicit}
+\end{equation}
+If $u\in\mathcal X_{k-1}(J)$, the right side of
+\eqref{eq:Rk-explicit} is well-defined in $L^{6/5}(J\times\R)$ and
+\begin{equation}
+ \norm{R_k(u)}_{L^{6/5}_{t,x}(J)}
+ \le C_k|J|^{1/2}\norm u_{\mathcal X_{k-1}(J)}^3.               \label{eq:Rk-bound}
+\end{equation}
+The map $R_k:\mathcal X_{k-1}(J)\to L^{6/5}(J\times\R)$ is locally
+Lipschitz.
+\end{lemma}
+
+\begin{proof}
+The multinomial Leibniz rule gives
+\[
+ \partial_x^k(u\overline u u)
+ =\sum_{a+b+c=k}\frac{k!}{a!b!c!}
+   (\partial_x^au)(\partial_x^b\overline u)(\partial_x^cu).
+\]
+The three terms in which one index is $k$ are
+\[
+ |u|^2\partial_x^ku
+ +u^2\partial_x^k\overline u
+ +|u|^2\partial_x^ku
+ =DN(u)[\partial_x^ku],
+\]
+and every remaining index is at most $k-1$, which proves
+\eqref{eq:top-derivative-split}--\eqref{eq:Rk-explicit}.
+
+For one remaining monomial choose any one factor for
+$L^\infty_tL^2_x$ and the other two for $L^6_tL^6_x$.  At each time the
+spatial reciprocal exponents add to
+$1/2+1/6+1/6=5/6$, while in time the two $L^6$ factors give an $L^3$
+function.  The finite-measure embedding
+$L^3(J)\hookrightarrow L^{6/5}(J)$ has norm $|J|^{1/2}$.  Hence
+\[
+ \norm{f_1f_2f_3}_{L^{6/5}_{t,x}}
+ \le |J|^{1/2}\norm{f_1}_{L^\infty_tL^2_x}
+                   \norm{f_2}_{L^6_tL^6_x}
+                   \norm{f_3}_{L^6_tL^6_x}.
+\]
+Summing the finitely many monomials proves \eqref{eq:Rk-bound}.  Expanding
+a difference of two cubic monomials into three terms, with one factor
+replaced by its difference, proves local Lipschitz continuity by the same
+estimate.
+\end{proof}
+
+\begin{proposition}[Global $H^k$ persistence]
+\label{prop:Hk-persistence}
+Let $k\ge1$ be an integer.  If $u_0\in H^k(\R)$, then on every compact time
+interval
+\[
+ u\in C_tH^k_x\cap L^6_tW^{k,6}_x.
+\]
+If $u_0$ is Schwartz, then $u$ is smooth in $(t,x)$ on every compact time
+interval.
+\end{proposition}
+
+\begin{proof}
+The case $k=1$ is \cref{lem:H1-persistence}.  Its local interval can be
+chosen from the mass-controlled construction in \cref{thm:LWP}; the length
+and the bound for $\norm u_{\mathcal X(J)}$ depend only on the conserved
+$L^2$ norm.  Finitely many such intervals cover every compact time interval.
+
+Assume now that persistence has been proved through order $k-1$, where
+$k\ge2$, and work on one of those mass-controlled intervals $J$ centered at
+$t_0$.  By reducing its length by a fixed mass-dependent factor if necessary,
+we retain
+\begin{equation}
+ C|\sigma||J|^{1/2}\norm u_{\mathcal X(J)}^2\le\frac14.          \label{eq:Hk-linear-smallness}
+\end{equation}
+The induction hypothesis and \cref{lem:cubic-Hk-leibniz} give
+$R_k(u)\in L^{6/5}_{t,x}(J)$.  Define the affine map on
+$\mathcal X(J)$ by
+\begin{align}
+ \Theta_k(z)(t)=S(t-t_0)\partial_x^ku(t_0)
+ -i\sigma\int_{t_0}^tS(t-s)
+ \bigl(DN(u(s))[z(s)]+R_k(u)(s)\bigr)\,\dd s.       \label{eq:Hk-affine-map}
+\end{align}
+The inhomogeneous Strichartz estimate, \eqref{eq:DN-bound}, and
+\eqref{eq:Hk-linear-smallness} make the linear part a contraction.  Hence
+there is a unique $z_k\in\mathcal X(J)$ satisfying
+\begin{equation}
+ z_k=\Theta_k(z_k).                                  \label{eq:zk-fixed}
+\end{equation}
+
+We identify this candidate with the $k$th weak derivative.  Put
+$y=\partial_x^{k-1}u$, which belongs to $\mathcal X(J)$ by induction, and
+for $h\ne0$ set
+\[
+ q_h=\frac{\tau_hy-y}{h},
+ \qquad q_{0,h}=\frac{\tau_h\partial_x^{k-1}u(t_0)
+                         -\partial_x^{k-1}u(t_0)}h.
+\]
+Then $q_{0,h}\to\partial_x^ku(t_0)$ in $L^2$.  Differentiate the mild
+equation $k-1$ times, translate it, subtract, and divide by $h$.  Applying
+the scalar fundamental theorem of calculus to every translated cubic
+monomial yields an equation
+\begin{equation}
+ q_h=S(t-t_0)q_{0,h}
+ -i\sigma\int_{t_0}^tS(t-s)
+       \bigl(A_h(s)[q_h(s)]+R_{k,h}(s)\bigr)\,\dd s.              \label{eq:Hk-dq-equation}
+\end{equation}
+To make the coefficients explicit, differentiate the mild equation only
+$k-1$ times before taking the quotient.  By
+\eqref{eq:top-derivative-split} at order $k-1$,
+\[
+ \partial_x^{k-1}N(u)=DN(u)[y]+R_{k-1}(u).
+\]
+Consequently one may take
+\begin{align*}
+ A_h[w]&=DN(\tau_hu)[w],\\
+ R_{k,h}
+ &=\frac{DN(\tau_hu)-DN(u)}h[y]
+   +\frac{\tau_hR_{k-1}(u)-R_{k-1}(u)}h.
+\end{align*}
+Every term in $R_{k,h}$ is a finite product of derivatives of order at most
+$k-1$ and a translation difference quotient of a derivative of order at most
+$k-2$; no occurrence of $q_h$ remains there.  Termwise differentiation of
+the explicit multinomial formula shows that its formal limit is precisely
+$R_k(u)$.  Quantitatively,
+\begin{align}
+ \sup_{\norm w_{\mathcal X(J)}\le1}
+ \norm{A_h[w]-DN(u)[w]}_{L^{6/5}_{t,x}(J)}
+ &\longrightarrow0,                                \label{eq:Ah-to-DN}\\
+ \norm{R_{k,h}-R_k(u)}_{L^{6/5}_{t,x}(J)}
+ &\longrightarrow0.                                \label{eq:Rkh-to-Rk}
+\end{align}
+Indeed, the induction hypothesis places every derivative through order
+$k-1$ in both $C_tL^2_x$ and $L^6_tL^6_x$.  Translation is strongly
+continuous in both spaces.  If $j\le k-2$, then
+\[
+ \frac{\tau_h\partial_x^ju-\partial_x^ju}{h}
+ \longrightarrow\partial_x^{j+1}u
+\]
+in $L^6_tL^6_x$ by
+\cref{lem:Wp-difference-quotient}, applied to the product spacetime
+norm.  The
+convergence in $C_tL^2_x$ is uniform in time: the compact set
+$\{\partial_x^{j+1}u(t):t\in J\}\subset L^2$ is acted on by the uniformly
+bounded Fourier multipliers $(\e^{ih\xi}-1)/(ih\xi)$, which converge strongly
+to one.  Expand every coefficient or product difference one factor at a time
+and apply the three-factor estimate in \eqref{eq:Rk-bound}.  This proves
+\eqref{eq:Ah-to-DN}--\eqref{eq:Rkh-to-Rk} without assuming a derivative of
+order $k$.
+
+For small $h$, the linear operator in \eqref{eq:Hk-dq-equation} has
+contraction norm at most $1/2$, by
+\eqref{eq:Hk-linear-smallness} and translation continuity.  Subtract
+\eqref{eq:zk-fixed} from \eqref{eq:Hk-dq-equation}, apply the inhomogeneous
+estimate, and absorb the $q_h-z_k$ term.  The result is
+\[
+ \norm{q_h-z_k}_{\mathcal X(J)}
+ \le C\norm{q_{0,h}-\partial_x^ku(t_0)}_2
+   +C\norm{R_{k,h}-R_k(u)}_{6/5}
+   +o(1)\norm{z_k}_{\mathcal X(J)}\longrightarrow0.
+\]
+Translation difference quotients of $y=\partial_x^{k-1}u$ converge to
+$\partial_xy=\partial_x^ku$ in $\D'(J\times\R)$, so the strong
+$\mathcal X$ limit satisfies $z_k=\partial_x^ku$.  This proves $u\in\mathcal X_k(J)$.  Finite iteration
+on the mass-controlled intervals proves the assertion on every compact time
+interval.
+
+If the datum is Schwartz, it belongs to every $H^k$, so the preceding result
+gives all spatial derivatives locally in time.  The equation
+$u_t=i u_{xx}-i\sigma|u|^2u$ then gives the first time derivative with
+arbitrarily high spatial regularity; differentiating the equation repeatedly
+in time gives every mixed derivative.  Thus $u$ is smooth.  No persistence
+of spatial moments is required.
+\end{proof}
+
+\section{Endpoint spacetime regularity}
+The next estimate is stronger in the spatial variable than the fixed-point
+norm.  It is also the source of almost-everywhere continuous spatial slices.
+
+\begin{proposition}[Endpoint bound and integrable forcing]\label{prop:endpoint}
+Let $I$ be bounded and let $u$ be a global $L^2$ solution.  Then
+\begin{align}
+ u&\in L^4(I;L^\infty(\R)),                         \label{eq:L4Linfty}\\
+ u&\in L^8(I;L^4(\R)),                              \label{eq:L8L4}\\
+ |u|^2u&\in L^1(I;L^2(\R)).                         \label{eq:forcing-L1L2}
+\end{align}
+Moreover, if $u_n$ are the solutions with data $u_{0,n}\to u_0$ in $L^2$,
+then on every bounded $I$
+\[
+ u_n\to u\quad\text{in }L^4_tL^\infty_x,
+ \qquad
+ |u_n|^2u_n\to|u|^2u\quad\text{in }L^1_tL^2_x.
+\]
+\end{proposition}
+
+\begin{proof}
+First,
+\begin{equation}
+ \norm{|u|^2u}_{L^1_tL^2_x(I)}
+ =\int_I\norm{u(t)}_6^3\,\dd t
+ \le |I|^{1/2}\norm u_{L^6(I\times\R)}^3.           \label{eq:L1L2-from-L6}
+\end{equation}
+Use the Duhamel formula and the homogeneous endpoint estimate
+$(q,r)=(4,\infty)$.  For each fixed $s$, restriction of the time variable can
+only decrease the scalar $L^4_tL^\infty_x$ norm, so
+\cref{lem:scalar-mixed-minkowski} gives
+\begin{align*}
+ \left\|\int_{t_0}^{t}S(t-s)F(s)\,\dd s\right\|_{L^4_tL^\infty_x(I)}
+ &\le\int_I
+   \norm{\1_{\{s\text{ lies between }t_0\text{ and }t\}}
+             S(t-s)F(s)}_{L^4_tL^\infty_x(I)}\,\dd s\\
+ &\le C\int_I\norm{F(s)}_2\,\dd s.
+\end{align*}
+With $F=|u|^2u$, \eqref{eq:L1L2-from-L6} proves \eqref{eq:L4Linfty}.
+The $L^8_tL^4_x$ estimate follows without invoking an interpolation-space
+identification.  Pointwise in time,
+\[
+ \norm{u(t)}_4^4\le\norm{u(t)}_2^2\norm{u(t)}_\infty^2.
+\]
+Square, integrate in time, and use the $L^\infty_tL^2_x$ and
+$L^4_tL^\infty_x$ bounds to obtain \eqref{eq:L8L4}.
+
+For convergence of the nonlinear forcing, use
+\[
+ \norm{|u_n|^2u_n-|u|^2u}_{L^2_x}
+ \le C(\norm{u_n}_6^2+\norm u_6^2)\norm{u_n-u}_6.
+\]
+The first factor belongs uniformly to $L^3_t$, the last converges in $L^6_t$,
+and an additional H\"older inequality on the finite interval yields
+convergence in $L^1_t$.  The endpoint Duhamel estimate just proved then gives
+convergence in $L^4_tL^\infty_x$.  Since the cubic forcing belongs to both
+$L^{6/5}_{t,x}$ and $L^1_tL^2_x$, the compatibility assertion of
+\cref{lem:retarded-continuous} shows that every mild formula used from this
+point onward is an ordinary $L^2$-valued Bochner integral.
+\end{proof}
+
+\begin{corollary}[Continuous spatial representatives at almost every time]
+\label{cor:C0-slices}
+For every bounded interval $I$, there is a full-measure set $E_I\subset I$
+such that, for $t\in E_I$, the $L^2$ class $u(t)$ has a representative in
+$C_0(\R)$.
+\end{corollary}
+
+\begin{proof}
+Choose Schwartz initial data $u_{0,n}\to u_0$ and let $u_n$ be the
+corresponding solutions.  By \cref{prop:Hk-persistence}, every
+$u_n(t)$ belongs to $H^1$.  The explicit one-dimensional representative
+theorem \cref{lem:H1-C0}, including its tail estimates, therefore gives
+$u_n(t,\cdot)\in C_0(\R)$ for every time.
+
+By \cref{prop:endpoint}, $u_n\to u$ in the scalar space
+$L^4(I;L^\infty_x)$.  Apply \cref{lem:mixed-subsequence-uniform}.  For almost
+every $t$, a subsequence is uniformly Cauchy in $x$ and hence converges to a
+function in $C_0$.  At every time the same sequence converges to $u(t)$ in
+$L^2$ because the flow convergence is in $C_tL^2_x$.  Therefore
+\cref{lem:C0-limit-identification} identifies the uniform limit with a
+representative of $u(t)$.  A countable exhaustion of the time axis and an
+intersection of the resulting full-measure sets give one common set.
+\end{proof}
+
+\begin{checkpoint}
+The global flow, its stability, mass conservation, gauge covariance, and all
+spacetime norms later used in the proof have been established.  In
+particular, the cubic forcing is locally integrable with values in $L^2$.
+\end{checkpoint}
+
+\chapter{Local smoothing by one half derivative}\label{chap:smoothing}
+
+\section{The homogeneous identity}
+The local smoothing gain is proved directly from the Fourier representation.
+
+\begin{lemma}[Pointwise-in-space smoothing]\label{lem:point-smoothing}
+For every $f\in L^2(\R)$ and every $x\in\R$,
+\begin{equation}
+ \int_\R\big| |D|^{1/2}S(t)f(x)\big|^2\,\dd t
+ \le C\norm f_2^2.                                 \label{eq:point-smoothing}
+\end{equation}
+The constant is independent of $x$.
+\end{lemma}
+
+\begin{proof}
+Begin with $f\in\Ssch$.  Write
+\[
+ |D|^{1/2}S(t)f(x)
+ =(2\pi)^{-1/2}\int_\R
+    \e^{ix\xi-it\xi^2}|\xi|^{1/2}\widehat f(\xi)\,\dd\xi.
+\]
+Split into positive and negative frequencies and put $\lambda=\xi^2$.  Up to
+one fixed normalization constant, the expression is the inverse time Fourier
+transform of
+\begin{equation}
+ B_xf(\lambda)=\1_{\{\lambda>0\}}\lambda^{-1/4}
+ \left(\e^{ix\sqrt\lambda}\widehat f(\sqrt\lambda)
+      +\e^{-ix\sqrt\lambda}\widehat f(-\sqrt\lambda)\right).
+ \label{eq:smoothing-Bx}
+\end{equation}
+Plancherel in $t$ and $(a+b)^2\le2a^2+2b^2$ give
+\[
+ \norm{B_xf}_{L^2_\lambda}^2
+ \le C\int_0^\infty \lambda^{-1/2}
+ \left(|\widehat f(\sqrt\lambda)|^2
+      +|\widehat f(-\sqrt\lambda)|^2\right)\,\dd\lambda
+ =C\norm f_2^2,
+\]
+where the final equality is the substitution $\lambda=\xi^2$.  The bound is
+independent of $x$.
+
+For general $f\in L^2$, formula \eqref{eq:smoothing-Bx} still defines an
+$L^2_\lambda$ function, and hence by inverse time Plancherel a canonical
+$A_xf\in L^2_t$.  The preceding estimate proves
+$\norm{A_xf}_{L^2_t}\le C\norm f_2$.  Moreover
+$x\mapsto B_xf$ is continuous into $L^2_\lambda$: the phase factors converge
+pointwise when $x_n\to x$, and the displayed integrable majorant is
+independent of $n$.  Thus $x\mapsto A_xf$ is continuous into $L^2_t$ and has
+a jointly measurable representative.
+
+Choose Schwartz $f_n\to f$ in $L^2$.  For every compact spatial set $K$,
+\[
+ \int_K\norm{A_x(f_n-f)}_{L^2_t}^2\,\dd x
+ \le C|K|\norm{f_n-f}_2^2\longrightarrow0.
+\]
+For the Schwartz approximants, $A_xf_n=|D|^{1/2}S(t)f_n(x)$.  The latter
+converges in distributions to the Fourier-multiplier distribution
+$|D|^{1/2}S(t)f$, while the preceding estimate gives the local
+$L^2_{t,x}$ limit $A_xf$.  The two limits coincide.  We use this canonical
+representative for the expression in \eqref{eq:point-smoothing}; its norm
+bound is exactly the asserted estimate.
+\end{proof}
+
+\begin{corollary}[Localized homogeneous smoothing]\label{cor:hom-smoothing}
+For $\chi\in C_c^\infty(\R)$ and a bounded interval $I$,
+\begin{equation}
+ \norm{\chi S(t)f}_{L^2(I;H^{1/2}_x)}
+ \le C_{\chi,I}\norm f_2.                          \label{eq:hom-local-smoothing}
+\end{equation}
+\end{corollary}
+
+\begin{proof}
+Integrating \eqref{eq:point-smoothing} against $|\chi(x)|^2$ gives
+\[
+ \norm{\chi|D|^{1/2}S(t)f}_{L^2_{t,x}(\R^2)}
+ \le C\norm\chi_2\norm f_2.
+\]
+It remains to commute $|D|^{1/2}$ through $\chi$.  In Fourier variables the
+commutator has kernel
+\[
+ (|\xi|^{1/2}-|\eta|^{1/2})\widehat\chi(\xi-\eta).
+\]
+Since $||\xi|^{1/2}-|\eta|^{1/2}|\le|\xi-\eta|^{1/2}$ and
+$|\theta|^{1/2}\widehat\chi(\theta)\in L^1$, Young's inequality gives
+\[
+ \norm{[|D|^{1/2},\chi]g}_2\le C_\chi\norm g_2.
+\]
+The $L^2$ part of the $H^{1/2}$ norm contributes
+$|I|^{1/2}\norm\chi_\infty\norm f_2$ by unitarity.
+\end{proof}
+
+\section{Duhamel smoothing}
+
+\begin{proposition}[Local smoothing for forced solutions]\label{prop:forced-smoothing}
+Let $I$ be bounded, $t_0\in I$, $f\in L^2$, and
+$F\in L^1(I;L^2)$.  Then
+\[
+ w(t)=S(t-t_0)f+\int_{t_0}^tS(t-s)F(s)\,\dd s
+\]
+satisfies, for every $\chi\in C_c^\infty(\R)$,
+\begin{equation}
+ \norm{\chi w}_{L^2(I;H^{1/2})}
+ \le C_{\chi,I}\left(\norm f_2+\norm F_{L^1_tL^2_x(I)}\right). \label{eq:forced-smoothing}
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+The homogeneous term is \cref{cor:hom-smoothing}.  For the Duhamel term,
+Minkowski and time translation give
+\begin{align*}
+ &\left\|\chi\int_{t_0}^tS(t-s)F(s)\,\dd s\right\|_{L^2_tH^{1/2}_x(I)}\\
+ &\qquad\le\int_I
+ \norm{\chi\1_{\{s\text{ between }t_0\text{ and }t\}}
+       S(t-s)F(s)}_{L^2_tH^{1/2}_x(I)}\,\dd s
+ \le C_{\chi,I}\int_I\norm{F(s)}_2\,\dd s.
+\end{align*}
+Restriction of the time domain again only decreases the norm.
+\end{proof}
+
+\begin{corollary}[Local smoothing for the cubic flow]\label{cor:NLS-smoothing}
+Every global $L^2$ solution satisfies
+\begin{equation}
+  \chi u\in L^2(I;H^{1/2}(\R))
+  \qquad(\chi\in C_c^\infty,\ I\Subset\R).          \label{eq:NLS-local-smoothing}
+\end{equation}
+If $u_n$ are smooth-data solutions converging to $u$ in the $L^2$ flow, then
+\begin{equation}
+  \chi u_n\to\chi u
+  \quad\text{in }L^2(I;H^{1/2}).                   \label{eq:smoothing-convergence}
+\end{equation}
+\end{corollary}
+
+\begin{proof}
+Apply \cref{prop:forced-smoothing} to the mild equation and use
+\eqref{eq:forcing-L1L2}.  For differences, the initial data converge in
+$L^2$ and the cubic forcings converge in $L^1_tL^2_x$ by
+\cref{prop:endpoint}.
+\end{proof}
+
+\section{A useful countable full-measure set}
+Fix an increasing sequence of compact time intervals $I_m$ and compact
+spatial cutoffs $\chi_m$ with $\chi_m=1$ on $[-m,m]$.  From
+\eqref{eq:NLS-local-smoothing}, for almost every $t$ we have
+$\chi_m u(t),\chi_m v(t)\in H^{1/2}$ for every $m$.  Intersect this set with
+the full-measure set in \cref{cor:C0-slices}.  We obtain one set
+$E\subset\R$ of full measure such that, for every $t\in E$,
+\begin{equation}
+ u(t),v(t)\in H^{1/2}_{\loc}(\R)\cap C_0(\R).       \label{eq:good-slices}
+\end{equation}
+Later we shall shrink $E$ by countably many distributional identities without
+changing its measure.
+
+\begin{checkpoint}
+The exact critical regularity needed for the current and diagonal traces is
+now available, and smooth approximants converge in that norm.
+\end{checkpoint}
+
+\chapter{Critical \texorpdfstring{$H^{1/2}$}{H1/2} calculus}\label{chap:critical-calculus}
+
+The endpoint proof repeatedly multiplies an $H^{1/2}$ function by a bounded
+$H^{1/2}$ function and composes with Lipschitz maps.  At the critical index,
+these operations are valid only when the $L^\infty$ information is retained.
+This chapter records the exact estimates and proves the approximation facts
+used at the common zero set.
+
+\section{The product estimate}
+
+\begin{lemma}[$H^{1/2}\cap L^\infty$ is an algebra]\label{lem:Hhalf-algebra}
+If $f,g\in H^{1/2}(\R)\cap L^\infty(\R)$, then $fg\in H^{1/2}$ and
+\begin{equation}
+ \norm{fg}_{H^{1/2}}
+ \le C\left(\norm f_\infty\norm g_{H^{1/2}}
+           +\norm g_\infty\norm f_{H^{1/2}}\right). \label{eq:Hhalf-product}
+\end{equation}
+The corresponding statement is local after multiplication by a smooth
+cutoff.
+\end{lemma}
+
+\begin{proof}
+The $L^2$ part follows from either factor in $L^\infty$.  For the Gagliardo
+seminorm,
+\[
+ f(x)g(x)-f(y)g(y)
+ =f(x)(g(x)-g(y))+g(y)(f(x)-f(y)).
+\]
+Square, use $(a+b)^2\le2a^2+2b^2$, divide by $|x-y|^2$, and integrate.
+The local statement follows by applying the global estimate to cutoffs and
+using \cref{lem:smooth-multiplier}.
+\end{proof}
+
+\begin{lemma}[Lipschitz composition]\label{lem:Lip-composition}
+Let $F:\C\to\C$ be Lipschitz and satisfy $F(0)=0$.  If
+$f\in H^{1/2}(\R)$, then $F\circ f\in H^{1/2}$ and
+\[
+ \norm{F(f)}_{H^{1/2}}\le C\operatorname{Lip}(F)\norm f_{H^{1/2}}.
+\]
+If $F$ is merely Lipschitz on the range of a locally bounded function, the
+same conclusion holds locally after subtracting the constant $F(0)$.
+\end{lemma}
+
+\begin{proof}
+The pointwise inequalities
+$|F(f(x))|\le\operatorname{Lip}(F)|f(x)|$ and
+$|F(f(x))-F(f(y))|\le\operatorname{Lip}(F)|f(x)-f(y)|$ control the $L^2$
+norm and the Gagliardo seminorm.
+\end{proof}
+
+\section{Mollification in both critical and uniform norms}
+
+\begin{lemma}[Simultaneous approximation]\label{lem:simultaneous-mollification}
+Let $f\in H^{1/2}(\R)\cap C_0(\R)$.  If $\varphi_\delta$ is a standard smooth
+approximate identity, then
+\[
+ \varphi_\delta*f\to f
+ \quad\text{in }H^{1/2}(\R)\text{ and in }L^\infty(\R).
+\]
+The same is true locally after inserting a cutoff.
+\end{lemma}
+
+\begin{proof}
+With the unitary Fourier normalization, convolution by
+$\varphi_\delta$ has multiplier
+$m_\delta(\xi)=(2\pi)^{1/2}\widehat\varphi(\delta\xi)$.
+It is uniformly bounded and converges pointwise to one because
+$\int\varphi=1$.  Dominated convergence therefore gives strong
+convergence in $H^{1/2}$.
+A continuous function vanishing at infinity is uniformly continuous, so the
+standard approximate-identity argument gives uniform convergence.  For the
+local version, first multiply by a cutoff which is identically one on the
+compact set of interest.
+\end{proof}
+
+\section{The zero-set regularizers}
+For $\eps>0$ define
+\begin{equation}
+ T_\eps(z)=\frac{\eps z}{|z|^2+\eps},
+ \qquad z\in\C.                                    \label{eq:Teps-def}
+\end{equation}
+
+\begin{lemma}[Uniform Lipschitz and strong critical convergence]
+\label{lem:Teps}
+The maps $T_\eps:\C\to\C$ are uniformly Lipschitz, satisfy
+$T_\eps(0)=0$, and obey
+\begin{equation}
+ |T_\eps(z)|\le\frac{\sqrt\eps}{2}.                \label{eq:Teps-sup}
+\end{equation}
+If $f\in H^{1/2}_{\loc}(\R)\cap C(\R)$ is locally bounded, then
+\begin{equation}
+ T_\eps(f)\longrightarrow0
+ \quad\text{strongly in }H^{1/2}_{\loc}(\R).       \label{eq:Teps-strong}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Viewed as a map on $\R^2$, $T_\eps$ is radial.  Its tangential derivative is
+$\eps/(r^2+\eps)$ and its radial derivative is
+$\eps(\eps-r^2)/(r^2+\eps)^2$; both have absolute value at most one.  The
+maximum of $\eps r/(r^2+\eps)$ occurs at $r=\sqrt\eps$ and equals
+$\sqrt\eps/2$.  We also have the domination
+\begin{equation}
+ |T_\eps(z)|=\frac{\eps|z|}{|z|^2+\eps}\le |z|.    \label{eq:Teps-domination}
+\end{equation}
+
+After localizing, assume $f\in H^{1/2}\cap C_0$.  For every fixed $z$,
+$T_\eps(z)\to0$ as $\eps\downarrow0$.  By
+\eqref{eq:Teps-domination}, $|T_\eps(f)|^2\le|f|^2$, so dominated convergence
+proves convergence in $L^2(\R)$.  For the Gagliardo seminorm, pointwise
+convergence and the uniform Lipschitz bound give
+\[
+ \frac{|T_\eps(f(x))-T_\eps(f(y))|^2}{|x-y|^2}
+ \le \frac{|f(x)-f(y)|^2}{|x-y|^2}.
+\]
+The right side is integrable by
+\cref{thm:fourier-gagliardo}, and dominated convergence on $\R^2$ proves
+convergence of the seminorm.  This yields strong $H^{1/2}$ convergence.  The
+local statement follows by multiplying $f$ by a cutoff equal to one on the
+compact set under consideration.
+\end{proof}
+
+\section{Quadratic-form distributions}
+If $f\in H^{1/2}_{\loc}$, define the local distribution
+$\overline f f_x$ by
+\begin{equation}
+ \pair{\overline f f_x}{\phi}
+ :=\pair{f_x}{\phi\overline f}_{H^{-1/2},H^{1/2}},
+ \qquad \phi\in C_c^\infty(\R).                   \label{eq:quad-form}
+\end{equation}
+The pairing is complex bilinear, extending $\int T\phi$; it is not the
+sesquilinear Hilbert inner product.  By
+\cref{lem:smooth-multiplier}, the test factor belongs to $H^{1/2}$, and the
+definition is independent of the cutoff used to globalize $f$.  Notice that
+local boundedness is not needed for this quadratic form; it will enter only
+later, when the zero-set regularizers are multiplied into test factors.
+
+\begin{definition}[Multiplier test algebra]\label{def:multiplier-test-algebra}
+For a compact interval $K\subset\R$, let $\mathcal A(K)$ be the space of
+functions $\psi\in H^{1/2}(\R)\cap L^\infty(\R)$ supported in $K$, with norm
+\[
+ \norm\psi_{\mathcal A}=\norm\psi_{H^{1/2}}+\norm\psi_\infty.
+\]
+Smooth compactly supported functions are dense in $\mathcal A(K)$ for the
+simultaneous topology whenever $\psi$ has a continuous representative; the
+mollification statement is \cref{lem:simultaneous-mollification}.
+\end{definition}
+
+\begin{lemma}[Extension of the logarithmic quadratic form]
+\label{lem:quadratic-form-extension}
+Let $f\in H^{1/2}(\R)\cap L^\infty(\R)$.  The map initially defined on
+smooth $\psi$ by
+\[
+ \mathcal Q_f(\psi)=\pair{f_x}{\psi\overline f}_{H^{-1/2},H^{1/2}}
+\]
+extends continuously to $\mathcal A(K)$, and
+\begin{equation}
+ |\mathcal Q_f(\psi)|
+ \le C\norm f_{H^{1/2}}
+ \left(\norm\psi_\infty\norm f_{H^{1/2}}
+       +\norm f_\infty\norm\psi_{H^{1/2}}\right).  \label{eq:quadratic-extension-bound}
+\end{equation}
+If $f_n\to f$ in both $H^{1/2}$ and $L^\infty$, and
+$\psi_n\to\psi$ in both norms, then
+$\mathcal Q_{f_n}(\psi_n)\to\mathcal Q_f(\psi)$.
+The same assertions hold locally after one fixed cutoff.
+\end{lemma}
+
+\begin{proof}
+The derivative map is bounded from $H^{1/2}$ to $H^{-1/2}$.  By the algebra
+estimate,
+\[
+ \norm{\psi\overline f}_{H^{1/2}}
+ \le C\left(\norm\psi_\infty\norm f_{H^{1/2}}
+       +\norm f_\infty\norm\psi_{H^{1/2}}\right).
+\]
+Pairing the two Sobolev spaces proves \eqref{eq:quadratic-extension-bound}.
+For convergence, add and subtract
+$\pair{(f_n)_x}{\psi_n\overline f}$ and
+$\pair{(f_n)_x}{\psi\overline f}$, then apply the same product estimate to
+each difference.  Uniform boundedness of the convergent sequences completes
+the proof.  Localization is obtained by inserting a cutoff equal to one near
+$K$; two choices give the same value because the distributional derivative is
+local.
+\end{proof}
+
+\begin{lemma}[Stability of quadratic forms]\label{lem:quad-stability}
+Suppose on a compact set $K$ that
+$f_n\to f$ in $H^{1/2}$ after multiplication by one cutoff equal to one near
+$K$.  Then
+\[
+ \overline{f_n}(f_n)_x\longrightarrow\overline f f_x
+ \quad\text{in }\D'(K).
+\]
+The same conclusion holds after integration in time when the localized
+$H^{1/2}$ convergence is in $L^2_t$.
+\end{lemma}
+
+\begin{proof}
+For a test function $\phi$ supported in $K$, subtract the two pairings and
+write
+\begin{align*}
+ \pair{(f_n)_x-f_x}{\phi\overline{f_n}}
+ +\pair{f_x}{\phi(\overline{f_n}-\overline f)}.
+\end{align*}
+By boundedness of multiplication by the fixed smooth function $\phi$, the
+absolute value is at most
+\[
+ C_\phi\norm{f_n-f}_{H^{1/2}}
+ \bigl(\norm{f_n}_{H^{1/2}}+\norm f_{H^{1/2}}\bigr),
+\]
+after localization.  This tends to zero.  In time, integrate the same bound
+and use Cauchy--Schwarz for the two $H^{1/2}$ factors.
+\end{proof}
+
+\begin{lemma}[Real part of the logarithmic form]\label{lem:real-log-form}
+For $f\in H^{1/2}_{\loc}$,
+\begin{equation}
+  \Rea(\overline f f_x)=\frac12\partial_x|f|^2
+  \quad\text{in }\D'(\R).                         \label{eq:real-log-form}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Mollify after a cutoff.  For smooth $f_n$ the identity is the product rule.
+The left side converges by \cref{lem:quad-stability}.  The right side
+converges because $f_n\to f$ in $L^2_{\loc}$ and
+\[
+ \norm{|f_n|^2-|f|^2}_{L^1(K)}
+ \le \norm{f_n-f}_{L^2(K)}
+     \bigl(\norm{f_n}_{L^2(K)}+\norm f_{L^2(K)}\bigr).
+\]
+\end{proof}
+
+\begin{checkpoint}
+All critical products, compositions, and limiting operations needed below are
+now justified by explicit estimates.  In particular, no division at a zero
+will be used.
+\end{checkpoint}
+
+\chapter{The density determines the endpoint current}\label{chap:current}
+
+\section{Density equality at every time}
+
+\begin{lemma}[Continuity of the density map]\label{lem:density-continuity}
+If $f\in C(I;L^2(\R))$, then $t\mapsto|f(t)|^2$ is continuous from $I$ to
+$L^1(\R)$.
+\end{lemma}
+
+\begin{proof}
+The elementary factorization gives
+\[
+ \norm{|f(t)|^2-|f(s)|^2}_{L^1}
+ \le\norm{f(t)-f(s)}_2\big(\norm{f(t)}_2+\norm{f(s)}_2\big).
+\]
+\end{proof}
+
+\begin{corollary}[All-time equality of densities]\label{cor:all-time-density}
+Under the hypothesis \eqref{eq:equal-modulus-main},
+\begin{equation}
+ |u(t)|^2=|v(t)|^2\quad\text{in }L^1(\R)
+ \quad\text{for every }t\in\R.                    \label{eq:all-time-density}
+\end{equation}
+\end{corollary}
+
+\begin{proof}
+Fubini gives equality in $L^1$ for almost every time.  The difference of the
+two density maps is continuous by \cref{lem:density-continuity}; a continuous
+map which is zero almost everywhere is zero everywhere.
+\end{proof}
+
+\section{The smooth continuity equation}
+For a smooth solution set
+\[
+ \rho_u=|u|^2,
+ \qquad j_u=\Ima(\overline u\,u_x).
+\]
+
+\begin{lemma}[Continuity equation]\label{lem:continuity-smooth}
+Every $H^1$ solution satisfies
+\begin{equation}
+  \partial_t\rho_u+2\partial_xj_u=0
+  \quad\text{in }\D'(I\times\R).                  \label{eq:continuity-eq}
+\end{equation}
+Consequently, if $\phi\in C_c^\infty(\R)$ and
+$a(x)=\int_{-\infty}^x\phi(y)\,\dd y$, then
+\begin{equation}
+ \frac{\dd}{\dd t}\int_\R a(x)|u(t,x)|^2\,\dd x
+ =2\int_\R\phi(x)j_u(t,x)\,\dd x                 \label{eq:localized-mass-smooth}
+\end{equation}
+in the distributional sense in time.
+\end{lemma}
+
+\begin{proof}
+We justify the product rule at the stated $H^1$ regularity.  If
+$b\in C_c^\infty(\R)$ is real, multiplication by $b$ is bounded on $H^1$.
+The time-mollification proof of \cref{lem:gelfand-chain-rule}, applied to the
+bounded sesquilinear form
+$B_b(f,g)=\int b f\overline g$, gives
+\[
+ \frac{\dd}{\dd t}\int b|u|^2
+ =2\Rea\pair{u_t}{bu}_{H^{-1},H^1}
+\]
+in distributions in time.  Substitute
+$u_t=i u_{xx}-i\sigma|u|^2u$.  The nonlinear pairing is purely imaginary,
+while weak integration by parts gives
+\begin{align*}
+ 2\Rea\pair{i u_{xx}}{bu}
+ &=2\Ima\int \overline u\,u_x b'
+ =2\int b'\Ima(\overline u\,u_x).
+\end{align*}
+Testing also in time proves
+$\partial_t|u|^2+2\partial_x\Ima(\overline u u_x)=0$ in spacetime
+distributions.
+
+For the primitive $a(x)=\int_{-\infty}^x\phi$, insert a compact cutoff
+$b_R=a\chi_R$ in the preceding identity.  The term with $a\chi_R'$ tends to
+zero because $a$ is bounded, $u\,u_x\in L^1$, and the cutoffs may be chosen
+with uniformly bounded derivative converging pointwise to zero.  The term
+with $a'\chi_R=\phi\chi_R$ converges to the right side of
+\eqref{eq:localized-mass-smooth}.  This proves the localized identity.
+\end{proof}
+
+\section{Endpoint current as a spacetime distribution}
+For a solution with only $L^2$ data, define for almost every time
+\begin{equation}
+ \pair{\mathfrak j_u(t)}{\phi}
+ =\Ima\pair{u_x(t)}{\phi\overline{u(t)}}_{H^{-1/2},H^{1/2}}. \label{eq:endpoint-current-def}
+\end{equation}
+The local smoothing norm makes this an $L^1_{\loc}$ family in time.
+Indeed, after a cutoff containing $\supp\phi$,
+\[
+ |\pair{\mathfrak j_u(t)}{\phi}|
+ \le C_\phi\norm{\chi u(t)}_{H^{1/2}}^2,
+\]
+and the right side is integrable in time.
+
+\begin{proposition}[Weak localized mass identity]\label{prop:weak-localized-mass}
+Let $u$ be a global $L^2$ solution.  For
+$\eta\in C_c^\infty(I)$, $\phi\in C_c^\infty(\R)$, and the bounded primitive
+$a$ above,
+\begin{equation}
+ -\int_I\eta'(t)\int_\R a(x)|u(t,x)|^2\,\dd x\,\dd t
+ =2\int_I\eta(t)\pair{\mathfrak j_u(t)}{\phi}\,\dd t. \label{eq:weak-localized-mass}
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+Take Schwartz initial data $u_{0,n}\to u_0$ and let $u_n$ be the smooth
+solutions.  Identity \eqref{eq:weak-localized-mass} holds for $u_n$ by
+\cref{lem:continuity-smooth}.  The left side converges because
+$u_n\to u$ in $C_tL^2_x$ and $a$ is bounded.  The right side converges by
+\cref{cor:NLS-smoothing,prop:endpoint,lem:quad-stability}.  Pass to the limit.
+\end{proof}
+
+\begin{theorem}[Endpoint recovery of the logarithmic derivative]
+\label{thm:current-recovery}
+Under the hypotheses of \cref{thm:main},
+\begin{equation}
+ \overline u\,u_x=\overline v\,v_x
+ \quad\text{as a local quadratic-form distribution on }\R_t\times\R_x.
+ \label{eq:log-derivative-equality}
+\end{equation}
+There is a full-measure set of times on which the same equality holds as a
+spatial distribution.
+\end{theorem}
+
+\begin{proof}
+Apply \cref{prop:weak-localized-mass} to $u$ and $v$.  By
+\eqref{eq:all-time-density}, the left sides agree, so the current forms agree
+for every tensor-product test function $\eta(t)\phi(x)$.
+
+We record the continuity needed to pass to arbitrary tests.  If
+$\Psi\in C_c^\infty(I\times\R)$ and $\chi$ is one on its spatial support,
+then the algebra estimate with the smooth multiplier $\Psi(t,\cdot)$ gives
+\begin{align}
+ \left|\int_I
+ \pair{u_x(t)}{\Psi(t)\overline{u(t)}}\,\dd t\right|
+ &\le C_K\max_{|\alpha|\le1}\norm{\partial_x^\alpha\Psi}_\infty
+       \norm{\chi u}_{L^2_tH^{1/2}_x}^2.          \label{eq:current-test-continuity}
+\end{align}
+The same bound holds for $v$.  By \cref{lem:tensor-test-density} with $M=1$, finite sums of separated
+tests converge to $\Psi$ in the seminorm on the right of
+\eqref{eq:current-test-continuity}.  Hence the imaginary parts of the two
+forms agree against every spacetime test.  Their
+real parts agree by \cref{lem:real-log-form} and equality of the densities.
+This proves \eqref{eq:log-derivative-equality} as a spacetime distribution.
+
+For slicing, fix compact intervals $I_m,K_m$ exhausting spacetime and a
+cutoff $\chi_m$ equal to one near $K_m$.  For smooth $\phi$ supported in
+$K_m$, the multiplier proof gives the concrete estimate
+\begin{equation}
+ |\Lambda_t(\phi)|
+ \le C_m\bigl(\norm{\chi_m u(t)}_{H^{1/2}}^2
+              +\norm{\chi_m v(t)}_{H^{1/2}}^2\bigr)
+       \bigl(\norm\phi_\infty+\norm{\phi'}_\infty\bigr),
+ \label{eq:sliced-current-test-bound}
+\end{equation}
+where
+\[
+ \Lambda_t(\phi)=
+ \pair{u_x(t)}{\phi\overline{u(t)}}
+ -\pair{v_x(t)}{\phi\overline{v(t)}}.
+\]
+The coefficient in parentheses is integrable on $I_m$.  Choose a countable
+family $\{\phi_{m,n}\}_n\subset C_c^\infty(K_m)$ dense, for the
+$C^1$ norm, in the smooth functions supported in $K_m$; piecewise-polynomial
+approximants with rational data followed by a fixed smoothing construction
+provide one.  The spacetime identity implies
+$\int\eta(t)\Lambda_t(\phi_{m,n})\,\dd t=0$ for every scalar test $\eta$.
+The scalar fundamental lemma gives
+$\Lambda_t(\phi_{m,n})=0$ outside a null set depending on $(m,n)$.  Remove
+the countable union of these null sets.  Estimate
+\eqref{eq:sliced-current-test-bound} extends equality from the dense family
+to every smooth test supported in $K_m$.  Finally take the countable union
+of the compact exhaustions.  This produces one full-measure set on which the
+spatial quadratic forms agree as distributions.  At the good times, their
+continuous extensions to the multiplier algebra are then equal as well, by
+\cref{lem:quadratic-form-extension}.
+\end{proof}
+
+\begin{checkpoint}
+Equal modulus has now produced equal complex logarithmic-derivative forms at
+the critical regularity.  The remaining issue is to convert that identity to
+an unconjugated Wronskian without dividing by the common density.
+\end{checkpoint}
+
+\chapter{The critical Wronskian lemma}\label{chap:wronskian}
+
+\begin{theorem}[Zero-set-safe Wronskian lemma]\label{thm:critical-wronskian}
+Let $f,g\in H^{1/2}_{\loc}(\R)\cap C(\R)$ be locally bounded.  Assume
+\begin{equation}
+ |f|=|g|\quad\text{almost everywhere}               \label{eq:W-density}
+\end{equation}
+and
+\begin{equation}
+ \overline f f'-\overline g g'=0                   \label{eq:W-log}
+\end{equation}
+as a local $H^{-1/2}$--$H^{1/2}$ quadratic-form distribution.  Then
+\begin{equation}
+  g f'-f g'=0\quad\text{in }\D'(\R).               \label{eq:W-zero}
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+\textbf{Step 1: localization.}
+Take a real cutoff $\chi$.  The derivative terms created by $\chi$ cancel:
+\begin{align*}
+ &\overline{\chi f}(\chi f)'-\overline{\chi g}(\chi g)'\\
+ &\qquad=\chi^2(\overline f f'-\overline g g')
+          +\chi\chi'(|f|^2-|g|^2)=0,
+\end{align*}
+while
+$W(\chi f,\chi g)=\chi^2W(f,g)$.  It is therefore enough to prove the
+identity after a compactly supported cutoff.  We now assume
+$f,g\in H^{1/2}\cap L^\infty$.  Because the chosen representatives are
+continuous, the almost-everywhere identity $|f|=|g|$ holds in fact at every
+point.
+
+\textbf{Step 2: a legal test function.}
+Put
+\[
+ \rho=|f|^2=|g|^2,
+ \qquad s_\eps=\frac{\rho}{\rho+\eps},
+ \qquad h_\eps=\frac{fg}{\rho+\eps}.
+\]
+We spell out why these are legal critical multipliers.  The function
+$r\mapsto r/(r+\eps)$ is bounded, Lipschitz on the bounded range of
+$\rho$, and vanishes at zero.  Hence
+$s_\eps\in H^{1/2}\cap L^\infty$ by
+\cref{lem:Lip-composition}, and the algebra lemma gives
+$s_\eps f,s_\eps g\in H^{1/2}\cap L^\infty$.
+For $h_\eps$, the reciprocal $r\mapsto(r+\eps)^{-1}$ does not vanish at
+zero and therefore is not itself an $L^2$ function on the line.  Choose a
+fixed cutoff $\kappa$ equal to one on the supports of $f$ and $g$.  The
+function
+\[
+ r\longmapsto\frac1{r+\eps}-\frac1\eps
+\]
+is Lipschitz on the range of $\rho$ and vanishes at zero, so
+\[
+ \kappa(\rho+\eps)^{-1}
+ =\frac{\kappa}{\eps}
+  +\kappa\left((\rho+\eps)^{-1}-\eps^{-1}\right)
+ \in H^{1/2}\cap L^\infty.
+\]
+Since $fg$ is supported where $\kappa=1$, the algebra estimate now gives
+\[
+ h_\eps=fg\,\kappa(\rho+\eps)^{-1}
+ \in H^{1/2}\cap L^\infty.
+\]
+We may therefore test \eqref{eq:W-log} against $h_\eps\phi$, with
+$\phi\in C_c^\infty$.  The equality of logarithmic forms extends from
+smooth tests to this multiplier by
+\cref{lem:quadratic-form-extension}.  Concretely, $h_\eps\phi$ is
+continuous and compactly supported; mollify it after one fixed cutoff.  The
+mollifications converge in both $H^{1/2}$ and $L^\infty$ by
+\cref{lem:simultaneous-mollification}, and
+\eqref{eq:quadratic-extension-bound} makes both quadratic pairings converge.
+
+Since
+\[
+ \overline f h_\eps=s_\eps g,
+ \qquad
+ \overline g h_\eps=s_\eps f,
+\]
+we obtain
+\begin{equation}
+ \pair{f'}{s_\eps g\phi}-\pair{g'}{s_\eps f\phi}=0. \label{eq:s-eps-W}
+\end{equation}
+
+\textbf{Step 3: concentrate the error on the common zero set.}
+Let $D=gf'-fg'$.  Subtract \eqref{eq:s-eps-W} from its defining pairing:
+\begin{align}
+ \pair D\phi
+ &=\pair{f'}{(1-s_\eps)g\phi}
+   -\pair{g'}{(1-s_\eps)f\phi}\\
+ &=\pair{f'}{T_\eps(g)\phi}
+   -\pair{g'}{T_\eps(f)\phi},                      \label{eq:W-Teps}
+\end{align}
+where the last identity uses $|f|=|g|$ and
+$T_\eps(z)=\eps z/(|z|^2+\eps)$.
+
+\textbf{Step 4: remove the regularizer.}
+By \cref{lem:Teps}, both $T_\eps(f)$ and $T_\eps(g)$ converge strongly to
+zero in local $H^{1/2}$.  Multiplication by $\phi$ preserves that convergence.
+Since $f',g'\in H^{-1/2}_{\loc}$, the right side of \eqref{eq:W-Teps} tends
+to zero.  Thus $\pair D\phi=0$ for every test function, which is
+\eqref{eq:W-zero}.
+\end{proof}
+
+\begin{corollary}[Diagonal Wronskian for the NLS pair]\label{cor:diagonal-W}
+There is a full-measure set $E\subset\R$ such that, for every $t\in E$,
+\begin{equation}
+ u(t)v_x(t)-v(t)u_x(t)=0
+ \quad\text{in }\D'(\R_x).                         \label{eq:time-W}
+\end{equation}
+The set $E$ may be chosen so that \eqref{eq:good-slices} and
+\eqref{eq:log-derivative-equality} also hold at every $t\in E$.
+\end{corollary}
+
+\begin{proof}
+Use the good slices from \cref{chap:smoothing}, the sliced identity in
+\cref{thm:current-recovery}, and apply \cref{thm:critical-wronskian} at each
+such time.  Intersecting finitely many full-measure sets preserves full
+measure.
+\end{proof}
+
+\begin{remark}[What the Wronskian does and does not prove]
+On an interval on which $u(t)$ never vanishes, \eqref{eq:time-W} implies that
+$v/u$ is constant.  It does not by itself show that constants on different
+components of $\{u(t)\ne0\}$ agree.  The two-particle argument in the next
+chapters is precisely the dynamical gluing mechanism.
+\end{remark}
+
+\begin{checkpoint}
+The current identity has been converted into zero normal derivative for the
+exterior product on the diagonal.  The argument is valid at common zeros and
+uses no quotient.
+\end{checkpoint}
+
+\chapter{The two-particle exterior product}\label{chap:exterior}
+
+\section{Definition and algebraic equation}
+Define
+\begin{equation}
+ F(t,x,y)=u(t,x)v(t,y)-v(t,x)u(t,y).                \label{eq:F-def}
+\end{equation}
+By \eqref{eq:tensor-norm} and continuity of $u,v$ in $L^2$,
+\begin{equation}
+ F\in C(\R;L^2(\R^2)).                             \label{eq:F-C-L2}
+\end{equation}
+It is antisymmetric:
+\begin{equation}
+ F(t,y,x)=-F(t,x,y).                                \label{eq:F-antisym}
+\end{equation}
+Let
+\[
+  \rho(t,x)=|u(t,x)|^2=|v(t,x)|^2.
+\]
+
+\begin{proposition}[Exterior-product equation]\label{prop:F-equation}
+In distributions on $\R_t\times\R_x^2$,
+\begin{equation}
+ iF_t+F_{xx}+F_{yy}
+ =\sigma\bigl(\rho(t,x)+\rho(t,y)\bigr)F.          \label{eq:F-equation}
+\end{equation}
+On every bounded interval $I$,
+\begin{align}
+ F&\in L^4(I\times\R^2),                           \label{eq:F-L4}\\
+ \bigl(\rho(x)+\rho(y)\bigr)F&\in L^2(I\times\R^2). \label{eq:QF-L2}
+\end{align}
+\end{proposition}
+
+\begin{proof}
+Write $N(z)=|z|^2z$.  For a smooth pair, with no equality-of-moduli
+assumption imposed on the pair, direct differentiation gives the unfactored
+identity
+\begin{align}
+ &(i\partial_t+\partial_x^2+\partial_y^2)
+   \bigl(u(x)v(y)-v(x)u(y)\bigr) \notag\\
+ &\quad=\sigma\bigl[
+   N(u)(x)v(y)+u(x)N(v)(y)
+  -N(v)(x)u(y)-v(x)N(u)(y)\bigr].                 \label{eq:F-unfactored}
+\end{align}
+This is the identity that is stable under arbitrary smooth approximation;
+the approximating pair need not have equal moduli.
+
+Choose smooth initial data converging to the two given data and denote the
+corresponding solutions by $u_n,v_n$.  On every compact interval,
+$u_n\to u$ and $v_n\to v$ in $C_tL^2_x$, while
+$N(u_n)\to N(u)$ and $N(v_n)\to N(v)$ in $L^1_tL^2_x$.
+Consequently every tensor on the right of \eqref{eq:F-unfactored} converges
+in $L^1_tL^2_{x,y}$.  For example,
+\begin{align*}
+ &\norm{N(u_n)\otimes v_n-N(u)\otimes v}_{L^1_tL^2_{x,y}}\\
+ &\quad\le
+   \norm{N(u_n)-N(u)}_{L^1_tL^2_x}
+   \norm{v_n}_{L^\infty_tL^2_y}
+  +\norm{N(u)}_{L^1_tL^2_x}
+   \norm{v_n-v}_{L^\infty_tL^2_y}\longrightarrow0.
+\end{align*}
+The left side converges in distributions by the $C_tL^2_{x,y}$ convergence
+of the exterior products.  Thus \eqref{eq:F-unfactored} holds for the given
+rough solutions.  Only now use the exact hypothesis
+$|u|^2=|v|^2=\rho$: its four terms factor algebraically as
+\[
+ \rho(x)\bigl(u(x)v(y)-v(x)u(y)\bigr)
+ +\rho(y)\bigl(u(x)v(y)-v(x)u(y)\bigr),
+\]
+which proves \eqref{eq:F-equation}.
+
+For the $L^4$ bound, a typical tensor term satisfies
+\begin{align*}
+ \norm{u(t,x)v(t,y)}_{L^4_{t,x,y}}^4
+ &=\int_I\norm{u(t)}_4^4\norm{v(t)}_4^4\,\dd t\\
+ &\le\norm u_{L^8_tL^4_x(I)}^4
+       \norm v_{L^8_tL^4_x(I)}^4.
+\end{align*}
+For the forcing, one typical term in the factored right side is
+$|u(x)|^2u(x)v(y)$.  Its squared $L^2$ norm is
+\[
+ \int_I\norm{u(t)}_6^6\norm{v(t)}_2^2\,\dd t,
+\]
+which is finite by mass conservation and the $L^6_{t,x}$ bound.  The other
+terms are identical, proving \eqref{eq:QF-L2}.
+\end{proof}
+
+\section{Normal and tangential coordinates}
+Set
+\begin{equation}
+ r=\frac{x+y}{\sqrt2},\qquad s=\frac{x-y}{\sqrt2}. \label{eq:rs-coordinates}
+\end{equation}
+We use the same letter $F$ after this orthogonal change of variables.  Then
+\begin{equation}
+ iF_t+F_{rr}+F_{ss}=QF,                             \label{eq:F-rs}
+\end{equation}
+where
+\begin{equation}
+ Q(t,r,s)=\sigma\left[
+  \rho\!\left(t,\frac{r+s}{\sqrt2}\right)
+ +\rho\!\left(t,\frac{r-s}{\sqrt2}\right)
+ \right].                                          \label{eq:Q-ridge}
+\end{equation}
+The function $Q$ is real and even in $s$, while $F$ is odd in $s$.
+
+\begin{lemma}[Ridge-potential bounds]\label{lem:Q-bounds}
+On every bounded time interval $I$,
+\begin{align}
+ Q&\in L^1(I;L^\infty(\R^2)),                      \label{eq:Q-L1Linfty}\\
+ \norm Q_{L^1_tL^\infty_{r,s}(I)}
+ &\le2|\sigma||I|^{1/2}\norm u_{L^4_tL^\infty_x(I)}^2. \label{eq:Q-L1-bound}
+\end{align}
+Furthermore, for every strip
+$S_{a,h}=\{(r,s):a<s<a+h\}$,
+\begin{equation}
+ \norm{\1_{S_{a,h}}Q}_{L^2(I\times\R^2)}
+ \le C|\sigma|h^{1/2}\norm u_{L^4_tL^4_x(I)}^2,   \label{eq:Q-strip}
+\end{equation}
+uniformly in $a$.
+\end{lemma}
+
+\begin{proof}
+At each time,
+$\norm Q_\infty\le2|\sigma|\norm{u(t)}_\infty^2$.
+Integrate and use Cauchy--Schwarz in time to obtain
+\eqref{eq:Q-L1-bound}.  For one ridge term, the change of variables in $r$
+gives
+\begin{align*}
+ &\int_I\int_a^{a+h}\int_\R
+ \rho\!\left(t,\frac{r+s}{\sqrt2}\right)^2
+ \,\dd r\,\dd s\,\dd t\\
+ &\qquad=\sqrt2h\int_I\norm{u(t)}_4^4\,\dd t.
+\end{align*}
+The second ridge is identical, and the triangle inequality proves
+\eqref{eq:Q-strip}.
+\end{proof}
+
+\begin{remark}
+The full spacetime $L^2$ norm of $Q$ is generally infinite because each
+one-body density is repeated along a transverse direction.  The proof below
+can use either the global $L^1_tL^\infty_{r,s}$ control on short time
+intervals or the uniform strip estimate.  We prove the half-space theorem in
+a form that accommodates both decompositions.
+\end{remark}
+
+\chapter{Distribution-valued diagonal traces}\label{chap:traces}
+
+The equal-density condition gives the Dirichlet trace $F|_{s=0}=0$ formally,
+and the Wronskian gives the Neumann trace.  At $L^2$ regularity neither trace
+is initially classical.  We now construct them by testing in the tangential
+variables and using the equation as an ordinary differential equation in the
+normal variable.
+
+\section{The one-dimensional trace theorem used below}
+
+\begin{lemma}[Interior first-derivative estimate]
+\label{lem:interior-first-derivative}
+Let $J'\Subset J$ be bounded intervals.  There is $C=C(J',J)$ such that every
+smooth $h$ on $J$ satisfies
+\begin{equation}
+ \norm{h'}_{L^2(J')}
+ \le C\left(\norm h_{L^2(J)}+\norm{h''}_{L^2(J)}\right). \label{eq:interior-H1-estimate}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Choose $\chi\in C_c^\infty(J)$ with $\chi=1$ on $J'$.  Integration by parts
+gives
+\[
+ \int\chi^2|h'|^2
+ =-\Rea\int\chi^2h''\overline h
+   -2\Rea\int\chi\chi'h'\overline h.
+\]
+Cauchy--Schwarz and $2ab\le\tfrac12a^2+2b^2$ absorb half of the left side and
+give
+\[
+ \norm{\chi h'}_2^2
+ \le C_\chi\left(\norm h_2^2+\norm{h''}_2^2\right).
+\]
+Since $\chi=1$ on $J'$, this is \eqref{eq:interior-H1-estimate}.
+\end{proof}
+
+\begin{theorem}[Local $H^2$ characterization and $C^1$ representative]
+\label{thm:local-H2-characterization}
+Let $h\in\D'(J)$.  If $h$ and its distributional second derivative are
+represented by functions in $L^2_{\loc}(J)$, then
+$h\in H^2_{\loc}(J)$.  It has a unique $C^1$ representative, and on every
+$J'\Subset J$
+\begin{equation}
+ \norm h_{H^2(J')}
+ \le C_{J',J''}
+ \left(\norm h_{L^2(J'')}+\norm{h''}_{L^2(J'')}\right) \label{eq:local-H2-bound}
+\end{equation}
+for any intermediate interval $J'\Subset J''\Subset J$.
+\end{theorem}
+
+\begin{proof}
+Mollify $h$ inside $J''$.  The mollifications $h_\eps$ and
+$h_\eps''$ converge in $L^2$ on every smaller interval and are uniformly
+bounded there.  Apply \cref{lem:interior-first-derivative} on nested
+intervals to obtain a uniform $L^2$ bound for $h_\eps'$.  Weak compactness
+and the distributional identity identify its weak limit with $h'$, so
+$h'\in L^2_{\loc}$.  Since $h''\in L^2_{\loc}$ by hypothesis, this proves
+$h\in H^2_{\loc}$ and the displayed estimate.
+
+For a one-dimensional $H^1$ function $g$, the absolutely continuous
+representative satisfies
+\[
+ |g(x)-g(y)|\le|x-y|^{1/2}\norm{g'}_{L^2([x,y])}.
+\]
+Apply this first to $h'$ and then to $h$.  Thus $h'$ and $h$ are continuous,
+so $h$ has a $C^1$ representative.  Two continuous representatives agreeing
+almost everywhere agree everywhere.
+\end{proof}
+
+\section{Scalarization in the normal variable}
+Fix a bounded interval $I$ and
+$\psi\in C_c^\infty(I\times\R_r)$.  Define a scalar distribution in $s$ by
+\begin{equation}
+ H_\psi(s)=\pair{F(\cdot,\cdot,s)}{\psi}_{t,r}.     \label{eq:Hpsi-def}
+\end{equation}
+
+\begin{lemma}[$H^2$ regularity of scalarized traces]\label{lem:Hpsi-H2}
+For every $\psi$ as above,
+\[
+ H_\psi\in H^2_{\loc}(\R_s).
+\]
+In particular $H_\psi(0)$ and $H_\psi'(0)$ are well-defined.
+\end{lemma}
+
+\begin{proof}
+Since $F\in L^2(I\times\R^2)$, Cauchy--Schwarz in $(t,r)$ gives
+$H_\psi\in L^2_s$ locally.  Pair \eqref{eq:F-rs} with $\psi$ and integrate by
+parts in $t$ and $r$:
+\begin{equation}
+ H_\psi''(s)
+ =\pair{QF}{\psi}_{t,r}
+  +\pair F{i\psi_t-\psi_{rr}}_{t,r}.               \label{eq:Hpsi-second}
+\end{equation}
+Both right-hand terms belong to $L^2_s$ locally because
+$QF,F\in L^2(I\times\R^2)$ and the test functions are compactly supported.
+Thus $H_\psi''\in L^2_{\loc}$ in the distributional sense.  The local characterization in
+\cref{thm:local-H2-characterization} then gives
+$H_\psi\in H^2_{\loc}$ together with its $C^1$ representative.
+\end{proof}
+
+\section{The Dirichlet trace}
+
+\begin{lemma}[Zero Dirichlet trace]\label{lem:Dirichlet-trace}
+For every $\psi\in C_c^\infty(I\times\R)$,
+\[
+ H_\psi(0)=0.
+\]
+Equivalently, $F|_{s=0}=0$ as a distribution in $(t,r)$.
+\end{lemma}
+
+\begin{proof}
+Antisymmetry \eqref{eq:F-antisym} becomes $F(t,r,-s)=-F(t,r,s)$ in the new
+coordinates.  Hence $H_\psi$ is odd.  Its continuous representative, supplied
+by $H^2_{\loc}\hookrightarrow C^1_{\loc}$ in one dimension, vanishes at zero.
+\end{proof}
+
+\section{The Neumann trace}
+The derivative requires the half-derivative smoothing and the translation
+difference quotient from \cref{lem:translation-dq}.
+
+\begin{proposition}[Zero Neumann trace]\label{prop:Neumann-trace}
+For every $\psi\in C_c^\infty(I\times\R)$,
+\[
+ H_\psi'(0)=0.
+\]
+Equivalently, $F_s|_{s=0}=0$ as a distribution in $(t,r)$.
+\end{proposition}
+
+\begin{proof}
+Put $z=(r-s)/\sqrt2$.  Then $r=\sqrt2z+s$, $\dd r=\sqrt2\,\dd z$, and
+\eqref{eq:F-def} gives
+\begin{align}
+ H_\psi(s)=\sqrt2\iint
+ &\big[u(t,z+\sqrt2s)v(t,z)-v(t,z+\sqrt2s)u(t,z)\big]\notag\\
+ &\hspace{25mm}\times\psi(t,\sqrt2z+s)\,\dd z\,\dd t. \label{eq:Hpsi-expanded}
+\end{align}
+The bracket vanishes at $s=0$.
+
+Fix $s_0>0$.  The set of all $z$ for which
+$\psi(t,\sqrt2z+s)$ can be nonzero for some $t$ and $|s|\le s_0$ is compact.
+Choose $\chi_0,\chi_1\in C_c^\infty(\R)$ so that $\chi_0=1$ on that set and
+$\chi_1=1$ on an open neighbourhood of
+\[
+ \supp\chi_0+[-\sqrt2s_0,\sqrt2s_0].
+\]
+Thus whenever $|s|\le s_0$ and $\psi(t,\sqrt2z+s)\ne0$, both
+$\chi_1(z)$ and $\chi_1(z+\sqrt2s)$ are equal to one.  Local smoothing gives
+\[
+ \chi_1u,\chi_1v\in L^2(I;H^{1/2}(\R)).
+\]
+
+For $s\ne0$ define the genuinely localized difference quotients
+\[
+ \widetilde D_su
+   =\frac{(\chi_1u)(\,\cdot+\sqrt2s)-\chi_1u}{s},
+ \qquad
+ \widetilde D_sv
+   =\frac{(\chi_1v)(\,\cdot+\sqrt2s)-\chi_1v}{s}.
+\]
+By \cref{lem:translation-dq}, for almost every $t$,
+\[
+ \widetilde D_su(t)\longrightarrow\sqrt2(\chi_1u(t))_x,
+ \qquad
+ \widetilde D_sv(t)\longrightarrow\sqrt2(\chi_1v(t))_x
+ \quad\text{in }H^{-1/2}.
+\]
+The same lemma gives the pointwise bounds
+\[
+ \norm{\widetilde D_su(t)}_{H^{-1/2}}
+ \le C\norm{\chi_1u(t)}_{H^{1/2}},
+ \qquad
+ \norm{\widetilde D_sv(t)}_{H^{-1/2}}
+ \le C\norm{\chi_1v(t)}_{H^{1/2}},
+\]
+uniformly for $0<|s|\le s_0$.  Squaring and applying dominated convergence
+in $t$ therefore yields
+\begin{align}
+ \widetilde D_su&\longrightarrow\sqrt2(\chi_1u)_x,
+ &\widetilde D_sv&\longrightarrow\sqrt2(\chi_1v)_x
+ &&\text{in }L^2(I;H^{-1/2}).                 \label{eq:DQ-time-convergence}
+\end{align}
+This formulation avoids a cutoff commutator: on the support of every test
+function used below, the localized quotients agree exactly with the
+unlocalized quotients.
+
+Write
+\[
+ \psi_s(t,z)=\psi(t,\sqrt2z+s),
+ \qquad \psi_0(t,z)=\psi(t,\sqrt2z).
+\]
+Multiplication by $\psi_s(t,\cdot)$ maps $H^{1/2}$ to itself.  The proof of
+\cref{lem:smooth-multiplier}, combined with the mean-value theorem for the
+first two spatial derivatives of $\psi$, gives the uniform operator estimate
+\begin{equation}
+ \norm{(\psi_s-\psi_0)f}_{H^{1/2}}
+ \le C_\psi|s|\norm f_{H^{1/2}}
+ \qquad(0<|s|\le s_0).                         \label{eq:translated-test-multiplier}
+\end{equation}
+Because $\chi_0=1$ on the spatial support of every $\psi_s$,
+local smoothing and the multiplier lemma imply
+\[
+ \chi_0u,\chi_0v\in L^2(I;H^{1/2}),
+ \qquad
+ v\psi_s,\ u\psi_s\in L^2(I;H^{1/2}).
+\]
+
+Dividing \eqref{eq:Hpsi-expanded} by $s$, using the support property of
+$\chi_1$, and interpreting the products by the
+$H^{-1/2}$--$H^{1/2}$ pairing gives the exact identity
+\begin{align}
+ \frac{H_\psi(s)}s
+ =\sqrt2\int_I\Big(
+   &\pair{\widetilde D_su(t)}{v(t)\psi_s(t)}
+    -\pair{\widetilde D_sv(t)}{u(t)\psi_s(t)}\Big)\,\dd t.       \label{eq:Hpsi-dq-exact}
+\end{align}
+Replace $\psi_s$ by $\psi_0$.  By Cauchy--Schwarz in time,
+\eqref{eq:translated-test-multiplier}, and the uniform bounds following
+\eqref{eq:DQ-time-convergence}, the absolute value of the resulting error is
+at most
+\[
+ C|s|\Big(
+   \norm{\chi_1u}_{L^2_tH^{1/2}}
+   \norm{\chi_0v}_{L^2_tH^{1/2}}
+  +\norm{\chi_1v}_{L^2_tH^{1/2}}
+   \norm{\chi_0u}_{L^2_tH^{1/2}}
+ \Big),
+\]
+which tends to zero.
+
+We may now pass to the limit in the two pairings by
+\eqref{eq:DQ-time-convergence}.  Since $\chi_1$ is identically one on a
+neighbourhood of the support of $\psi_0$, distributional differentiation
+shows
+\[
+ \pair{(\chi_1u)_x}{v\psi_0}=\pair{u_x}{v\psi_0},
+ \qquad
+ \pair{(\chi_1v)_x}{u\psi_0}=\pair{v_x}{u\psi_0}.
+\]
+Consequently
+\begin{equation}
+ H_\psi'(0)
+ =2\int_I\pair{vu_x-uv_x}{\psi(t,\sqrt2\,\cdot)}\,\dd t. \label{eq:Hpsi-prime-W}
+\end{equation}
+The integrand belongs to $L^1(I)$ by Cauchy--Schwarz, local smoothing, and
+the smooth-multiplier estimate.  It vanishes for almost every $t$ by
+\cref{cor:diagonal-W}.  Hence $H_\psi'(0)=0$.
+\end{proof}
+
+\section{The zero-extension jump formula}
+Let
+\begin{equation}
+  G(t,r,s)=\1_{\{s>0\}}F(t,r,s).                   \label{eq:G-def}
+\end{equation}
+Multiplication by a half-space is bounded on $L^2$, hence
+$G\in C(I;L^2_{r,s})\cap L^4(I\times\R^2)$.
+
+\begin{lemma}[One-dimensional jump identity]\label{lem:jump-formula}
+Let $h\in H^2_{\loc}(\R)$ and write $h_+=\1_{\{s>0\}}h$.  Then
+\begin{equation}
+ h_+''=\1_{\{s>0\}}h''+h'(0)\delta_0+h(0)\delta_0'
+ \quad\text{in }\D'(\R).                           \label{eq:jump-formula}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+For a test function $\varphi$, integrate $\int_0^\infty h\varphi''$ twice by
+parts.  The boundary terms are $h'(0)\varphi(0)-h(0)\varphi'(0)$, which are
+exactly the pairings with $h'(0)\delta_0+h(0)\delta_0'$.
+\end{proof}
+
+\begin{proposition}[The zero extension solves the same equation]
+\label{prop:G-equation}
+On $I\times\R^2$,
+\begin{equation}
+ iG_t+G_{rr}+G_{ss}=QG                            \label{eq:G-equation}
+\end{equation}
+in distributions, and $G=0$ on the open half-space $s<0$.
+\end{proposition}
+
+\begin{proof}
+Test first in $(t,r)$ and use the scalar functions $H_\psi$ from
+\eqref{eq:Hpsi-def}.  By \cref{lem:jump-formula}, the only possible defect in
+$\partial_s^2G$ is
+$H_\psi'(0)\delta_0+H_\psi(0)\delta_0'$.  Both coefficients vanish by
+\cref{lem:Dirichlet-trace,prop:Neumann-trace}.  The remaining terms are
+simply the restriction of \eqref{eq:F-rs} to $s>0$.  This proves the identity
+first against tests of the form $\psi(t,r)\varphi(s)$.  Finite sums of such tests approximate an
+arbitrary compactly supported smooth test together with two derivatives by
+\cref{lem:tensor-test-density}; continuity of all $L^2$ pairings completes
+the passage to general tests.  Vanishing on $s<0$ is the definition.
+\end{proof}
+
+\begin{checkpoint}
+The nonlinear phase-retrieval problem has now been reduced to a linear
+half-space uniqueness statement in two spatial dimensions.  All boundary
+traces and jump terms have been handled in the exact low-regularity solution
+class.
+\end{checkpoint}
+
+\chapter{A self-contained half-space Carleman theorem}\label{chap:carleman}
+
+We prove the linear uniqueness statement needed for $G$.  The proof has three
+parts.  First, a uniform exponential-weight estimate is obtained by writing an
+explicit inverse for the conjugated free Schr\"odinger operator.  Second, a
+small-potential absorption lemma converts that estimate into exponential
+separation.  Third, a moving spatial interface makes the time-cutoff errors
+occur strictly inside the already known zero side.  Quantitative iteration
+propagates a half-space zero through any prescribed finite distance.
+
+\section{The solution and source spaces}
+On a time interval $J$ and in two spatial dimensions, define
+\begin{align}
+ X(J)&=L^1(J;L^2(\R^2))+L^{4/3}(J\times\R^2),       \label{eq:X-space}\\
+ X'(J)&=L^\infty(J;L^2(\R^2))\cap L^4(J\times\R^2),\label{eq:Xprime-space}\\
+ Y(J)&=L^1(J;L^\infty(\R^2))+L^2(J\times\R^2).     \label{eq:Y-space}
+\end{align}
+Every component is the scalar mixed-norm space of
+\cref{def:scalar-mixed-norm}.  The sum space has its infimum norm and the
+intersection has the maximum norm; completeness and restriction are supplied
+by \cref{lem:sum-intersection-complete}.  When the time interval is the whole
+line, it is omitted.
+
+\begin{lemma}[Critical multiplier estimate]\label{lem:XY-multiplier}
+There is an absolute $C$ such that
+\begin{equation}
+  \norm{WZ}_{X(J)}\le C\norm W_{Y(J)}\norm Z_{X'(J)}. \label{eq:XY-multiplier}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Write $W=W_1+W_2$ with
+$W_1\in L^1_tL^\infty_z$ and $W_2\in L^2_{t,z}$.  Then
+\[
+ \norm{W_1Z}_{L^1_tL^2_z}
+ \le\norm{W_1}_{L^1_tL^\infty_z}\norm Z_{L^\infty_tL^2_z},
+\]
+while
+\[
+ \norm{W_2Z}_{L^{4/3}_{t,z}}
+ \le\norm{W_2}_{L^2_{t,z}}\norm Z_{L^4_{t,z}}.
+\]
+Take the infimum over decompositions of $W$.
+\end{proof}
+
+\section{The conjugated free operator}
+Put
+\[
+  P=i\partial_t+\Delta_z,
+  \qquad z=(z_1,z_2)\in\R^2.
+\]
+For $\beta>0$,
+\begin{equation}
+ P_\beta=\e^{\beta z_1}P\e^{-\beta z_1}
+ =i\partial_t+\Delta_z-2\beta\partial_{z_1}+\beta^2. \label{eq:Pbeta}
+\end{equation}
+We construct a right inverse $T_\beta$ whose bounds are independent of
+$\beta$.
+
+Take the spatial Fourier transform.  If $P_\beta w=f$, then
+\begin{equation}
+ i\partial_t\widehat w
+ +(\beta^2-|\xi|^2-2i\beta\xi_1)\widehat w
+ =\widehat f.                                      \label{eq:Pbeta-ODE}
+\end{equation}
+Let $a(\xi)=\beta^2-|\xi|^2$.  For $\xi_1<0$ solve forward from $-\infty$;
+for $\xi_1>0$ solve backward from $+\infty$:
+\begin{equation}
+ \widehat{T_\beta f}(t,\xi)=
+ \begin{cases}
+ -i\displaystyle\int_{-\infty}^t
+   \e^{(ia(\xi)+2\beta\xi_1)(t-s)}\widehat f(s,\xi)\,\dd s,
+   &\xi_1<0,\\[1.2em]
+ i\displaystyle\int_t^{\infty}
+   \e^{(ia(\xi)+2\beta\xi_1)(t-s)}\widehat f(s,\xi)\,\dd s,
+   &\xi_1>0.
+ \end{cases}                                      \label{eq:Tbeta-def}
+\end{equation}
+The exponential has modulus at most one in the selected integration
+direction.
+
+\begin{lemma}[Kernel estimates for $T_\beta$]\label{lem:Tbeta-kernel}
+Let $K_\beta(\tau)$ be the spatial convolution operator appearing in
+\eqref{eq:Tbeta-def}.  For every $\tau\ne0$,
+\begin{align}
+ \norm{K_\beta(\tau)}_{L^2_z\to L^2_z}&\le1,        \label{eq:K-L2}\\
+ \norm{K_\beta(\tau)}_{L^1_z\to L^\infty_z}
+ &\le C|\tau|^{-1},                                 \label{eq:K-disp}\\
+ \norm{K_\beta(\tau)}_{L^{4/3}_z\to L^4_z}
+ &\le C|\tau|^{-1/2}.                              \label{eq:K-43-4}
+\end{align}
+The constants are independent of $\beta>0$.
+\end{lemma}
+
+\begin{proof}
+The Fourier multiplier of $K_\beta(\tau)$ is supported where
+$\tau\xi_1<0$ and has modulus
+$\e^{-2\beta|\tau\xi_1|}$, proving \eqref{eq:K-L2}.
+
+For the kernel bound, factor the inverse Fourier integral into the $\xi_2$
+and $\xi_1$ variables.  The full Gaussian integral in $\xi_2$ has modulus
+$C|\tau|^{-1/2}$ by \eqref{eq:complex-gaussian}, interpreted as the
+boundary value from positive Gaussian damping.  After reflecting the selected half-line if necessary, the
+remaining factor is
+\begin{equation}
+ \int_0^\infty
+ \e^{i x_1\eta-i\tau\eta^2}
+ \e^{-2\beta|\tau|\eta}\,\dd\eta.                 \label{eq:half-Fresnel}
+\end{equation}
+Scale $\eta=|\tau|^{-1/2}y$.  It remains to show that
+\[
+ \left|\int_0^\infty
+   \e^{i(ay\pm y^2)}\e^{-by}\,\dd y\right|\le C
+ \qquad(a\in\R,\ b\ge0).                          \label{eq:uniform-Fresnel}
+\]
+We prove the needed second-derivative estimate directly.  Suppose
+$\phi\in C^2([0,R])$ and $|\phi''|\ge\lambda>0$.  The derivative $\phi'$ is
+monotone.  The set $E=\{|\phi'|\le\sqrt\lambda\}$ is therefore an interval
+of length at most $2\lambda^{-1/2}$, and
+\[
+ \left|\int_E\e^{i\phi}A\right|
+ \le2\lambda^{-1/2}\norm A_\infty.
+\]
+The complement has at most two interval components.  On either one,
+integration by parts with
+$\e^{i\phi}=(i\phi')^{-1}(\e^{i\phi})'$ gives boundary terms bounded by
+$2\lambda^{-1/2}\norm A_\infty$, an $A'$ term bounded by
+$\lambda^{-1/2}\int|A'|$, and a final term bounded by
+\[
+ \norm A_\infty\int\frac{|\phi''|}{|\phi'|^2}
+ =\norm A_\infty\operatorname{Var}\!\left(\frac1{\phi'}\right)
+ \le2\lambda^{-1/2}\norm A_\infty.
+\]
+Summing the components proves
+\[
+ \left|\int_0^R\e^{i\phi(y)}A(y)\,\dd y\right|
+ \le C\lambda^{-1/2}
+ \left(\norm A_\infty+\int_0^R|A'(y)|\,\dd y\right).
+\]
+For the phase in \eqref{eq:uniform-Fresnel}, $\lambda=2$.  If
+$b>0$, take $A(y)=\e^{-by}$; then
+$\norm A_\infty+\int_0^\infty|A'|\le2$, and absolute convergence allows
+$R\to\infty$.  When $b=0$, the preceding estimate gives uniform boundedness
+of the partial integrals, but we also record convergence of the improper
+integral.  Choose $R_0>2(1+|a|)$.  On $[R_0,\infty)$ the derivative of
+$ay\pm y^2$ has fixed sign and magnitude comparable to $y$.  One integration
+by parts gives, for $R_2>R_1\ge R_0$,
+\[
+ \left|\int_{R_1}^{R_2}\e^{i(ay\pm y^2)}\,\dd y\right|
+ \le C\left(R_1^{-1}+\int_{R_1}^\infty y^{-2}\,\dd y\right)
+ \le CR_1^{-1}.
+\]
+Thus the partial integrals are Cauchy and their limit obeys the same uniform
+bound.  This proves \eqref{eq:uniform-Fresnel} for every $b\ge0$.  Hence the
+$\xi_1$ factor is $O(|\tau|^{-1/2})$.
+
+For completeness, the oscillatory kernel is obtained without treating a
+conditionally convergent Fourier integral as an ordinary Lebesgue integral.
+Insert the multiplier cutoff $\e^{-\delta|\xi|^2}$, $\delta>0$.  Its
+inverse transform is a continuous convolution kernel.  The full Gaussian
+factor has modulus at most $C|\tau|^{-1/2}$ by
+\eqref{eq:complex-gaussian}, while the half-line argument above applies to
+the amplitude $A(y)=\e^{-by-cy^2}$: it is decreasing and
+$\norm A_\infty+\int|A'|\le2$.  Thus the regularized kernels obey the
+same $C|\tau|^{-1}$ bound, uniformly in $\delta$.  For Schwartz input the outputs of the
+regularized multipliers converge in $L^2$, and the kernels converge in
+tempered distributions to the inverse Fourier transform of the multiplier
+of $K_\beta(\tau)$; the improper Fresnel calculation gives
+the pointwise kernel limit.  Passing to the limit first on Schwartz
+functions and then by $L^1$ density yields the bounded convolution
+realization and proves \eqref{eq:K-disp}.
+
+The $L^1\to L^\infty$ kernel realization and the $L^2$ multiplier
+realization agree on Schwartz functions, so the compatible-operator
+Riesz--Thorin theorem applies and gives \eqref{eq:K-43-4}.
+\end{proof}
+
+\begin{lemma}[Homogeneous bounds for the kernel family]
+\label{lem:K-homogeneous}
+For every $s\in\R$, $g\in L^2(\R^2)$, and $\beta\ge0$,
+\begin{align}
+ \norm{K_\beta(t-s)g}_{L^4_{t,z}(\R^{1+2})}
+ &\le C\norm g_2,                                  \label{eq:K-homogeneous}\\
+ \norm{K_\beta(t-s)^*g}_{L^4_{t,z}(\R^{1+2})}
+ &\le C\norm g_2.                                  \label{eq:K-adjoint-homogeneous}
+\end{align}
+The constants are independent of $s$ and $\beta$.
+\end{lemma}
+
+\begin{proof}
+Time translation reduces the first estimate to $s=0$.  Define
+$A_\beta g(t)=K_\beta(t)g$.  The multiplier of
+$A_\beta A_\beta^*$ from time $s$ to time $t$ is
+$m_t(\xi)\overline{m_s(\xi)}$, where $m_\tau$ is the multiplier of
+$K_\beta(\tau)$.  It vanishes when $t$ and $s$ have opposite signs.  When
+they have the same sign, it is supported on one half-line in $\xi_1$, has
+oscillatory factor
+\[
+ \exp\big(i(\beta^2-|\xi|^2)(t-s)\big),
+\]
+and damping factor
+\[
+ \exp\big(-2\beta(|t|+|s|)|\xi_1|\big).
+\]
+Consequently its $L^2_z$ operator norm is at most one.  The factorization and
+half-Fresnel argument in \cref{lem:Tbeta-kernel}, now with
+$|t-s|$ as the oscillatory scale and
+$2\beta(|t|+|s|)$ as a nonnegative damping parameter, gives
+\[
+ \norm{K_\beta(t)K_\beta(s)^*}_{L^1_z\to L^\infty_z}
+ \le C|t-s|^{-1}
+\]
+for $t\ne s$.  Interpolation therefore gives
+\[
+ \norm{K_\beta(t)K_\beta(s)^*}_{L^{4/3}_z\to L^4_z}
+ \le C|t-s|^{-1/2}.
+\]
+The time-line HLS estimate yields
+\[
+ \norm{A_\beta A_\beta^*F}_{L^4_{t,z}}
+ \le C\norm F_{L^{4/3}_{t,z}}.
+\]
+Hence, by duality,
+\begin{align*}
+ \norm{A_\beta^*F}_2^2
+ &=\big|\pair{A_\beta A_\beta^*F}{F}\big|\\
+ &\le \norm{A_\beta A_\beta^*F}_4\norm F_{4/3}
+ \le C\norm F_{4/3}^2.
+\end{align*}
+Thus $A_\beta^*:L^{4/3}\to L^2$ and, by duality again,
+$A_\beta:L^2\to L^4$, proving \eqref{eq:K-homogeneous}.  Replacing every
+kernel by its adjoint gives the same composition estimates and proves
+\eqref{eq:K-adjoint-homogeneous}.
+\end{proof}
+
+\begin{proposition}[Uniform linear-weight Carleman estimate]
+\label{prop:linear-carleman}
+For every $\beta\in\R$ and every $\varphi\in C_c^\infty(\R^{1+2})$,
+\begin{equation}
+ \norm{\e^{\beta z_1}\varphi}_{X'}
+ \le C\norm{\e^{\beta z_1}P\varphi}_{X},           \label{eq:linear-carleman}
+\end{equation}
+where $C$ is absolute and independent of $\beta$.
+\end{proposition}
+
+\begin{proof}
+By reflection it is enough to take $\beta>0$; the case $\beta=0$ is obtained
+from the same formulas.  Set
+$w=\e^{\beta z_1}\varphi$ and
+$f=\e^{\beta z_1}P\varphi=P_\beta w$.  Because $w$ is compactly supported in
+time, solving the scalar ODE \eqref{eq:Pbeta-ODE} in the selected direction
+shows that $w=T_\beta f$.
+
+We verify all four mappings needed for the sum-to-intersection estimate.  If
+$f_1\in L^1_tL^2_z$, then \eqref{eq:K-L2} and Minkowski give
+\[
+ \norm{T_\beta f_1}_{L^\infty_tL^2_z}
+ \le\norm{f_1}_{L^1_tL^2_z},
+\]
+while \cref{lem:K-homogeneous} and Minkowski give
+\[
+ \norm{T_\beta f_1}_{L^4_{t,z}}
+ \le\int_\R
+   \norm{K_\beta(t-s)f_1(s)}_{L^4_{t,z}}\,\dd s
+ \le C\norm{f_1}_{L^1_tL^2_z}.
+\]
+If $f_2\in L^{4/3}_{t,z}$, then \eqref{eq:K-43-4} and
+\cref{lem:HLS-time} give
+\[
+ \norm{T_\beta f_2}_{L^4_{t,z}}
+ \le C\norm{f_2}_{L^{4/3}_{t,z}}.
+\]
+For the missing energy bound, fix $t$ and $g\in L^2_z$.  By spacetime
+H\"older and the adjoint estimate \eqref{eq:K-adjoint-homogeneous},
+\begin{align*}
+ \big|\pair{T_\beta f_2(t)}{g}\big|
+ &\le\int_\R
+   \big|\pair{f_2(s)}{K_\beta(t-s)^*g}\big|\,\dd s\\
+ &\le\norm{f_2}_{L^{4/3}_{s,z}}
+       \norm{K_\beta(t-s)^*g}_{L^4_{s,z}}
+ \le C\norm{f_2}_{4/3}\norm g_2.
+\end{align*}
+Taking the supremum over unit $g$ gives
+$\norm{T_\beta f_2}_{L^\infty_tL^2_z}\le C\norm{f_2}_{4/3}$.
+
+For a decomposition $f=f_1+f_2$, both components of the $X'$ norm are
+therefore bounded by
+$C(\norm{f_1}_{L^1L^2}+\norm{f_2}_{4/3})$.  Taking the infimum over all
+decompositions proves \eqref{eq:linear-carleman}.
+\end{proof}
+
+\section{Extension to the graph class}
+The exterior product is neither smooth nor compactly supported in space.  We
+therefore prove the closure step at the level of the explicit inverse.  Every
+approximation below is spatial only; compact time support is preserved.
+
+\begin{lemma}[Spatial mollification in the source spaces]
+\label{lem:spatial-mollification-source}
+Let $\rho_\eps$ be a standard approximate identity on $\R^2$ and let
+$J_0\Subset\R$ be bounded.
+\begin{enumerate}
+\item If $f_1\in L^1_tL^2_z$ is supported in $J_0$ in time, then
+$\rho_\eps*_zf_1\to f_1$ in $L^1_tL^2_z$.
+\item If $f_2\in L^{4/3}_{t,z}$ is supported in $J_0$ in time, then
+$\rho_\eps*_zf_2\to f_2$ in $L^{4/3}_{t,z}$ and, for fixed $\eps>0$,
+$\rho_\eps*_zf_2\in L^1_tL^2_z$.
+\end{enumerate}
+Consequently spatial mollification converges strongly in $X$.
+\end{lemma}
+
+\begin{proof}
+The first two convergence statements are the standard approximate-identity
+theorem, applied for almost every time and then integrated; equivalently,
+approximate first by compactly supported simple functions.  For the additional
+mapping, Young's inequality in $z$ gives
+\[
+ \norm{\rho_\eps*f_2(t)}_2
+ \le\norm{\rho_\eps}_{4/3}\norm{f_2(t)}_{4/3}.
+\]
+Since $J_0$ has finite length,
+$L^{4/3}(J_0)\hookrightarrow L^1(J_0)$, proving the claim.
+\end{proof}
+
+\begin{lemma}[Almost-everywhere parameter slicing of a first-order equation]
+\label{lem:parameterwise-distribution-ODE}
+Let $A:\R^d\to\C$ be measurable and bounded on compact sets.  Suppose
+$y\in L^2_{\loc}(\R_t\times\R^d_\xi)$ and
+$g\in L^1_{\loc}(\R_t;L^2_{\loc}(\R^d_\xi))$ satisfy
+\begin{equation}
+ \partial_ty-A(\xi)y=g
+ \quad\text{in }\D'(\R_t\times\R^d_\xi).          \label{eq:parameter-distribution-equation}
+\end{equation}
+Then there is a single null set $N\subset\R^d$ such that, for every
+$\xi\notin N$,
+\[
+ y(\cdot,\xi)\in L^2_{\loc}(\R),\qquad
+ g(\cdot,\xi)\in L^1_{\loc}(\R),
+\]
+and
+\begin{equation}
+ \partial_ty(\cdot,\xi)-A(\xi)y(\cdot,\xi)
+ =g(\cdot,\xi)
+ \quad\text{in }\D'(\R_t).                       \label{eq:parameterwise-ODE}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Fubini first removes one null set so that the two asserted section
+integrability properties hold.  For a time test $\eta\in C_c^\infty(\R)$,
+define, for almost every $\xi$,
+\[
+ R_\eta(\xi)
+ =-\int_\R y(t,\xi)\eta'(t)\,\dd t
+  -A(\xi)\int_\R y(t,\xi)\eta(t)\,\dd t
+  -\int_\R g(t,\xi)\eta(t)\,\dd t.
+\]
+On each compact frequency set this is an $L^1$ function of $\xi$; the first
+two terms follow from Cauchy--Schwarz on the compact time support, and the
+last from Minkowski.  Testing \eqref{eq:parameter-distribution-equation}
+against $\eta(t)\phi(\xi)$ gives
+\[
+ \int_{\R^d}R_\eta(\xi)\phi(\xi)\,\dd\xi=0
+ \qquad(\phi\in C_c^\infty(\R^d)).
+\]
+The scalar fundamental lemma therefore gives $R_\eta=0$ almost everywhere.
+
+To avoid taking an uncountable union of exceptional sets, choose for every
+integer $m\ge1$ a countable family dense in
+$C_c^\infty((-m,m))$ for the $C^1$ norm; rational piecewise polynomials
+followed by convolution with rational smooth kernels provide such a family.
+Remove the union of the null sets associated with all members of all these
+families.  For a remaining frequency $\xi$, the map
+\[
+ \eta\longmapsto R_\eta(\xi)
+\]
+is continuous in the $C^1$ norm on each fixed compact time interval, with
+bound
+\[
+ |R_\eta(\xi)|
+ \le \norm{y(\cdot,\xi)}_{L^1(K)}\norm{\eta'}_\infty
+   +|A(\xi)|\norm{y(\cdot,\xi)}_{L^1(K)}\norm\eta_\infty
+   +\norm{g(\cdot,\xi)}_{L^1(K)}\norm\eta_\infty.
+\]
+Density extends $R_\eta(\xi)=0$ to every time test $\eta$, which is exactly
+\eqref{eq:parameterwise-ODE}.
+\end{proof}
+
+\begin{lemma}[Scalar compact-support ODE]
+\label{lem:compact-support-ODE}
+Let $\lambda\in\C$, $y\in L^2(\R)$ have compact support, and
+$g\in L^1(\R)$.  If
+\[
+ y'-\lambda y=g
+\]
+in distributions, then $y$ has a locally absolutely continuous
+representative.  If $\Re\lambda<0$, then
+\[
+ y(t)=\int_{-\infty}^t\e^{\lambda(t-s)}g(s)\,\dd s,
+\]
+while if $\Re\lambda>0$, then
+\[
+ y(t)=-\int_t^\infty\e^{\lambda(t-s)}g(s)\,\dd s.
+\]
+\end{lemma}
+
+\begin{proof}
+On every bounded interval, $\lambda y+g\in L^1$, so the distributional
+identity implies $y\in W^{1,1}_{\loc}$ and hence gives an absolutely
+continuous representative.  Multiplying by $\e^{-\lambda t}$ and applying
+the fundamental theorem of calculus gives
+\[
+ \e^{-\lambda t}y(t)-\e^{-\lambda a}y(a)
+ =\int_a^t\e^{-\lambda s}g(s)\,\dd s.
+\]
+If $\Re\lambda<0$, take $a$ to the left of the compact support of $y$; then
+$y(a)=0$ and the first formula follows.  If $\Re\lambda>0$, integrate from
+$t$ to a point to the right of the support.  The signs are exactly those
+displayed.
+\end{proof}
+
+\begin{lemma}[Fourier-section identification]
+\label{lem:fourier-section-identification}
+Let $w\in L^\infty_tL^2_z$ have compact support in a bounded time interval,
+and suppose
+$P_\beta w=f$ in distributions, where
+$f\in L^1_tL^2_z$.  Then
+\begin{equation}
+ w=T_\beta f\quad\text{in distributions and in }X'. \label{eq:section-Tbeta}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Because the time support is bounded,
+$w\in L^2_{t,z}$.  Spatial Plancherel and Fubini give a full-measure set of
+frequencies on which $\widehat w(\cdot,\xi)\in L^2_t$.  Moreover,
+Minkowski gives
+\[
+ \left\|\int_\R|\widehat f(t,\xi)|\,\dd t\right\|_{L^2_\xi}
+ \le\int_\R\norm{\widehat f(t)}_{L^2_\xi}\,\dd t
+ =\norm f_{L^1_tL^2_z},
+\]
+so $\widehat f(\cdot,\xi)\in L^1_t$ for almost every $\xi$.
+The spatial Fourier transform of the distributional equation is
+\[
+ \partial_t\widehat w
+ -(ia(\xi)+2\beta\xi_1)\widehat w
+ =-i\widehat f
+ \quad\text{in }\D'(\R_t\times\R^2_\xi).
+\]
+Apply \cref{lem:parameterwise-distribution-ODE} with
+$A(\xi)=ia(\xi)+2\beta\xi_1$.  It supplies one full-measure set of
+frequencies on which this is an ordinary distributional equation in $t$.
+For $\xi_1<0$ the real part of the coefficient is negative, and for
+$\xi_1>0$ it is positive.  Apply \cref{lem:compact-support-ODE}.  The
+resulting formulas are exactly \eqref{eq:Tbeta-def}.  The hyperplane
+$\xi_1=0$ has Lebesgue measure zero and does not affect the inverse Fourier
+transform.  The formulas and Plancherel identify $w=T_\beta f$ in
+$L^2_{\loc}$ and hence in distributions.  Since the mapping estimates of
+\cref{prop:linear-carleman} put $T_\beta f$ in $X'$, the distributional
+equality permits us to use $T_\beta f$ as the scalar representative of
+$w$.  Consequently $w\in X'$ and \eqref{eq:section-Tbeta} is an equality
+of $X'$ equivalence classes.
+\end{proof}
+
+\begin{lemma}[Graph closure of the Carleman estimate]\label{lem:carleman-closure}
+Suppose $U\in X'$, $U$ has compact support in time, and
+$U(t,z)=0$ for $z_1>H$ for some $H$.  Fix $\beta>0$ and assume that the
+weighted distribution $\e^{\beta z_1}PU$ belongs to $X$.  Then
+\begin{equation}
+ \norm{\e^{\beta z_1}U}_{X'}
+ \le C\norm{\e^{\beta z_1}PU}_{X}.                \label{eq:graph-carleman}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Set
+\[
+ w=\e^{\beta z_1}U,
+ \qquad f=\e^{\beta z_1}PU.
+\]
+The upper support bound makes the weight bounded on the support of $U$, so
+$w\in X'$.  It has the same compact time support as $U$, and distributional
+conjugation gives
+\[
+ P_\beta w=f.                                      \label{eq:weighted-graph-equation}
+\]
+Choose a decomposition $f=f_1+f_2$ with
+$f_1\in L^1_tL^2_z$ and $f_2\in L^{4/3}_{t,z}$.  Because $f$ has compact
+time support as a distribution, choose a bounded interval $J_0$ containing
+that support and replace the decomposition by
+$\1_{J_0}f_1+\1_{J_0}f_2$.  Outside $J_0$ the equality
+$f_1+f_2=f=0$ holds almost everywhere, so the new components still sum to
+$f$; multiplication by an indicator does not increase either component norm.
+Thus both components may be assumed supported in one bounded interval without
+changing the infimum norm.
+
+Convolve \eqref{eq:weighted-graph-equation} in $z$ with $\rho_\eps$:
+\[
+ P_\beta w_\eps=f_\eps,
+ \qquad
+ w_\eps=\rho_\eps*_zw,
+ \qquad f_\eps=\rho_\eps*_zf.
+\]
+The constant-coefficient operator commutes with spatial convolution.
+By \cref{lem:spatial-mollification-source},
+$f_\eps\in L^1_tL^2_z$ for every $\eps>0$ and
+$f_\eps\to f$ in $X$.  Also $w_\eps\in L^\infty_tL^2_z$, with compact time
+support.  Therefore \cref{lem:fourier-section-identification} gives
+\[
+ w_\eps=T_\beta f_\eps.
+\]
+The bounded map $T_\beta:X\to X'$ proved in
+\cref{prop:linear-carleman} yields
+$T_\beta f_\eps\to T_\beta f$ in $X'$.  On the other hand,
+$w_\eps\to w$ in distributions because spatial mollifiers approximate every
+locally integrable function and $w\in X'\subset L^1_{\loc}$.  Uniqueness of
+the distributional limit gives
+\[
+ w=T_\beta f.
+\]
+Applying the established operator bound and then taking the infimum over the
+initial decomposition of $f$ proves \eqref{eq:graph-carleman}.
+\end{proof}
+
+\section{Exponential separation with a small potential}
+
+\begin{lemma}[One-slab separation]\label{lem:one-slab}
+There is an absolute $\eps_*>0$ with the following property.  Suppose
+$U\in X'$, $U$ is compactly supported in time, $U=0$ for $z_1>H$, and
+\begin{equation}
+  PU=VU+R                                             \label{eq:one-slab-eq}
+\end{equation}
+in distributions, with $V\in Y$ and $\norm V_Y\le\eps_*$.  Assume that for
+all sufficiently large $\beta$ the weighted distribution
+$\e^{\beta z_1}R$ belongs to $X$ and
+\begin{equation}
+ \norm{\e^{\beta z_1}R}_X\longrightarrow0
+ \quad(\beta\to+\infty).                            \label{eq:R-decay}
+\end{equation}
+This condition holds, for example, when $R\in X$ is supported in
+$\{z_1\le-d\}$ for some $d>0$.  Then $U=0$ on $\{z_1>0\}$.
+\end{lemma}
+
+\begin{proof}
+Apply \cref{lem:carleman-closure} and the multiplier estimate:
+\begin{align*}
+ \norm{\e^{\beta z_1}U}_{X'}
+ &\le C\norm{V\e^{\beta z_1}U}_{X}
+      +C\norm{\e^{\beta z_1}R}_{X}\\
+ &\le C\norm V_Y\norm{\e^{\beta z_1}U}_{X'}
+      +C\norm{\e^{\beta z_1}R}_{X}.
+\end{align*}
+Choose $\eps_*=(2C)^{-1}$ and absorb the first term.  On $z_1>0$ the weight
+is at least one, hence
+\[
+ \norm{U}_{X'(\{z_1>0\})}
+ \le2C\norm{\e^{\beta z_1}R}_{X}.
+\]
+Let $\beta\to\infty$.
+\end{proof}
+
+\begin{lemma}[Exponentially suppressed moment errors]\label{lem:moment-error}
+Let $d>0$, let $A\in L^1_t$, and let
+$U\in L^\infty_tL^2_z$ have compact time support.  Then
+\begin{equation}
+ \norm{\e^{\beta z_1}A(t)z_1U\1_{\{z_1\le-d\}}}_{L^1_tL^2_z}
+ \longrightarrow0\quad(\beta\to\infty).           \label{eq:moment-error-decay}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+For $z_1\le-d$,
+$|z_1|\e^{\beta z_1}\le C_d\e^{-\beta d/2}$ for all sufficiently large
+$\beta$.  Therefore the displayed norm is bounded by
+$C_d\e^{-\beta d/2}\norm A_{L^1_t}\norm U_{L^\infty_tL^2_z}$.
+\end{proof}
+
+\section{Moving the interface}
+We now show how to manufacture the hypotheses of \cref{lem:one-slab}.
+
+\begin{lemma}[Moving translation and Galilean gauge in distributions]
+\label{lem:moving-galilean-distribution}
+Let $J$ be bounded, let
+$Z\in L^1_{\loc}(J\times\R^2)$, and suppose
+\[
+ PZ=WZ
+ \quad\text{in }\D'(J\times\R^2),
+\]
+where $WZ\in L^1_{\loc}$.  Let $w\in C^2(J;\R)$ and define
+\[
+ V(t,y)=Z(t,y_1+w(t),y_2),
+ \qquad a(t)=\frac{w'(t)}2,
+\]
+\begin{equation}
+ U(t,y)=
+ \exp\!\left(-ia(t)y_1-i\int_{t_*}^t a(\tau)^2\,\dd\tau\right)V(t,y).
+ \label{eq:moving-gauge-definition}
+\end{equation}
+Then, in distributions,
+\begin{align}
+ PV&=W(t,y_1+w(t),y_2)V+iw'(t)\partial_{y_1}V,
+                                                        \label{eq:moving-translation-distribution}\\
+ PU&=\left(W(t,y_1+w(t),y_2)+\frac{w''(t)}2y_1\right)U. \label{eq:moving-gauge-distribution}
+\end{align}
+Spatial translation and the unimodular factor preserve the
+$L^\infty_tL^2_y$ and $L^4_{t,y}$ norms.  They also carry the support
+condition $Z(t,z)=0$ for $z_1>B$ to
+$V(t,y)=U(t,y)=0$ for $y_1>B-w(t)$.
+\end{lemma}
+
+\begin{proof}
+For a test function $\Phi\in C_c^\infty(J\times\R^2)$, make the
+measure-preserving substitution $z_1=y_1+w(t)$ in the distributional pairing.
+The pulled-back test is
+$\widetilde\Phi(t,z)=\Phi(t,z_1-w(t),z_2)$ and satisfies
+\[
+ \partial_t\widetilde\Phi
+ =\Phi_t(t,z_1-w,z_2)-w'(t)\Phi_{y_1}(t,z_1-w,z_2),
+ \qquad
+ \Delta_z\widetilde\Phi=\Delta_y\Phi(t,z_1-w,z_2).
+\]
+Insert these identities in $\pair{PZ}{\widetilde\Phi}$ and move the
+$y_1$ derivative back onto $V$.  This gives
+\eqref{eq:moving-translation-distribution}; all pairings are legitimate
+because the test support is compact and $V,WV$ are locally integrable.
+
+Write the phase in \eqref{eq:moving-gauge-definition} as $\e^{-i\Theta}$,
+where $\Theta(t,y_1)=a(t)y_1+\int_{t_*}^ta(\tau)^2\,\dd\tau$.
+Multiplication of a distribution by this smooth function obeys the ordinary
+Leibniz rule.  Since
+\[
+ \Theta_{y_1}=a,
+ \qquad \Theta_t=a'y_1+a^2,
+\]
+a direct expansion gives
+\begin{align*}
+ P(\e^{-i\Theta}V)
+ &=\e^{-i\Theta}
+   \bigl(PV+a'y_1V-2ia\partial_{y_1}V\bigr).
+\end{align*}
+Use $w'=2a$ in \eqref{eq:moving-translation-distribution}; the first-order
+terms cancel and $a'=w''/2$, proving
+\eqref{eq:moving-gauge-distribution}.  The norm and support statements are
+immediate from the change of variables and the modulus-one phase.
+\end{proof}
+
+\begin{lemma}[Quantitative one-step propagation]\label{lem:one-step-propagation}
+There is an absolute constant $c_0>0$ with the following property.  Let
+$J=(a,b)$ have length $L$, let $0<\delta<L/8$, and let
+$0<h\le c_0\sqrt\delta$.  Suppose
+\begin{equation}
+ Z\in C(J;L^2)\cap L^4(J\times\R^2),
+ \qquad PZ=WZ,
+ \qquad \norm W_{L^1_tL^\infty_z(J)}\le c_0,        \label{eq:step-hyp}
+\end{equation}
+and $Z=0$ on $J\times\{z_1>B\}$.  Then
+\begin{equation}
+ Z=0\quad\text{on }
+ (a+4\delta,b-4\delta)\times\{z_1>B-h\}.           \label{eq:step-conclusion}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+\textbf{1. Choice of compatible cutoffs.}
+Choose $\omega\in C^\infty([a,b])$ such that
+\begin{align*}
+ \omega(t)&=2
+ &&\text{on }[a,a+2\delta]\cup[b-2\delta,b],\\
+ \omega(t)&=-1
+ &&\text{on }[a+3\delta,b-3\delta],\\
+ -1\le\omega&\le2,
+ \qquad |\omega'|\le C\delta^{-1},
+ \qquad |\omega''|\le C\delta^{-2}.
+\end{align*}
+The derivatives may be supported in the two transition intervals of length
+$\delta$.  Choose also $\eta\in C_c^\infty(J)$ with
+\begin{align*}
+ \eta&=0
+ &&\text{on }[a,a+\delta]\cup[b-\delta,b],\\
+ \eta&=1
+ &&\text{on }[a+2\delta,b-2\delta],\\
+ |\eta'|&\le C\delta^{-1},
+\end{align*}
+and with $\supp\eta'$ contained where $\omega=2$.  Set
+$w(t)=B+h\omega(t)$.  Thus the moving boundary is $B+2h$ wherever the time
+cutoff changes and is $B-h$ on the central interval.
+
+Introduce translated coordinates $y_1=z_1-w(t)$, $y_2=z_2$, and
+\[
+ V(t,y)=Z(t,y_1+w(t),y_2).
+\]
+The known half-space vanishing implies
+\begin{equation}
+ V(t,y)=0\quad\text{when }y_1>B-w(t)=-h\omega(t).   \label{eq:V-upper-support}
+\end{equation}
+Since $-h\omega(t)\le h$, we have $V=0$ for $y_1>h$ at every time.  On
+$\supp\eta'$, where $\omega=2$, we have the stronger vanishing
+$V=0$ for $y_1>-2h$.
+
+\textbf{2. Galilean gauge.}
+Let $a(t)=w'(t)/2$ and define
+\[
+ U(t,y)=\exp\!\left(-ia(t)y_1-i\int_a^t a(s)^2\,\dd s\right)V(t,y).
+\]
+Apply \cref{lem:moving-galilean-distribution}.  It gives, in the exact
+rough distributional class of $Z$,
+\begin{equation}
+ PU=\left(W(t,y_1+w(t),y_2)+\frac{w''(t)}2y_1\right)U. \label{eq:gauged-moving}
+\end{equation}
+It also proves that translation and the unimodular gauge preserve the
+$L^\infty_tL^2_y$ and $L^4_{t,y}$ norms and the stated support inequalities.
+
+\textbf{3. A bounded near coefficient and a weighted far error.}
+Put $Y=\eta U$.  Then $Y\in X'$, it is compactly supported in time, and it
+vanishes for $y_1>h$.  On the support of $U$ split the affine coefficient as
+\[
+ \frac{w''}2y_1=A_{\mathrm{near}}+A_{\mathrm{far}},
+\]
+where
+\[
+ A_{\mathrm{near}}
+ =\frac{w''}2y_1\1_{\{-h<y_1\le h\}},
+ \qquad
+ A_{\mathrm{far}}
+ =\frac{w''}2y_1\1_{\{y_1\le-h\}}.
+\]
+The value of the coefficient for $y_1>h$ is irrelevant because $U$ is zero
+there.  Since $w''=h\omega''$ is supported on a set of total length
+$O(\delta)$,
+\begin{equation}
+ \norm{A_{\mathrm{near}}}_{L^1_tL^\infty_y}
+ \le \frac h2\int_J|w''(t)|\,\dd t
+ \le C h^2\delta^{-1}.                            \label{eq:near-affine-small}
+\end{equation}
+The equation for $Y$ is
+\begin{equation}
+ PY=\widetilde VY+R,                                \label{eq:Y-moving-eq}
+\end{equation}
+where
+\[
+ \widetilde V(t,y)=W(t,y_1+w(t),y_2)+A_{\mathrm{near}}(t,y)
+\]
+and
+\[
+ R=\eta A_{\mathrm{far}}U+i\eta' U.
+\]
+Translation preserves the $L^1_tL^\infty$ norm.  Choose the absolute
+constant $c_0$ so small that
+$c_0+Cc_0^2\le\eps_*$.  The hypotheses
+$\norm W_{L^1L^\infty}\le c_0$ and $h^2/\delta\le c_0^2$ then give
+$\norm{\widetilde V}_Y\le\eps_*$.
+
+\textbf{4. Exponential decay of both errors.}
+For every $\beta>0$, the weighted far term belongs to $L^1_tL^2_y$.
+Indeed, \cref{lem:moment-error} applies with
+$A(t)=\eta(t)w''(t)/2$, because $A\in L^1_t$, $U\in L^\infty_tL^2_y$, and
+the term is supported in $y_1\le-h$.  It also gives
+\[
+ \norm{\e^{\beta y_1}\eta A_{\mathrm{far}}U}_{L^1_tL^2_y}
+ \longrightarrow0.
+\]
+On $\supp\eta'$ we have $U=0$ for $y_1>-2h$, and therefore
+\[
+ \norm{\e^{\beta y_1}\eta'U}_{L^1_tL^2_y}
+ \le \e^{-2\beta h}\norm{\eta'}_{L^1_t}
+      \norm U_{L^\infty_tL^2_y}
+ \longrightarrow0.
+\]
+Thus $R$ satisfies \eqref{eq:R-decay}.
+
+\textbf{5. Propagation across one slab.}
+Apply \cref{lem:one-slab} with upper support bound $H=h$.  It gives
+$Y=0$ for $y_1>0$.  On
+$(a+4\delta,b-4\delta)$ we have $\eta=1$ and $w=B-h$, so $y_1>0$ is exactly
+$z_1>B-h$.  This proves \eqref{eq:step-conclusion}.
+\end{proof}
+
+\section{Half-space propagation}
+
+\begin{theorem}[Half-space uniqueness for integrably bounded potentials]
+\label{thm:halfspace-UC}
+Let $J$ be an open interval and let
+\begin{equation}
+ Z\in C(J;L^2(\R^2))\cap L^4_{\loc}(J\times\R^2),
+ \qquad PZ=WZ,                                      \label{eq:halfspace-class}
+\end{equation}
+where $W\in L^1_{\loc}(J;L^\infty(\R^2))$.  If for some $B\in\R$
+\begin{equation}
+ Z=0\quad\text{almost everywhere on }J\times\{z_1>B\}, \label{eq:halfspace-zero}
+\end{equation}
+then $Z=0$ on $J\times\R^2$.
+\end{theorem}
+
+\begin{proof}
+Fix $t_0\in J$ and a target distance $D>0$.  By absolute continuity of the
+$L^1_tL^\infty_z$ norm, choose a symmetric interval
+$I=(t_0-L/2,t_0+L/2)\Subset J$ on which
+$\norm W_{L^1_tL^\infty_z(I)}\le c_0/2$.  We shall propagate the boundary
+from $B$ to $B-D$ while keeping $t_0$ inside the surviving time interval.
+
+Choose an integer $N$ and put
+\[
+ \delta=\frac{L}{32N},
+ \qquad h=\frac{c_0}{2}\sqrt\delta.
+\]
+At each application of \cref{lem:one-step-propagation}, the time interval
+loses at most $8\delta$ in total, so after $N$ applications it still contains
+the central interval of length at least $3L/4$, and in particular contains
+$t_0$.  The potential norm on every smaller interval is no larger than on
+$I$.  The relation $h\le c_0\sqrt\delta$ is built into the choice.
+
+After $N$ steps, $Z$ vanishes almost everywhere on a time neighborhood
+of $t_0$ and on the region $z_1>B-Nh$.  Continuity into $L^2$ implies the
+same vanishing at the exact time $t_0$.  But
+\[
+ Nh=\frac{c_0}{2}\sqrt{\frac{NL}{32}},
+\]
+which tends to infinity with $N$.  Choose $N$ so large that $Nh>D$.
+Therefore $Z(t_0,z)=0$ for $z_1>B-D$.  Since $D$ was arbitrary,
+$Z(t_0)=0$ in $L^2(\R^2)$.  Since $t_0$ was arbitrary, $Z=0$ throughout
+$J\times\R^2$.
+\end{proof}
+
+\begin{corollary}[Half-space uniqueness in the $X,Y$ formulation]
+\label{cor:halfspace-XY}
+The conclusion of \cref{thm:halfspace-UC} remains valid if
+$W\in Y_{\loc}$ and, around every time, there is a sufficiently short
+interval on which $W$ admits a decomposition with $Y$ norm smaller than
+$c_0/2$.  The case $W\in L^1_{\loc}L^\infty$ used in the main proof is the
+first summand of this formulation.
+\end{corollary}
+
+\begin{proof}
+The proof of \cref{lem:one-step-propagation} uses the potential only through
+\cref{lem:XY-multiplier} and the smallness needed in
+\cref{lem:one-slab}.  Replace the $L^1L^\infty$ norm by the corresponding
+small $Y$ norm.
+\end{proof}
+
+\begin{checkpoint}
+The half-space propagation theorem has been proved from an explicit
+Fourier-kernel inverse for the conjugated free operator, HLS, norm
+absorption, and a quantitative moving-interface construction.  No external
+unique-continuation theorem is used.
+\end{checkpoint}
+
+\chapter{Completion of the phase-retrieval proof}\label{chap:completion}
+
+\section{Vanishing of the exterior product}
+Fix a bounded open interval $I$.  By \cref{prop:G-equation},
+\[
+ iG_t+G_{rr}+G_{ss}=QG,
+ \qquad G=0\text{ for }s<0.
+\]
+The solution belongs to
+$C(I;L^2_{r,s})\cap L^4(I\times\R^2)$, and by
+\cref{lem:Q-bounds},
+$Q\in L^1(I;L^\infty_{r,s})$.
+
+Reflect the normal variable:
+\begin{equation}
+ z_1=-s,\qquad z_2=r,
+ \qquad Z(t,z_1,z_2)=G(t,z_2,-z_1),                 \label{eq:Z-reflection}
+\end{equation}
+and set
+\[
+ W(t,z_1,z_2)=Q(t,z_2,-z_1).
+\]
+Then
+\[
+ (i\partial_t+\Delta_z)Z=WZ,
+ \qquad Z=0\quad\text{for }z_1>0.
+\]
+All hypotheses of \cref{thm:halfspace-UC} hold, so $Z=0$ on
+$I\times\R^2$.  Consequently $G=0$ for $s>0$.  Since $F$ is odd in $s$, it
+vanishes for almost every $(t,r,s)\in I\times\R^2$.  The continuity
+$F\in C(I;L^2)$ then upgrades this almost-everywhere-in-time statement to
+\begin{equation}
+  F=0\quad\text{in }C(I;L^2(\R^2)).                \label{eq:F-zero-I}
+\end{equation}
+The interval $I$ was arbitrary, hence
+\begin{equation}
+  F(t)=0\quad\text{in }L^2(\R^2)
+  \quad\text{for every }t\in\R.                   \label{eq:F-zero-all}
+\end{equation}
+
+\section{The Hilbert-space exterior-product lemma}
+
+\begin{lemma}[Zero exterior product means linear dependence]
+\label{lem:Hilbert-wedge}
+Let $f,g\in L^2(\R)$ and assume
+\begin{equation}
+ f(x)g(y)-g(x)f(y)=0
+ \quad\text{in }L^2(\R^2).                         \label{eq:Hilbert-wedge-zero}
+\end{equation}
+If $f\ne0$, there is a unique $c\in\C$ with $g=cf$ in $L^2$.  If, in
+addition, $\norm f_2=\norm g_2$, then either $f=g=0$, or this scalar satisfies
+$|c|=1$.  Equivalently, under the equal-norm hypothesis there always exists
+$\zeta\in\C$ with $|\zeta|=1$ and $g=\zeta f$.
+\end{lemma}
+
+\begin{proof}
+Assume first that $f\ne0$.  The contraction map
+\[
+ \mathcal C_f:L^2(\R^2)\to L^2(\R),
+ \qquad
+ (\mathcal C_fH)(y)=\int_\R\overline{f(x)}H(x,y)\,\dd x
+\]
+is bounded with norm at most $\norm f_2$, by Cauchy--Schwarz and Fubini.
+Applying it to \eqref{eq:Hilbert-wedge-zero} yields
+\[
+ \norm f_2^2g-\left(\int_\R\overline f g\right)f=0.
+\]
+Thus $g=cf$, where
+$c=\pair f g/\norm f_2^2$; uniqueness follows from $f\ne0$.  If the norms are
+equal and nonzero, then
+$|c|\norm f_2=\norm g_2=\norm f_2$, so $|c|=1$.
+If $f=0$ and the norms are equal, then $g=0$ as well, and one may take
+$\zeta=1$.
+\end{proof}
+
+\section{Proof of the main theorem}
+
+\begin{proof}[Proof of \cref{thm:main}]
+Evaluate \eqref{eq:F-zero-all} at $t=0$.  If $u(0)=0$, then
+\eqref{eq:all-time-density} gives $v(0)=0$, and uniqueness of the global flow
+shows $u=v=0$.
+
+Assume $u(0)\ne0$.  By \cref{lem:Hilbert-wedge}, there is $\zeta\in\C$ with
+$v(0)=\zeta u(0)$.  Equal densities imply equal $L^2$ norms, so
+$|\zeta|=1$.  Gauge covariance \eqref{eq:gauge-cov} and uniqueness of the
+global mild flow give
+\[
+ v(t)=\Phi_t(v(0))
+     =\Phi_t(\zeta u(0))
+     =\zeta\Phi_t(u(0))
+     =\zeta u(t)
+\]
+for every $t\in\R$.
+\end{proof}
+
+\section{Immediate corollaries}
+
+\begin{corollary}[Equality on any time interval]\label{cor:interval-version}
+Let $u,v$ be global $L^2$ solutions.  If $|u|=|v|$ almost everywhere on
+$J\times\R$ for one nonempty open time interval $J$, then there is
+$\zeta\in\T$ such that $v=\zeta u$ on all of $\R\times\R$.
+\end{corollary}
+
+\begin{proof}
+Repeat the proof on $J$.  It gives $F(t)=0$ for every $t\in J$, hence
+$v(t_0)=\zeta u(t_0)$ at one $t_0\in J$.  Global uniqueness and gauge
+covariance propagate the relation both forward and backward.
+\end{proof}
+
+\begin{corollary}[The finite-energy case]\label{cor:H1-case}
+The conclusion holds in particular for solutions in $C(\R;H^1(\R))$.
+No separate one-dimensional lateral unique-continuation theorem is required.
+\end{corollary}
+
+\begin{proof}
+An $H^1$ solution is the $L^2$ mild solution with the same data by
+persistence and uniqueness, so \cref{thm:main} applies.
+\end{proof}
+
+\begin{corollary}[Rigidity of a common real potential]\label{cor:linear-common-potential}
+Let $V\in L^1_{\loc}(\R;L^\infty(\R))$ be real.  Suppose
+$u,v\in C(\R;L^2)\cap L^4_{\loc}L^\infty$ are mild solutions of
+\[
+ iu_t+u_{xx}=Vu,
+ \qquad iv_t+v_{xx}=Vv,
+\]
+have the same modulus almost everywhere, and possess the local
+half-derivative smoothing needed for the quadratic current.  Then
+$v=\zeta u$ for one constant unimodular $\zeta$.
+\end{corollary}
+
+\begin{proof}
+The continuity equation is unchanged because $V$ is real.  The Wronskian,
+exterior-product, trace, and half-space arguments then give, at any fixed
+time $t_0$, a scalar $\zeta\in\T$ with $v(t_0)=\zeta u(t_0)$.  The difference
+$w=v-\zeta u$ satisfies the mild equation
+\[
+ w(t)=-i\int_{t_0}^t S(t-s)V(s)w(s)\,\dd s.
+\]
+Unitarity gives
+\[
+ \norm{w(t)}_2
+ \le\int_{t_0}^t\norm{V(s)}_\infty\norm{w(s)}_2\,\dd s
+\]
+with the integration orientation adjusted when $t<t_0$.  The elementary
+Gronwall argument on compact intervals yields $w=0$ in both time directions.
+\end{proof}
+
+\begin{checkpoint}
+The main result is proved.  The remaining chapters are verification aids:
+they isolate approximation details, state the exact foundational boundary,
+and give a theorem-by-theorem formalization order.
+\end{checkpoint}
+
+\appendix
+
+\chapter{Approximation and distributional bookkeeping}\label{app:bookkeeping}
+
+\section{Why smooth approximation is simultaneous}
+The proof uses one sequence of smooth solutions to justify several identities.
+Here is the construction in a form suitable for formalization.  Choose
+$u_{0,n},v_{0,n}\in\Ssch(\R)$ with convergence in $L^2$.  Let $u_n,v_n$ be
+the global solutions.  On every compact interval $I$, the stability estimates
+proved in \cref{chap:wellposed} give
+\begin{align*}
+ u_n&\to u,
+ &v_n&\to v
+ &&\text{in }C_tL^2_x\cap L^6_{t,x},\\
+ u_n&\to u,
+ &v_n&\to v
+ &&\text{in }L^4_tL^\infty_x,\\
+ |u_n|^2u_n&\to|u|^2u,
+ &|v_n|^2v_n&\to|v|^2v
+ &&\text{in }L^1_tL^2_x,\\
+ \chi u_n&\to\chi u,
+ &\chi v_n&\to\chi v
+ &&\text{in }L^2_tH^{1/2}_x.
+\end{align*}
+The last convergence holds after every compact spatial cutoff $\chi$.
+The first line follows from the contraction argument; the second from the
+endpoint Duhamel estimate; the third from the cubic difference inequality;
+and the fourth from forced local smoothing.  Thus the continuity equation,
+quadratic current, exterior-product equation, and normal trace all pass to the
+limit along the same approximating sequence.  For the exterior equation one
+passes first to the unfactored four-term identity
+\eqref{eq:F-unfactored}; equality of the two limiting densities is used only
+after that passage to factor its right-hand side as $QF$.
+
+\section{Density of tensor-product tests}
+
+\begin{lemma}[Finite-derivative density of separated tests]
+\label{lem:tensor-test-density}
+Let $K\Subset\R^{m+n}$ be compact, let $M\in\N$, and let
+$\Psi\in C_c^\infty(\R^m\times\R^n)$ have support in $K$.  There are finite
+sums
+\[
+ \Psi_N(t,x)=\sum_{j=1}^{J_N}\eta_{N,j}(t)\phi_{N,j}(x),
+ \qquad
+ \eta_{N,j}\in C_c^\infty(\R^m),\quad
+ \phi_{N,j}\in C_c^\infty(\R^n),
+\]
+supported in one fixed compact rectangle, such that
+\begin{equation}
+ \max_{|\alpha|\le M}
+ \norm{\partial^\alpha(\Psi_N-\Psi)}_\infty\longrightarrow0.
+ \label{eq:tensor-test-density}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Choose open product rectangles
+\[
+ K\subset R_0\Subset R_1\Subset R_2
+\]
+and product cutoffs
+$\kappa(t,x)=\kappa_t(t)\kappa_x(x)$ such that
+$\kappa=1$ on $R_0$ and $\supp\kappa\subset R_1$.  The original function
+$\Psi$ is identically zero near the boundary of $R_2$.  Regard its
+restriction to $R_2$ as a smooth function on the flat torus obtained by
+identifying opposite faces of $R_2$; the periodic extension, denoted
+$\widetilde\Psi$, agrees with $\Psi$ throughout $R_2$.
+
+Write its Fourier series as
+\[
+ \widetilde\Psi(t,x)
+ =\sum_{k\in\mathbb Z^m,\,\ell\in\mathbb Z^n}
+ c_{k,\ell}\,
+ \e^{2\pi i k\cdot t/L_t}\e^{2\pi i\ell\cdot x/L_x},
+\]
+with the evident componentwise side lengths.  For every integer $N_0$,
+integration by parts $N_0$ times in a coordinate for which
+$|(k,\ell)|$ is maximal gives
+\begin{equation}
+ |c_{k,\ell}|
+ \le C_{N_0}(1+|k|+|\ell|)^{-N_0}.               \label{eq:tensor-fourier-decay}
+\end{equation}
+Choose $N_0>M+m+n+1$.  After applying any derivative of order at most $M$,
+the resulting Fourier series is absolutely and uniformly convergent by
+\eqref{eq:tensor-fourier-decay}.  Hence the rectangular partial sums $P_N$
+converge to $\widetilde\Psi$ in the $C^M$ norm on $R_2$.
+
+Finally set $\Psi_N=\kappa P_N$, extending it by zero outside $R_2$.  Since
+$\supp\kappa\Subset R_2$, this extension is smooth.  Each Fourier monomial
+in $P_N$ is a product of a function of $t$ and a function of $x$, and the
+cutoff is itself a product.  Thus $\Psi_N$ is a finite sum of separated
+compactly supported smooth functions, all supported in the fixed rectangle
+$\supp\kappa$.  The product rule and $C^M$ convergence of $P_N$ give
+\eqref{eq:tensor-test-density}; indeed
+\[
+ \kappa\widetilde\Psi=\kappa\Psi=\Psi,
+\]
+because $\kappa=1$ on the support of $\Psi$.
+\end{proof}
+
+This lemma is the only tensor-test density input used in the proof.  For the
+current identity take $m=n=1$ and $M=1$; for the zero-extension equation take
+$m=2,n=1$ and $M=2$.  No nuclear-space tensor-product theorem is required.
+
+\section{Slicing an \texorpdfstring{$L^1$}{L1} family of distributions}
+Fix a compact spatial interval $K$.  Suppose $t\mapsto\Lambda_t$ is a
+measurable family of distributions for which
+\[
+ |\Lambda_t(\phi)|\le A(t)
+   \bigl(\norm\phi_\infty+\norm{\phi'}_\infty\bigr),
+ \qquad A\in L^1(I),
+\]
+for every smooth test supported in $K$.  Choose a countable family dense in
+the $C^1$ norm among such tests.  If
+\[
+ \int_I\eta(t)\Lambda_t(\phi)\,\dd t=0
+\]
+for every $\eta\in C_c^\infty(I)$ and every member of that family, then the
+scalar fundamental lemma gives one null set for each test.  Remove their
+countable union and extend by the displayed continuity bound.  Thus
+$\Lambda_t=0$ as a distribution for almost every $t$.  Countable compact
+exhaustion yields one common full-measure set.  This is the mechanism used
+for the logarithmic derivative and Wronskian identities; it does not require
+an unjustified $H^{1/2}$-dual bound on the test variable.
+
+\section{Distributional products appearing in the exterior equation}
+The product $QF$ is an actual $L^2$ function on compact time intervals, not a
+formal distributional multiplication.  A typical term is
+\[
+ |u(t,x)|^2u(t,x)v(t,y).
+\]
+Its $L^2_{t,x,y}$ norm factors exactly as
+\[
+ \norm v_{L^\infty_tL^2_y}
+ \left(\int_I\norm{u(t)}_6^6\,\dd t\right)^{1/2}.
+\]
+Therefore every passage to the limit in \eqref{eq:F-equation} can be made in
+$L^2$, which is stronger than distributional convergence.
+
+\section{Why the zero extension has no hidden time or tangential jumps}
+The multiplier $\1_{\{s>0\}}$ is independent of $t$ and $r$, so
+$\partial_t$ and $\partial_r^2$ commute with it in distributions.  Only
+$\partial_s^2$ produces jump terms.  Scalarization by $\psi(t,r)$ reduces the
+statement to \cref{lem:jump-formula}.  Because the scalarized function lies
+in $H^2_{\loc}(s)$, both traces are genuine numbers and there is no ambiguity
+about the coefficients of $\delta_0$ and $\delta_0'$.
+
+\chapter{Detailed norm calculations}\label{app:norms}
+
+\section{Interpolation to \texorpdfstring{$L^8_tL^4_x$}{L8t L4x}}
+For completeness, complex or real interpolation of the two mixed-norm
+endpoints gives
+\[
+ \norm u_{L^8_tL^4_x}
+ \le\norm u_{L^\infty_tL^2_x}^{1/2}
+      \norm u_{L^4_tL^\infty_x}^{1/2}.
+\]
+This can also be checked pointwise without an interpolation theorem:
+$\norm{u(t)}_4^4\le\norm{u(t)}_2^2\norm{u(t)}_\infty^2$.  Squaring and
+integrating in time gives
+\[
+ \int_I\norm{u(t)}_4^8\,\dd t
+ \le\norm u_{L^\infty_tL^2_x}^4
+      \int_I\norm{u(t)}_\infty^4\,\dd t.
+\]
+
+\section{The ridge strip identity}
+For fixed $s$ and $t$, the substitution
+$x=(r+s)/\sqrt2$ gives $\dd r=\sqrt2\,\dd x$.  Therefore
+\begin{align*}
+ &\int_a^{a+h}\int_\R
+ \left|\rho\!\left(t,\frac{r+s}{\sqrt2}\right)\right|^2
+ \,\dd r\,\dd s\\
+ &\qquad=\int_a^{a+h}\sqrt2\int_\R|u(t,x)|^4\,\dd x\,\dd s
+ =\sqrt2h\norm{u(t)}_4^4.
+\end{align*}
+Integrating in time gives the exact identity behind \eqref{eq:Q-strip}.
+
+\section{The exterior forcing}
+Expanding $QF$ yields eight tensor monomials, but only two forms occur up to
+renaming:
+\[
+ |u(x)|^2u(x)v(y),
+ \qquad
+ |u(x)|^2v(x)u(y).
+\]
+Because $|u|=|v|$, both have the same norm.  For the second,
+\begin{align*}
+ &\iint_{\R^2}|u(x)|^4|v(x)|^2|u(y)|^2\,\dd x\,\dd y\\
+ &\qquad=\norm u_2^2\int_\R|u(x)|^6\,\dd x.
+\end{align*}
+Thus the common estimate uses only mass and $L^6_{t,x}$.
+
+\section{The moving-interface smallness scale}
+In \cref{lem:one-step-propagation}, a boundary displacement of size $h$ over
+a transition time $\delta$ has
+\[
+ |w'|\lesssim h\delta^{-1},
+ \qquad |w''|\lesssim h\delta^{-2}.
+\]
+The near affine coefficient is restricted to $|y_1|\le h$, and its time
+support has length $O(\delta)$.  Hence
+\[
+ \int |w''(t)y_1|\,\dd t
+ \lesssim (h\delta^{-2})h\delta
+ =h^2\delta^{-1}.
+\]
+Choosing $h\lesssim\sqrt\delta$ makes this perturbation uniformly small.
+After $N$ steps with $\delta\simeq L/N$, the total distance is
+$Nh\simeq\sqrt{NL}$, which tends to infinity.  This is the quantitative
+reason the loss of time at each step does not obstruct propagation through an
+arbitrary spatial distance.
+
+
+\chapter{Resolution of the formalization-readiness audit}
+\label{app:audit-resolution}
+
+The earlier draft was audited against a stronger standard than ordinary
+journal exposition: a later translator should not have to invent a missing
+analytic argument or silently choose a non-equivalent representation.  The
+following table records where each blocking item is closed in this edition.
+The table is an index only; the cited numbered results, not this table, carry
+the proofs.
+
+\begin{longtable}{p{0.075\textwidth}p{0.285\textwidth}p{0.535\textwidth}}
+\toprule
+Item & Earlier obstruction & Closure in this edition\\
+\midrule
+\endhead
+B01 & No pinned formal boundary. & Lean/Mathlib are pinned in
+\cref{app:formalization-contract}; the Fourier rescaling and bootstrap
+entry points are stated explicitly.\\
+B02 & Mixed norms, sums, restrictions, mild solutions, and traces had no
+fixed representation. & Scalar mixed norms, their quotient convention,
+completeness, restriction, sum/intersection norms, the completed retarded
+operator, local Sobolev cutoffs, and scalarized traces are defined in
+\cref{chap:mixed-norms,lem:retarded-continuous,chap:traces}.\\
+B03 & The Fourier--Gagliardo equivalence was only summarized. &
+\Cref{thm:fourier-gagliardo} prove both directions,
+all changes of variables, mollification, cutoff removal, and density.\\
+B04 & The kernel and $L^2$ propagators, Gaussian formula, and interpolation
+were not connected. & \Cref{lem:complex-gaussian-kernel,lem:propagator-compatibility,lem:three-lines-explicit,lem:riesz-thorin-used} give the compatible
+realizations and prove the interpolation input.\\
+B05 & Endpoint $(4,\infty)$ duality used an invalid blanket Bochner-dual
+identification. & \Cref{lem:measurable-esssup-section,prop:endpoint-norming,thm:hom-strichartz} use jointly measurable scalar
+sections and a countable norming class; no full $L^\infty$ dual is invoked.\\
+B06 & $H^1$ and smooth persistence were sketches. &
+\Cref{lem:Wp-difference-quotient,lem:H1-persistence,prop:Hk-persistence}
+construct the differentiated fixed points, isolate the affine top derivative,
+and carry out the induction.\\
+B07 & The mass derivative in the Gelfand triple was asserted. &
+\Cref{lem:gelfand-chain-rule,lem:mass-H1} prove the chain rule by time
+mollification and apply it with all pairings displayed.\\
+B08 & Continuous spatial slices lacked representative and subsequence
+bookkeeping. & \Cref{lem:joint-representative-L2,lem:mixed-subsequence-uniform,lem:H1-C0,lem:C0-limit-identification,cor:C0-slices} provide the complete construction.\\
+B09 & The zero-set regularizer used a false infinite-measure $L^2$
+argument. & \Cref{lem:Teps} now uses
+$|T_\eps(f)|\le |f|$ and dominated convergence, followed by dominated
+convergence of the Gagliardo integrand.\\
+B10 & The logarithmic form was tested against a nonsmooth multiplier without
+a continuity theorem. & \Cref{def:multiplier-test-algebra,lem:quadratic-form-extension} give the precise test norm, continuity bound,
+and simultaneous convergence statement.\\
+B11 & Scalar $h,h''\in L^2_{\loc}\Rightarrow h\in H^2_{\loc}\subset C^1$
+was imported informally. & \Cref{lem:interior-first-derivative,thm:local-H2-characterization} prove the interior estimate, mollified weak
+limit, and one-dimensional continuous representatives.\\
+B12 & The Neumann trace limit omitted localization, multiplier, and Bochner
+steps. & \Cref{prop:Neumann-trace} fixes nested cutoffs, proves strong
+$L^2_tH^{-1/2}$ convergence, controls translated tests, and identifies the
+limit with the sliced Wronskian.\\
+B13 & Tensor tests, slicing, and jump assembly lacked a concrete topology. &
+\Cref{lem:tensor-test-density,thm:current-recovery,prop:G-equation} use
+finite derivative sup-seminorms and countable dense families, with all
+continuity bounds displayed.\\
+B14 & The Carleman graph closure was one paragraph. &
+\Cref{lem:spatial-mollification-source,lem:parameterwise-distribution-ODE,lem:compact-support-ODE,lem:fourier-section-identification,lem:carleman-closure} prove the source decomposition, frequency slicing,
+compact-support inverse, and limit passage in sequence.\\
+B15 & Endpoint mixed-norm measurability recurred unresolved throughout. &
+\Cref{chap:mixed-norms} fixes one scalar representation globally and proves
+all operations used later, including scalar Minkowski and endpoint
+completeness.\\
+B16 & The earlier readiness claims exceeded the supplied detail. & The front
+matter now distinguishes a mathematical proof specification from a Lean
+kernel certificate, and \cref{app:formalization-contract} states a
+three-way no-invention gate for imported, defined, and proved declarations.\\
+\bottomrule
+\end{longtable}
+
+Three additional omissions found during the second pass are also closed.
+First, \cref{lem:retarded-continuous} distinguishes the Strichartz-completion
+operator used in the fixed point from the a posteriori $L^2$-valued Bochner
+integral.  Second, the proof of \cref{thm:LWP} now establishes uniqueness in
+the entire solution class, not merely inside the contraction ball.  Third,
+\cref{lem:complex-gaussian-kernel,lem:three-lines-explicit} supply the
+Gaussian and three-lines calculations that interpolation and the dispersive
+kernel require.
+
+\chapter{Formalization contract and exact foundational boundary}
+\label{app:formalization-contract}
+
+This chapter is part of the proof package.  It fixes the version boundary,
+the representations of all nontrivial objects, and the declarations that are
+allowed to remain in the Mathlib layer.  It is intended to prevent an
+autoformalizer from replacing a missing analytic theorem by an axiom.
+
+\section{Pinned baseline}
+
+The target baseline is
+\[
+ \text{Lean }4.32.0,
+ \qquad
+ \text{Mathlib tag }\texttt{v4.32.0},
+ \qquad
+ \text{release commit }\texttt{81a5d25}.
+\]
+A project may use a top-level \texttt{import Mathlib}, but it must pin that
+revision in \texttt{lakefile.toml} and pin
+\texttt{leanprover/lean4:v4.32.0} in \texttt{lean-toolchain}.  The proof is
+mathematically independent of declaration names, but a reproducible
+translation is not independent of versions.
+
+The two project files are therefore fixed to the following literal contents.
+The package name is inessential, but the toolchain and revision are not.
+\begin{verbatim}
+# lean-toolchain
+leanprover/lean4:v4.32.0
+\end{verbatim}
+\begin{verbatim}
+# lakefile.toml
+name = "CubicNLSPhaseRetrieval"
+version = "0.1.0"
+defaultTargets = ["CubicNLSPhaseRetrieval"]
+
+[[lean_lib]]
+name = "CubicNLSPhaseRetrieval"
+
+[[require]]
+name = "mathlib"
+git = "https://github.com/leanprover-community/mathlib4.git"
+rev = "v4.32.0"
+\end{verbatim}
+\begin{verbatim}
+-- CubicNLSPhaseRetrieval.lean
+import Mathlib
+\end{verbatim}
+Here and below the word ``imported'' means available after that single import
+at the pinned revision; it never means postulated by a new axiom.
+
+At that baseline the intended Fourier entry points are the existing Mathlib
+declarations
+\begin{verbatim}
+MeasureTheory.Lp.fourierTransform_l_i
+MeasureTheory.Lp.norm_fourier_eq
+MeasureTheory.Lp.inner_fourier_eq
+MeasureTheory.Lp.fourier_toTemperedDistribution_eq
+TemperedDistribution.MemSobolev
+TemperedDistribution.memSobolev_two_iff_fourier
+TemperedDistribution.MemSobolev.lineDerivOp
+TemperedDistribution.MemSobolev.laplacian
+\end{verbatim}
+where the first displayed identifier is written in Lean with the unicode
+subscript characters used by Mathlib.  These are bootstrap entry points, not
+axioms: the project must run \texttt{\#check} on every identifier at the
+pinned revision before introducing any wrapper theorem.  The rescaling
+from Mathlib's Fourier character to the convention of this manuscript is
+\eqref{eq:mathlib-fourier-rescaling}.
+
+\section{Allowed foundational layer}
+
+The following are the only theorem families treated as imported
+foundations.  They are not PDE-specific.
+\begin{enumerate}
+\item real and complex normed-field algebra, conjugation, finite-dimensional
+      Euclidean spaces, and elementary inequalities;
+\item Lebesgue measure, product measure, almost-everywhere equality,
+      measurability, simple-function approximation, and completeness of
+      scalar $L^p$ spaces;
+\item Lebesgue and Bochner integration, Fubini--Tonelli, Fatou, dominated and
+      monotone convergence, H\"older, Minkowski, and Young convolution
+      inequalities;
+\item complete normed spaces, continuous linear maps, quotient and product
+      Banach spaces, Hilbert-space duality, weak compactness in Hilbert space,
+      and Banach's fixed-point theorem;
+\item the fundamental theorem for one-dimensional $W^{1,1}$ functions,
+      standard approximate identities, and density of smooth compactly
+      supported functions in finite-exponent $L^p$ spaces;
+\item the $L^1$ and $L^2$ Fourier transforms, Plancherel, Fourier inversion
+      on Schwartz functions, and the maximum-modulus principle for holomorphic functions on rectangles.
+      The needed three-lines estimate is proved as
+      \cref{lem:three-lines-explicit}.
+\end{enumerate}
+Every use of these items in the manuscript is accompanied by the hypotheses
+needed to apply it.  In particular, Strichartz, local smoothing, Sobolev
+multiplication, trace regularity, Carleman estimates, and unique continuation
+are not in the imported layer.
+
+\section{Project-defined scalar mixed norms}
+
+The Lean project should not define $L^4_tL^\infty_x$ as a Bochner space.
+Instead it should bundle the scalar construction of
+\cref{chap:mixed-norms}.  A suitable schematic interface is
+\begin{verbatim}
+structure ScalarMixed (p : ENNReal) (q : ENNReal) where
+  toFun : Time * Space -> C
+  aestronglyMeasurable : AEStronglyMeasurable toFun
+  finiteNorm : mixedNorm p q toFun < infinity
+
+-- Quotient by product-a.e. equality.
+-- Sections are toFun (t, x), not values in an L-infinity Banach space.
+-- For q = infinity, mixedNorm uses t |-> essSup_x |toFun (t, x)|.
+\end{verbatim}
+The implementation must prove, before Strichartz is started:
+\begin{enumerate}
+\item measurability of the section essential supremum
+      (\cref{lem:measurable-esssup-section});
+\item completeness (\cref{lem:scalar-endpoint-complete});
+\item restriction and scalar Minkowski
+      (\cref{lem:scalar-mixed-minkowski});
+\item the countable norming identity
+      (\cref{prop:endpoint-norming});
+\item the almost-everywhere uniform subsequence lemma
+      (\cref{lem:mixed-subsequence-uniform}).
+\end{enumerate}
+No theorem about the full dual of a Bochner $L^\infty$ space is required.
+
+\section{Distributions used in the proof}
+
+For an open set $\Omega\subset\R^n$, a complex distribution is a
+complex-linear functional on $C_c^\infty(\Omega)$ such that for every compact
+$K\Subset\Omega$ there are $m$ and $C_K$ with
+\[
+ |T(\phi)|\le C_K\max_{|\alpha|\le m}\norm{\partial^\alpha\phi}_\infty
+ \qquad(\supp\phi\subset K).
+\]
+This compact-by-compact definition is sufficient for every distribution in
+the manuscript.  The relevant orders and bounds are explicit:
+\begin{longtable}{p{0.29\textwidth}p{0.17\textwidth}p{0.44\textwidth}}
+\toprule
+Distribution & Order needed & Continuity bound\\
+\midrule
+\endhead
+$f_x$, $f\in H^{1/2}_{\loc}$ & one &
+$|\pair{f_x}{\phi}|\le C_K\norm{\chi f}_{H^{1/2}}
+\norm\phi_{H^{1/2}}$\\
+$\overline f f_x$ & one &
+\eqref{eq:quadratic-extension-bound} for smooth tests, then extension\\
+$\partial_t|u|^2+2\partial_x\mathfrak j_u$ & one &
+\eqref{eq:current-test-continuity} and $C_tL^2$ control\\
+$PF-QF$ & two &
+$F,QF\in L^2_{\loc}$ paired after moving derivatives to the test\\
+$H_\psi''$ & two in $s$ &
+\eqref{eq:Hpsi-second} and Cauchy--Schwarz\\
+$P(\1_{s>0}F)-Q\1_{s>0}F$ & two &
+scalar jump identity plus tensor-test density\\
+\bottomrule
+\end{longtable}
+
+A Lean implementation may use Mathlib's test-function and distribution
+structures, but it should expose lemmas with the preceding concrete bounds.
+This avoids relying on an unspecified topological tensor-product theorem.
+
+\section{Tensor tests and slicing}
+
+The finite-derivative approximation theorem required by the distributional
+arguments is already proved as \cref{lem:tensor-test-density}.  The Lean
+project should instantiate that theorem with the derivative order appearing
+in the concrete continuity bound of the functional at hand.  This avoids an
+unspecified topological tensor-product theorem and makes the approximation
+metric explicit.
+
+For slicing, the project should use the countable argument of the proof of
+\cref{thm:current-recovery}: on each compact interval choose a countable
+family dense in the finite test-function seminorm appearing in
+\eqref{eq:sliced-current-test-bound}, remove the union of scalar null sets,
+and extend by that concrete continuity estimate.  No identification with the
+dual of $H^{1/2}$ and no choice of a distribution-valued representative at
+every time is needed.
+
+\section{Local Sobolev objects and traces}
+
+Define $H^s_{\loc}$ by cutoffs: a distribution $f$ belongs locally when
+$\chi f\in H^s$ for every $\chi\in C_c^\infty$.  All statements are invariant
+under the cutoff because two cutoffs equal to one near a test support produce
+the same distributional pairing.  The scalar trace object is not a trace of
+an arbitrary $L^2$ function.  It is the map
+\[
+ \psi\longmapsto H_\psi\in H^2_{\loc}(\R_s)
+\]
+constructed from the equation.  Dirichlet and Neumann traces are then the
+continuous linear functionals
+\[
+ \psi\longmapsto H_\psi(0),
+ \qquad
+ \psi\longmapsto H_\psi'(0).
+\]
+The local $H^2$ theorem needed to define them is
+\cref{thm:local-H2-characterization}; the Neumann identification is the
+strong difference-quotient proof in \cref{prop:Neumann-trace}.  Thus the
+project need not import a general hypersurface trace theorem.
+
+\section{Carleman graph objects}
+
+The spaces $X$, $X'$, and $Y$ are sums and intersections of scalar spaces,
+not opaque notation.  Their completeness follows from
+\cref{lem:sum-intersection-complete}.  The conjugated inverse $T_\beta$ is
+first defined on compactly supported smooth forcing by
+\eqref{eq:Tbeta-def} and then extended using the four operator estimates in
+\cref{prop:linear-carleman}.  The graph-closure theorem must be implemented
+through the following compiled sequence, with no abstract uniqueness axiom:
+\begin{align*}
+ &\text{source mollification}
+   \Longrightarrow \text{Fourier sections}
+   \Longrightarrow \text{scalar compact-support ODE},\\
+ &w_\eps=T_\beta f_\eps
+   \Longrightarrow w=T_\beta f.
+\end{align*}
+These are precisely
+\cref{lem:spatial-mollification-source,lem:compact-support-ODE,lem:fourier-section-identification,lem:carleman-closure}.
+
+\section{No-invention gate}
+
+Before a module is accepted, every declaration in it must fall into one of
+three classes:
+\begin{enumerate}
+\item an exact theorem imported from the pinned Mathlib revision;
+\item a definition whose representation is fixed in this chapter;
+\item a theorem proved from earlier accepted declarations and corresponding
+to a numbered result in this manuscript.
+\end{enumerate}
+Declarations that merely restate a central analytic step, such as an axiom
+named \texttt{endpoint\_strichartz}, \texttt{diagonal\_trace}, or
+\texttt{halfspace\_unique\_continuation}, fail the gate.  Temporary
+\texttt{sorry} terms may be used during interactive development only if the
+build target used for certification rejects them.
+
+\chapter{A formalization ledger relative to Mathlib}\label{app:ledger}
+
+This appendix records the dependency order after the exact version and
+representation contract of \cref{app:formalization-contract}.  It adds no
+assumptions and separates definitions from theorem obligations.
+
+\section{Foundational imports}
+The project is pinned as in \cref{app:formalization-contract}.  It may use
+Mathlib's $L^2$ Fourier transform and tempered-distribution Sobolev
+infrastructure, after applying the rescaling
+\eqref{eq:mathlib-fourier-rescaling}.  Scalar endpoint mixed norms,
+Schr\"odinger propagators, local Sobolev quadratic forms, diagonal traces,
+and the Carleman spaces remain project-defined because their exact
+representations are part of the theorem statement and proof.
+
+\section{Suggested module order}
+\begin{longtable}{p{0.10\textwidth}p{0.28\textwidth}p{0.52\textwidth}}
+\toprule
+No. & Module & Main declarations and proof obligations\\
+\midrule
+\endhead
+1 & \texttt{FourierSobolev} & Fourier transform convention; multipliers
+$\langle D\rangle^s$, $|D|^s$; $H^{\pm1/2}$; translation difference
+quotients; smooth multiplication.\\
+2 & \texttt{FreeSchrodinger} & $S(t)$ as a unitary multiplier group;
+Schwartz differentiation; dispersive kernel.\\
+3 & \texttt{FractionalIntegration} & Maximal function, Hedberg inequality,
+one-dimensional HLS, and the Christ--Kiselev decomposition.\\
+4 & \texttt{Strichartz1D} & Homogeneous $(6,6)$ and $(4,\infty)$ estimates;
+retarded $L^{6/5}_{t,x}\to L^6_{t,x}$ and $L^{6/5}_{t,x}\to L^\infty_tL^2_x$ estimates.\\
+5 & \texttt{CubicFlow} & Fixed point in
+$C_tL^2\cap L^6_{t,x}$; uniqueness; stability; mass conservation; global
+iteration; gauge covariance.\\
+6 & \texttt{EndpointRegularity} & Cubic forcing in $L^1_tL^2_x$;
+$L^4_tL^\infty_x$; $L^8_tL^4_x$; smooth approximation convergence.\\
+7 & \texttt{LocalSmoothing1D} & Pointwise-in-space Fourier identity;
+cutoff commutator; forced local smoothing.\\
+8 & \texttt{CriticalQuadraticForms} & Gagliardo product estimate;
+Lipschitz composition; $T_\eps$ regularizer; definition and stability of
+$\overline f f_x$.\\
+9 & \texttt{DensityCurrent} & Continuity equation by approximation;
+weak localized mass; equal density implies equal logarithmic form.\\
+10 & \texttt{Wronskian} & Critical zero-set-safe Wronskian theorem and
+almost-everywhere slicing.\\
+11 & \texttt{ExteriorProduct} & Tensor continuity; two-particle equation;
+coordinate rotation; ridge-potential estimates.\\
+12 & \texttt{DiagonalTrace} & Scalarized $H^2$ regularity; translation
+quotient computation; jump formula; zero extension.\\
+13 & \texttt{Carleman2D} & Explicit conjugated inverse; kernel estimates;
+$X$--$X'$ Carleman inequality; graph closure; one-slab absorption.\\
+14 & \texttt{HalfspacePropagation} & Moving translation and Galilean gauge;
+quantitative iteration.\\
+15 & \texttt{PhaseRetrieval} & Reflection, vanishing exterior product,
+Hilbert contraction, unimodular scalar, gauge propagation.\\
+\bottomrule
+\end{longtable}
+
+\section{No-axiom dependency graph}
+The proof graph is acyclic:
+\[
+\begin{gathered}
+ \text{Fourier}+\text{HLS}
+ \Longrightarrow \text{Strichartz}
+ \Longrightarrow \text{global cubic flow},\\
+ \text{Fourier smoothing}+\text{flow stability}
+ \Longrightarrow \text{critical current},\\
+ \text{critical calculus}+\text{current}
+ \Longrightarrow \text{Wronskian},\\
+ \text{Wronskian}+\text{tensor equation}
+ \Longrightarrow \text{zero diagonal Cauchy data},\\
+ \text{Carleman kernel}+\text{moving interface}
+ \Longrightarrow \text{half-space uniqueness},\\
+ \text{zero extension}+\text{half-space uniqueness}
+ \Longrightarrow F=0
+ \Longrightarrow \text{global phase}.
+\end{gathered}
+\]
+No arrow points to an unproved PDE theorem.  The only leaves are the
+foundational analytic operations listed in the front matter.
+
+\section{Statements that should not be encoded as axioms}
+A Lean project claiming the full theorem should not introduce declarations
+such as
+\begin{verbatim}
+axiom strichartz_1d : ...
+axiom local_smoothing : ...
+axiom halfspace_unique_continuation : ...
+\end{verbatim}
+Those are central mathematical content, not harmless interfaces.  The module
+order above is designed so that each can be implemented as a theorem derived
+from earlier modules.  Abstract interfaces are appropriate only after the
+concrete theorem has been proved and registered as an instance or wrapper.
+
+\chapter{Final audit of self-containment}\label{app:audit}
+
+\section{Checklist}
+The following items are proved within the document rather than cited.  In
+this expanded edition the list includes the representation and closure
+lemmas that were previously compressed.
+\begin{enumerate}
+\item The free dispersive estimate and every Strichartz estimate used in the
+      nonlinear construction.
+\item Local and global $L^2$ well-posedness, stability, mass conservation,
+      and gauge covariance of the cubic flow.
+\item The endpoint $L^4_tL^\infty_x$ estimate and convergence of smooth
+      approximants in that norm.
+\item Local smoothing by one half derivative, including the Duhamel term.
+\item Critical $H^{1/2}$ multiplication, Lipschitz composition, mollification,
+      and the zero-set regularizer.
+\item Recovery of the current from the density at $L^2$ regularity.
+\item The Wronskian identity without division by the solution.
+\item The exterior-product equation and every integrability estimate for its
+      coefficient and forcing.
+\item Distribution-valued Dirichlet and Neumann traces on the diagonal.
+\item The zero-extension jump formula.
+\item The uniform exponential-weight Carleman estimate from an explicit
+      Fourier inverse and kernel bounds.
+\item Moving-interface half-space propagation with an explicit quantitative
+      iteration.
+\item The Hilbert-space step from zero exterior product to one unimodular
+      scalar.
+\end{enumerate}
+
+\section{What is not claimed}
+This TeX file is not itself executable Lean code, and compiling the PDF is not
+a kernel check.  Its self-containment claim is mathematical: all
+PDE-specific propositions used in the main proof occur with proofs in the
+same source.  A machine-checked version requires implementing the modules in
+\cref{app:ledger} and running Lean against a pinned Mathlib revision.  The
+manuscript has been organized so that such an implementation does not need to
+invent missing mathematical arguments or hide them behind axioms.
+
+\section{End of proof}
+Combining the chapters in the stated dependency order proves
+\cref{thm:main}.  The proof uses the common density first as a conservation-law
+observable, then as the real coefficient of a two-particle linear equation.
+Local smoothing provides the missing half derivative at the diagonal;
+Carleman propagation converts zero Cauchy data there into a vanishing exterior
+product; Hilbert-space algebra supplies the single global phase.
+
+\backmatter
+\chapter*{Index of principal notation}
+\addcontentsline{toc}{chapter}{Index of principal notation}
+\begin{longtable}{p{0.20\textwidth}p{0.68\textwidth}}
+$S(t)$ & Free one-dimensional Schr\"odinger group, multiplier
+$\e^{-it\xi^2}$.\\
+$\mathcal X(I)$ & Nonlinear fixed-point space
+$C_tL^2_x\cap L^6_{t,x}$.\\
+$\rho$ & Common density $|u|^2=|v|^2$.\\
+$\mathfrak j_u$ & Endpoint current quadratic form
+$\Ima\pair{u_x}{\phi\overline u}$.\\
+$F$ & Exterior product $u(x)v(y)-v(x)u(y)$.\\
+$(r,s)$ & Tangential and normal coordinates to the diagonal $x=y$.\\
+$Q$ & Ridge potential in the exterior-product equation.\\
+$G$ & Zero extension $\1_{\{s>0\}}F$.\\
+$P$ & Free two-dimensional spacetime operator $i\partial_t+\Delta_z$.\\
+$X,X',Y$ & Source, solution, and multiplier spaces in the Carleman argument.\\
+$T_\beta$ & Explicit inverse of the conjugated free operator $P_\beta$.\\
+$\zeta$ & Final constant unimodular phase.\\
+\end{longtable}
+
+\end{document}

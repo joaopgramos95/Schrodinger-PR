@@ -1,0 +1,402 @@
+Project Workflow: Formalizing the Cubic-NLS Phase-Retrieval Theorem in Lean
+==========================================================================
+
+Purpose
+-------
+
+This file is an execution-ready recipe for formalizing ONE central theorem —
+the phase-retrieval theorem for the 1D cubic NLS — in Lean 4 / Mathlib.
+
+It is the project-specific descendant of BlackBox_Workflow.txt (also in this
+folder). The generic 5-step idea is unchanged:
+
+1. read the paper;                    <- ALREADY DONE (see paper_blueprint.tex)
+2. make a Blueprint;                  <- ALREADY DONE (paper_blueprint.tex)
+3. split the Lean project into files; <- ALREADY DONE (appendix of the blueprint)
+4. produce a first scaffold;          <- you start here
+5. replace axioms by real proofs.     <- the bulk of the work
+
+Because Steps 1-3 are already done for this project, DO NOT re-read the paper
+from scratch or invent a new blueprint. Use the artifacts provided.
+
+What is different from BlackBox_Workflow.txt (READ THIS):
+- The blueprint already exists as a compiled, dependency-annotated LaTeX file
+  paper_blueprint.tex (144 numbered results, full \uses graph). Use it as THE
+  map. Do not produce a new Blueprint.md unless you are only re-serializing
+  paper_blueprint.tex into Markdown.
+- The Lean statement to verify already exists in showcase.lean and has been
+  checked to correspond to the paper's mathematics (see TEX_MATHLIB_AUDIT.md).
+- The Mathlib version, the foundational entry points, the file split, the one
+  missing foundational leaf, and the risk map are all known and recorded below.
+
+
+Files in this folder
+--------------------
+
+- showcase.lean          The Lean STATEMENT of record. The final theorem lives here.
+                         Its `sorry` (in `phase_retrieval_interval`) is what the whole
+                         project must discharge. See "The target" below.
+- paper_blueprint.tex    The refactored, Lean-friendly blueprint. 144 numbered results,
+                         each with \uses{...} dependencies (the DAG), split so every step
+                         is a small named lemma. Ends with an appendix giving the Lean
+                         file split and the Mathlib entry points. This is your map.
+- paper.tex              The full original manuscript with the epsilon-level proofs.
+                         The blueprint's `% FULL PROOF: paper.tex L<a>-L<b>` comments point
+                         into this file. Consult it only for proof detail, never for the
+                         dependency structure (use the blueprint for that).
+- TEX_MATHLIB_AUDIT.md   The readiness audit: what is in Mathlib, what the paper self-proves,
+                         where the risk is. Consult when a leaf's availability is unclear.
+- BlackBox_Workflow.txt  The generic template this file specializes.
+- NewWorkflow.txt        This file.
+
+
+The target (do not drift from this)
+------------------------------------
+
+The final Lean theorem is `phase_retrieval_interval` in showcase.lean
+(Corollary "Equality on any time interval"), of which `phase_retrieval_cubic_NLS`
+(Theorem 1.1) is a proved special case. In the blueprint these are
+\cref{cor:interval-version} and \cref{thm:main} in the chapter
+\chapter{Completion of the phase-retrieval proof}.
+
+GOAL: showcase.lean compiles with NO `sorry`, and `#print axioms
+CubicNLS.phase_retrieval_interval` reports only Lean's standard axioms
+(propext, Classical.choice, Quot.sound) — i.e. no project axioms and no sorryAx.
+
+Rules on showcase.lean:
+- The STATEMENTS `phase_retrieval_interval`, `phase_retrieval_cubic_NLS`, and the
+  structure `GlobalSolution` in showcase.lean are the statements of record. Do NOT
+  change them. You may only replace the `sorry` by a real proof.
+- The definitions inside showcase.lean (the space L2, the propagator `freeProp`,
+  the class `GlobalSolution`, the modulus/pairing conventions) are canonical. The
+  project in Lean_Code must reuse them or define them so that they are definitionally
+  the same, so that the final proof plugs into showcase.lean unchanged. The cleanest
+  route: factor these canonical definitions into an early Lean_Code file and have
+  showcase.lean import it, OR develop Lean_Code and, in the very last step, fill the
+  `sorry` in showcase.lean with `exact CubicNLSPhaseRetrieval.phase_retrieval_interval ...`.
+  Whichever route, the statement text of showcase.lean must be byte-for-byte unchanged.
+
+Do NOT start by trying to prove the final theorem. First build the project bottom-up.
+
+
+Important conventions
+---------------------
+
+- All main Lean code lives in a folder named:  Lean_Code
+- Pinned toolchain (do not change): Lean 4.32.0, Mathlib tag v4.32.0,
+  commit 81a5d257c8e410db227a6665ed08f64fea08e997. Use a top-level `import Mathlib`.
+- Compilation: build with the pinned toolchain. If you have an account on a Lean
+  build server (e.g. YOUR_NAME@lemma.farm), connect via SSH and create a project
+  folder there; otherwise build locally. After each file or small group of files
+  run `lake env lean <file>` and then `lake build`.
+
+
+Step 0. Prepare the Lean project and CONFIRM the Mathlib foundations
+--------------------------------------------------------------------
+
+Create the Lake project pinned exactly as above:
+
+    # lean-toolchain
+    leanprover/lean4:v4.32.0
+
+    # lakefile.toml
+    name = "CubicNLSPhaseRetrieval"
+    defaultTargets = ["CubicNLSPhaseRetrieval"]
+    [[lean_lib]]
+    name = "CubicNLSPhaseRetrieval"
+    [[require]]
+    name = "mathlib"
+    git = "https://github.com/leanprover-community/mathlib4.git"
+    rev = "v4.32.0"
+
+Run `lake exe cache get` then `lake build` to fetch Mathlib before doing anything else.
+
+BEFORE writing any definition or proof, `#check` every foundational entry point the
+project relies on, to confirm the exact names at this revision. These are CONFIRMED to
+exist at commit 81a5d25, but their spellings must be verified in your environment:
+
+    MeasureTheory.Lp.fourierTransformₗᵢ          -- L² Fourier transform as ≃ₗᵢ[ℂ]
+    MeasureTheory.Lp.norm_fourier_eq             -- ‖𝓕 f‖ = ‖f‖
+    MeasureTheory.Lp.inner_fourier_eq            -- ⟪𝓕 f, 𝓕 g⟫ = ⟪f, g⟫
+    MeasureTheory.Lp.fourier_toTemperedDistribution_eq
+    TemperedDistribution.MemSobolev              -- fractional Sobolev predicate on 𝓢'
+    TemperedDistribution.MemSobolev.lineDerivOp  -- p = 2 only
+    TemperedDistribution.MemSobolev.laplacian    -- p = 2 only
+    TemperedDistribution.besselPotential
+
+NAMING NUANCE (important): the p=2 Fourier characterization is NOT named
+`memSobolev_two_iff_fourier` (that string appears only in a Mathlib docstring). The real
+lemmas are `TemperedDistribution.memSobolev_iff_exists_smulLeftCLM_fourier` and
+`TemperedDistribution.memSobolev_besselPotential_iff`. `#check` these and alias the one
+you use.
+
+Also confirm the presence of the other foundational leaves (all verified present):
+Gaussian/oscillatory Fourier integral (Analysis/SpecialFunctions/Gaussian/FourierTransform),
+maximum modulus (Analysis/Complex/AbsMax, PhragmenLindelof), du Bois-Reymond
+(Analysis/Distribution/AEEqOfIntegralContDiff), FTC / 1D absolute continuity
+(MeasureTheory/Integral/IntervalIntegral/{Basic,FundThmCalculus,AbsolutelyContinuousFun}),
+Banach–Alaoglu / weak-dual, convolution/Young, simple-function/Schwartz density in L^p.
+
+THE ONE MISSING FOUNDATIONAL LEAF: Mathlib's Gronwall.lean has only the constant-coefficient
+derivative form. The variable-coefficient INTEGRAL Grönwall inequality is NOT in Mathlib. It
+is stated in the blueprint as \cref{lem:integral-gronwall} and must be proved from the FTC.
+It is off the main path (only \cref{cor:linear-common-potential} uses it), so it can be done
+last or skipped if that corollary is out of scope.
+
+LLM prompt:
+-----------
+Set up the Lake project CubicNLSPhaseRetrieval pinned to Lean 4.32.0 / Mathlib v4.32.0
+(commit 81a5d25). Run `lake exe cache get` and `lake build` on an empty library to confirm
+Mathlib is available. Then `#check` every identifier in the "foundational entry points" list
+of NewWorkflow.txt Step 0 and report which exist verbatim and which need an alias (especially
+the memSobolev Fourier characterization). Do not write any project definitions yet. Output a
+short table: entry point | exists verbatim? | actual name to use.
+
+
+Step 1. Confirm the main theorem and its correspondence (already established)
+----------------------------------------------------------------------------
+
+The main theorem and its Lean statement are already fixed (showcase.lean) and their
+correspondence to the paper is already audited (TEX_MATHLIB_AUDIT.md). Do not re-derive;
+just confirm you understand:
+- Statement: two global mild solutions u,v of i∂_t u + ∂ₓ²u = σ|u|²u with |u|=|v| a.e. on
+  one nonempty open time interval ⇒ v = ζu for a constant unimodular ζ, for all time.
+- Hypotheses/objects: the class GlobalSolution (Duhamel form, C_tL² ∩ L⁶_loc, |u|²u∈L¹_loc),
+  the free propagator S(t), the a.e.-modulus condition, the unimodular conclusion.
+- Blueprint anchors: \cref{thm:main}, \cref{cor:interval-version}, \cref{def:global-mild-solution}.
+
+LLM prompt:
+-----------
+Read showcase.lean and the chapter "Completion of the phase-retrieval proof" of
+paper_blueprint.tex, plus the "Executive verdict" of TEX_MATHLIB_AUDIT.md. In one page,
+restate: the final Lean theorem, every object in its statement, every hypothesis, every
+conclusion, and the blueprint labels of the results on the direct path to it. Do not write
+Lean code. Confirm that the Lean statement in showcase.lean is the theorem to be proved and
+must remain unchanged.
+
+
+Step 2. Use the existing Blueprint (do not make a new one)
+----------------------------------------------------------
+
+paper_blueprint.tex IS the blueprint. Every mathematical object is a numbered Definition;
+every step is a numbered Lemma/Proposition/Theorem; the dependency graph is encoded with
+\uses{...}. Turn it into a machine-usable build order.
+
+LLM prompt:
+-----------
+Parse paper_blueprint.tex. Extract, for every numbered result, its \label, its kind, its
+\uses (from the statement AND from the proof), and the `% FULL PROOF: paper.tex L..-L..`
+pointer if present. Build the dependency DAG and output a topological order (leaves first).
+Confirm the DAG is acyclic (the only forward edges are to the early "Distributional utilities"
+module — treat that module as buildable early). Produce Blueprint_order.md listing the results
+in build order, grouped by the 16 modules of the appendix "Suggested split into Lean files".
+Do not write Lean code yet.
+
+
+Step 3. Adopt the Lean file split from the blueprint appendix
+-------------------------------------------------------------
+
+The appendix "Suggested split into Lean files" of paper_blueprint.tex already gives the split.
+Use it verbatim, under Lean_Code. The 16 files (topological build order
+0,1,2,3,12,4,5,6,7,8,9,10,11,13,14,15):
+
+    Lean_Code/ScalarMixedNorms.lean        (chap:mixed-norms)
+    Lean_Code/FourierSobolev.lean          (chap:fourier)   <- build FIRST after ScalarMixedNorms
+    Lean_Code/FreeSchrodinger.lean         (chap:free-group)
+    Lean_Code/FractionalIntegration.lean   (chap:frac-int)
+    Lean_Code/Utilities.lean               (chap:utilities) <- early, imports only 0-3
+    Lean_Code/Strichartz1D.lean            (chap:strichartz)
+    Lean_Code/CubicFlow.lean               (chap:wellposed)
+    Lean_Code/EndpointRegularity.lean      (chap:endpoint)
+    Lean_Code/LocalSmoothing1D.lean        (chap:smoothing)
+    Lean_Code/CriticalQuadraticForms.lean  (chap:critical-calculus)
+    Lean_Code/DensityCurrent.lean          (chap:current)
+    Lean_Code/WronskianExterior.lean       (chap:wronskian-exterior)
+    Lean_Code/DiagonalTrace.lean           (chap:traces)
+    Lean_Code/Carleman2D.lean              (chap:carleman)      <- HARDEST
+    Lean_Code/HalfspacePropagation.lean    (chap:halfspace)
+    Lean_Code/PhaseRetrieval.lean          (chap:completion)
+plus
+    Lean_Code/Setup.lean                   (chap:setup: the equation, mild solution, GlobalSolution)
+    Lean_Code/Main.lean                    (imports the whole project)
+    Lean_Code/AXIOM_STATUS.md
+
+Put the canonical definitions that showcase.lean also uses (L2, freeProp, GlobalSolution) in
+Setup.lean / FreeSchrodinger.lean, so that showcase.lean can import them unchanged at the end.
+
+LLM prompt:
+-----------
+Create the empty Lean_Code files listed in NewWorkflow.txt Step 3 (one per blueprint module,
+plus Setup.lean, Main.lean, AXIOM_STATUS.md). For each file, write only a header comment
+naming the blueprint chapter it implements and the files it imports (per the appendix's import
+column). Make Main.lean import every file. Do not write definitions or proofs yet. Run
+`lake build` to confirm the empty project compiles.
+
+
+Step 4. First scaffold: real definitions, narrow named axioms for lemmas
+------------------------------------------------------------------------
+
+Turn each numbered blueprint result into a Lean declaration. Definitions become REAL Lean
+definitions wherever feasible; lemmas/props/theorems may TEMPORARILY be narrow named axioms
+whose statement is the faithful Lean translation of the blueprint statement. One axiom per
+blueprint result — never bundle unrelated facts.
+
+Build order for the scaffold: ScalarMixedNorms, then FourierSobolev, then the rest per Step 3.
+
+THE FIRST REAL DESIGN TASK is FourierSobolev (Module 1). Mathlib's TemperedDistribution.MemSobolev
+is a PREDICATE, not a bundled Hilbert space. You must design the H^s interface before scaffolding
+downstream: decide whether to build a bundled H^{1/2} Hilbert space (via ⟨ξ⟩^s \hat f ∈ L², as in
+\cref{def:Hs-space}) or to work through MemSobolev; then fix H^{-1/2} and the COMPLEX-BILINEAR
+H^{-1/2}–H^{1/2} pairing (\cref{def:Hs-neg-pairing}, the extension of ∫ T φ — NOT the sesquilinear
+inner product); then H^s_loc (\cref{def:Hs-loc}). Every later module consumes this interface, so
+choose it carefully. The proof that the Gagliardo seminorm equals the Fourier norm is supplied by
+\cref{thm:fourier-gagliardo}.
+
+Rules:
+- definitions real whenever possible;
+- theorem/lemma statements may temporarily be `axiom`s with precise statements;
+- each axiom narrow and named after its blueprint \label (e.g. `axiom thm_hom_strichartz : ...`);
+- never a giant catch-all axiom; NEVER an axiom that restates a central step under a vague name
+  (no `axiom strichartz`, `axiom carleman`, `axiom halfspace_uc` as opaque black boxes — these
+  are the mathematical content and must become theorems);
+- run Lean after each file or small group of files.
+
+LLM prompt:
+-----------
+Scaffold Lean_Code from paper_blueprint.tex, in the Step-3 build order. For each numbered
+blueprint result create one Lean declaration: definitions as real Lean definitions; lemmas,
+propositions, theorems as narrow named `axiom`s whose statement faithfully translates the
+blueprint statement (match hypotheses, exponents, norms exactly). Start with ScalarMixedNorms,
+then design and scaffold the FourierSobolev H^{±1/2} interface (see Step 4 of NewWorkflow.txt),
+then proceed. Keep showcase.lean's definitions canonical and reuse them. Create AXIOM_STATUS.md
+listing every axiom, its blueprint \label, its `% FULL PROOF: paper.tex L..` pointer, and why it
+is currently an axiom. The scaffold must compile: run `lake env lean` on each file and then
+`lake build`. Do not prove the main theorem.
+
+
+Step 5. Axiom-status discipline
+-------------------------------
+
+LLM prompt:
+-----------
+Whenever you work on replacing axioms, keep Lean_Code/AXIOM_STATUS.md current. Record:
+- axioms replaced in this pass and the proof idea for each;
+- the running axiom count (how many remain);
+- remaining axioms and why each is still hard;
+- the exact `lake env lean` / `lake build` commands run and whether the build succeeded;
+- for any axiom you could not finish, the precise obstacle and the missing sub-lemmas.
+Never leave the project in a broken (non-building) state.
+
+
+Step 6. Replace axioms bottom-up
+--------------------------------
+
+Replace temporary axioms with real proofs, working from the bottom of the \uses DAG upward.
+The blueprint order is your guide. Concretely, the recommended order:
+
+  Module 0 ScalarMixedNorms  ->  Module 1 FourierSobolev  ->  Module 12 Utilities
+  ->  Module 2 FreeSchrodinger, Module 3 FractionalIntegration  ->  Module 4 Strichartz1D
+  ->  Module 5 CubicFlow, Module 6 EndpointRegularity  ->  Module 7 LocalSmoothing1D
+  ->  Module 8 CriticalQuadraticForms  ->  Module 9 DensityCurrent
+  ->  Module 10 WronskianExterior  ->  Module 11 DiagonalTrace
+  ->  Module 13 Carleman2D  ->  Module 14 HalfspacePropagation  ->  Module 15 PhaseRetrieval
+
+For every axiom:
+1. read the blueprint statement and its `% FULL PROOF: paper.tex L..-L..` pointer;
+2. SEARCH MATHLIB FIRST (many leaves are already there — see Step 0 and TEX_MATHLIB_AUDIT.md)
+   before proving from scratch;
+3. transcribe the epsilon-level argument from the cited paper.tex lines;
+4. replace the axiom with a real theorem; keep the edit small;
+5. run `lake env lean` on the changed file, then `lake build`;
+6. update AXIOM_STATUS.md and report the new axiom count.
+
+A good warm-up first proof: \cref{lem:Hilbert-wedge} (showcase's endgame lemma) — fully
+self-contained (Cauchy–Schwarz + Fubini), no infrastructure needed.
+
+LLM prompt (goal mode):
+-----------------------
+We are replacing temporary axioms, bottom-up in the blueprint \uses order. Choose the
+lowest not-yet-proved axiom that is not the final theorem. Read its blueprint statement and
+its `% FULL PROOF: paper.tex L..` pointer. Search the project and Mathlib for existing lemmas
+first. Replace the axiom with a real Lean theorem, keeping the edit small and not changing any
+statement. Run `lake env lean` on the file and `lake build`. Update AXIOM_STATUS.md and report
+how many axioms remain. If the proof is too hard, stop and record the missing sub-lemmas precisely.
+
+
+Step 7. Loop for one hard lemma (use for Carleman and traces especially)
+------------------------------------------------------------------------
+
+The audit flags the hardest / highest-risk modules, in order:
+  (1) Carleman2D (Module 13)   — general-open-set distribution calculus, oscillatory-kernel
+                                 bounds (\cref{lem:Tbeta-kernel} and its sub-lemmas
+                                 lem:Tbeta-symbol, lem:vandercorput-kernel, lem:K-homogeneous),
+                                 the graph closure (\cref{lem:carleman-closure}), and the
+                                 slicing lemma (\cref{lem:parameterwise-distribution-ODE});
+  (2) DiagonalTrace (Module 11) — the Neumann trace (\cref{prop:Neumann-trace}) and the
+                                 quantitative multiplier (\cref{lem:translated-test-multiplier},
+                                 which needs \cref{lem:smooth-multiplier-quantitative});
+  (3) CriticalQuadraticForms (Module 8) — the current definition and A(K) test algebra.
+Budget extra verification there. The blueprint has already split these into sub-lemmas.
+
+LLM prompt:
+-----------
+Target exactly this axiom: <blueprint \label and its Lean statement>. Do not touch other
+axioms and do not change any statement. First give the mathematical proof strategy, reading
+the blueprint sub-lemmas it \uses and the cited paper.tex lines. Then search the project and
+Mathlib for relevant lemmas. If the proof is long, propose the intermediate Lean lemmas with
+exact statements (these should match the blueprint's split sub-lemmas). Then, in a follow-up,
+attack the axiom so the count drops.
+
+
+Step 8. Assemble the main theorem and discharge showcase.lean
+-------------------------------------------------------------
+
+Once every axiom on the direct path to \cref{cor:interval-version} is a real theorem, prove
+the project's phase-retrieval theorem in Lean_Code/PhaseRetrieval.lean, then discharge the
+`sorry` in showcase.lean.
+
+LLM prompt:
+-----------
+We are ready for the final theorem. Before writing proof code:
+1. show the Lean statement of `phase_retrieval_interval` from showcase.lean (unchanged);
+2. list every lemma/theorem it will use (the \uses of \cref{cor:interval-version},
+   \cref{thm:main}, \cref{lem:F-vanishing}, \cref{lem:Hilbert-wedge}, \cref{thm:GWP});
+3. confirm none of them is still a temporary axiom (run `#print axioms` on each);
+4. outline the proof.
+Then prove the project theorem in Lean_Code/PhaseRetrieval.lean and use it to replace the
+`sorry` in showcase.lean WITHOUT changing showcase.lean's statement or definitions. Finally
+run `#print axioms CubicNLS.phase_retrieval_interval` and confirm it shows only propext,
+Classical.choice, Quot.sound (no sorryAx, no project axioms). Report the final axiom count of 0.
+
+
+Definition of done
+------------------
+
+- `lake build` succeeds.
+- showcase.lean has no `sorry` and its statements/definitions are byte-for-byte unchanged.
+- `#print axioms CubicNLS.phase_retrieval_interval` and
+  `#print axioms CubicNLS.phase_retrieval_cubic_NLS` show only Lean's three standard axioms.
+- AXIOM_STATUS.md shows 0 remaining project axioms (or a precisely documented, human-approved
+  short list, e.g. only \cref{lem:integral-gronwall} if cor:linear-common-potential is descoped).
+
+
+Quick reference (project-specific)
+----------------------------------
+
+- Pin: Lean 4.32.0, Mathlib v4.32.0, commit 81a5d25. `import Mathlib`.
+- Confirmed-present Mathlib foundations: Lp.fourierTransformₗᵢ (+ norm_/inner_fourier_eq,
+  fourier_toTemperedDistribution_eq), TemperedDistribution.MemSobolev (+ lineDerivOp,
+  laplacian at p=2), Gaussian Fourier, AbsMax/PhragmenLindelof, AEEqOfIntegralContDiff,
+  IntervalIntegral/{Basic,FundThmCalculus,AbsolutelyContinuousFun}, weak-dual/Alaoglu,
+  convolution/Young, SimpleFuncDenseLp.
+- Naming nuance: use memSobolev_iff_exists_smulLeftCLM_fourier / memSobolev_besselPotential_iff,
+  NOT memSobolev_two_iff_fourier (docstring-only).
+- Only missing leaf: variable-coefficient integral Grönwall = \cref{lem:integral-gronwall}
+  (prove from FTC; off main path).
+- The paper self-proves (do NOT look for these in Mathlib; they are theorems to build):
+  Strichartz, Hardy–Littlewood maximal, three-lines, Riesz–Thorin, Christ–Kiselev, local
+  smoothing, the H^{±1/2} calculus, the mixed-norm spaces, the diagonal traces, and the
+  half-space Carleman / unique-continuation theorem.
+- Highest-risk modules: Carleman2D (13), DiagonalTrace (11), CriticalQuadraticForms (8).
+- First infrastructure to design: the H^{±1/2} interface in FourierSobolev (Module 1).
+- First proof to attempt (warm-up): \cref{lem:Hilbert-wedge}.

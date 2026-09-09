@@ -1,0 +1,380 @@
+Black-Box Workflow for Formalizing One Main Theorem in Lean
+===========================================================
+
+Purpose
+-------
+
+Use this file as a reusable recipe for a future project where you have a
+mathematical paper or note and want Lean to verify one central main theorem.
+
+The workflow matches the style used in some other project:
+
+1. LLM should read the paper;
+2. make a Blueprint;
+3. split the Lean project into manageable files;
+4. ask LLMs to produce a first scaffold;
+5. only then start replacing axioms by real proofs.
+
+Important convention:
+
+All main Lean code should live in a folder named:
+Lean_Code
+
+Do not start by asking an LLM to prove the final theorem. First make sure that
+the Lean statement of the final theorem and the definitions used in it are the
+mathematics you actually want to verify.
+
+
+
+Step 0. Prepare Inputs
+----------------------
+
+Put these files in the project folder: paper.tex, Showcase.lean
+
+LLM prompt:
+-----------
+
+We are starting a Lean formalization project.
+
+The goal is to verify one central main theorem from paper.tex.
+
+Showcase.lean is the theorem I want to verify. It corresponds to the math in paper.tex. Showcase should stay untouched. The goal of this whole operation is to have Showcase.lean without sorrys at the end of the project, so that I can say the main theorem in the paper is verified.
+
+Use the folder Lean_Code for all main Lean files.
+
+First inspect paper.tex and identify:
+- the central main theorem;
+- the definitions needed to state it;
+- the major lemmas/propositions that appear to support it;
+- any notation that must be translated into Lean.
+
+Do not write proof code yet.
+Produce a short project overview and a dependency list.
+
+All the Lean compilation should be done on the server lemma.farm. My account there is YOUR_NAME@lemma.farm. Connect via SSH and create a folder for this project in /home/YOUR_NAME there.
+
+
+
+Step 1. Read the Paper and Identify the Main Theorem
+----------------------------------------------------
+
+Goal:
+
+Decide exactly what theorem Lean should eventually verify.
+
+Output:
+
+```text
+Main theorem chosen.
+Definitions needed to state it.
+Important supporting lemmas listed.
+```
+
+Do not allow the project to drift into proving every interesting lemma in the
+paper. For a theorem-driven project, the main theorem controls the whole
+formalization.
+
+LLM prompt:
+-----------
+
+Read paper.tex as a theorem-formalization target.
+
+Identify the central theorem that should become the final Lean theorem in Showcase.lean.
+
+For that theorem, list:
+1. the informal theorem statement;
+2. every mathematical object needed to state it;
+3. every hypothesis;
+4. every conclusion;
+5. the paper labels or section numbers where these appear;
+6. the supporting lemmas that seem necessary later.
+
+Do not produce Lean code yet.
+Focus only on mathematical structure and dependencies.
+
+
+
+Step 2. Create a Blueprint
+--------------------------
+
+Goal:
+
+Make a Blueprint that describes the mathematical dependency graph before
+writing much Lean.
+
+Recommended file:
+
+```text
+Blueprint.md
+```
+
+The Blueprint should contain:
+
+- the main theorem;
+- required definitions;
+- supporting lemmas;
+- dependency order;
+- informal proof sketch;
+- suggested Lean names.
+
+LLM prompt:
+-----------
+
+Create a Blueprint.md for this Lean formalization.
+
+The project has one central main theorem.
+
+The Blueprint should contain:
+- a section for the main theorem;
+- a section for each definition needed to state the main theorem;
+- a section for each supporting lemma;
+- dependencies between the sections;
+- suggested Lean declaration names;
+- a short informal proof idea for each lemma/theorem.
+
+Use a dependency order suitable for Lean:
+definitions first, then elementary lemmas, then intermediate propositions,
+then the main theorem.
+
+Do not write full Lean proofs yet.
+
+
+
+Step 3. Decide the Lean File Split
+----------------------------------
+
+Goal:
+
+Split the project into small files that an LLM and a human can understand.
+
+Use the folder:
+
+```text
+Lean_Code
+```
+
+Typical file layout:
+
+```text
+Lean_Code/Basic.lean
+Lean_Code/Definitions.lean
+Lean_Code/Preliminaries.lean
+Lean_Code/MainTheorem.lean
+Lean_Code/Main.lean
+Lean_Code/Human_Check.lean
+Lean_Code/AXIOM_STATUS.md
+```
+
+For larger projects, use more specific files, for example:
+
+```text
+Lean_Code/Topology.lean
+Lean_Code/Algebra.lean
+Lean_Code/MeasureTheory.lean
+Lean_Code/Operators.lean
+Lean_Code/Compactness.lean
+```
+
+Rules:
+
+- put definitions close to the first file that needs them;
+- avoid one giant file;
+- avoid making a new file for every tiny lemma;
+- make `Lean_Code/Main.lean` import the whole project;
+- make `Lean_Code/MainTheorem.lean` contain the final theorem statement.
+
+LLM prompt:
+-----------
+
+Using Blueprint.md, propose a Lean file split inside the folder Lean_Code.
+
+The project should verify one central main theorem.
+
+Suggest files and explain what each file should contain.
+
+Requirements:
+- Lean_Code/Main.lean should import the project.
+- Lean_Code/MainTheorem.lean should contain the final theorem statement.
+- Definitions needed by many files should go in early files.
+- Avoid a single huge Lean file.
+- Avoid over-splitting into many tiny files.
+
+Do not write proofs yet.
+
+
+Step 4. Create the First Lean Scaffold
+--------------------------------------
+
+Goal:
+
+Create Lean files that contain the correct structure, names, imports, and
+temporary theorem statements.
+
+At this stage it is acceptable to use temporary axioms for hard facts. The
+point is to make a scaffold that compiles and exposes what remains to prove.
+
+Output:
+
+```text
+Lean_Code/*.lean
+Lean_Code/AXIOM_STATUS.md
+```
+
+Rules:
+
+- definitions should be real whenever possible;
+- theorem statements may temporarily be axioms;
+- each axiom should be narrow and named;
+- never hide many unrelated facts inside one giant axiom;
+- run Lean after each small group of files.
+
+LLM prompt:
+-----------
+
+Create the first Lean scaffold from Blueprint.md.
+
+Use the folder Lean_Code.
+
+Important:
+- Do not try to prove the main theorem yet.
+- Implement definitions as real Lean definitions whenever feasible.
+- For hard lemmas, create narrow temporary axioms with precise statements.
+- Split the code according to the file plan.
+- Make Lean_Code/Main.lean import all project files.
+- Create Lean_Code/AXIOM_STATUS.md listing every temporary axiom and why it is
+  currently an axiom.
+
+The scaffold should compile.
+
+After each file or small group of files, run:
+
+lake env lean <file>
+
+Then run:
+
+lake build
+
+
+Step 5. Rules
+-------------
+
+LLM prompt:
+-----------
+
+In an upcoming prompt I will tell you to start replacing axioms with proof. Here is a general rule that should apply when you work in replacing axioms:
+
+Update Lean_Code/AXIOM_STATUS.md.
+Include:
+- axioms replaced in this pass;
+- proof idea for each replacement;
+- remaining axioms;
+- why each remaining axiom is still hard;
+- exact commands that were run;
+- whether lake build succeeded.
+
+Do not leave files in a broken state. If the proof cannot be finished,
+record the obstacle in Lean_Code/AXIOM_STATUS.md.
+
+
+
+Step 6. Start Replacing Axioms
+------------------------------
+
+Goal:
+
+Replace temporary axioms by real Lean definitions and proofs.
+
+Do not start with the final theorem.
+
+Start with foundational definitions and easy lemmas. Work from the bottom of
+the dependency graph upward.
+
+For every replacement:
+
+1. replace one axiom or one small group of related axioms;
+2. run a focused Lean check;
+3. run `lake build`;
+4. update `Lean_Code/AXIOM_STATUS.md`;
+5. record the LLM prompt that worked.
+
+LLM prompt (IN GOAL MODE!):
+---------------------------
+
+
+We are now replacing temporary axioms.
+
+Choose a low-level axiom from Lean_Code/AXIOM_STATUS.md that is not the final
+theorem.
+
+For the chosen axiom:
+- inspect nearby definitions and lemmas;
+- search Mathlib for existing theorems before proving from scratch;
+- replace the axiom with a real definition or theorem if feasible;
+- keep the edit small;
+- do not change the main theorem statement;
+- update Lean_Code/AXIOM_STATUS.md;
+- run lake env lean on the changed file;
+- run lake build.
+
+If the proof is way too hard, stop and record the missing lemmas precisely.
+
+Provide an axiom count, and how many axioms are left. I.e., when an axiom was replaced successfully, provide a count how many axioms are left to replace.
+
+Do this until all low-level axioms are replaced.
+
+
+Step 7. Standard LLM Loop for One Hard Lemma
+--------------------------------------------
+
+Use this loop for each serious theorem.
+
+1. Ask for a proof plan.
+2. Ask Mathlib-search questions.
+3. Create intermediate lemmas.
+4. Prove the intermediate lemmas.
+5. Replace the axiom.
+6. Build.
+7. Update documentation.
+
+LLM prompt:
+-----------
+
+Target exactly this axiom:
+
+<axiom name and statement>
+
+Do not work on other axioms.
+Do not change the main theorem statement.
+
+First explain the mathematical proof strategy.
+Then search the local project and Mathlib for relevant lemmas.
+
+If the proof is long, propose intermediate Lean lemmas with exact statements. Make a smart strategy on who to attack the axiom.
+
+
+LLM prompt (follow-up in goal mode):
+-----------------------------------
+
+Using the outlined plan, attack the axiom XYZ. The goal is to replace the axiom with a proof so that the axiom count drops.
+
+
+Step 8. Assemble the Main Theorem
+----------------------------------
+
+Goal:
+
+Once the supporting axioms on the dependency path are gone, prove the central
+main theorem.
+
+LLM prompt:
+-----------
+We are ready to prove the central main theorem.
+
+Before writing proof code:
+1. show the Lean statement of the main theorem;
+2. list every theorem/lemma expected to be used;
+3. confirm that none of them are still temporary axioms, unless explicitly
+   allowed by the human;
+4. outline the proof.
+
+Then implement the proof in Lean_Code/MainTheorem.lean.
