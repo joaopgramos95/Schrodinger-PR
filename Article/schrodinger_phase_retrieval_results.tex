@@ -46,8 +46,8 @@
 
 \begin{abstract}
 We prove that two $L^2$ solutions of the one-dimensional Schr\"odinger equation with the same
-real potential are equal up to one constant unimodular factor whenever their moduli agree.  The potential may depend on time and is
-assumed locally to belong to
+real potential are equal up to one constant unimodular factor whenever their moduli agree.  The potential may depend on time and is only
+assumed to locally belong to
 $L^1_tL^\infty_x+L^2_{t,x}$.
 
 The result yields
@@ -86,15 +86,15 @@ where $\widehat h(\xi)=\int_{\R^n}e^{-2\pi i x\cdot\xi}h(x)\,dx$. In other words
 
 The Pauli problem is one instance of the broader phase retrieval problem: recovering a function or vector, up to a constant phase, from magnitudes of prescribed measurements. This problem also arises in optics, crystallography and signal processing; we refer to~\cite{KlibanovSacksTikhonravov,GrohsKoppensteinerRathmair} for surveys. Finite-dimensional recovery from frame coefficients and convex reconstruction methods are studied in~\cite{BalanCasazzaEdidin,CandesStrohmerVoroninski}, while infinite-dimensional Hilbert- and Banach-space formulations are treated in~\cite{CahillCasazzaDaubechies,AlaifariGrohs}. Stability on subspaces of function spaces is investigated in~\cite{ChristPineauTaylor,FreemanOikhbergPineauTaylor,AbdallaDeDiosRamosTaylor}, and H\"older stability on nonlinear subsets is studied in~\cite{FreemanTaylor}. For short-time Fourier measurements, local stability and its obstructions are considered in~\cite{AlaifariDaubechiesGrohsYin,GrohsRathmair,AlaifariPineauTaylorWellershoff,BertoliniDeDiosPineauRamosTaylor}; square-restricted stability in Fock space is treated in~\cite{BortolottoRamos}.
 
-As \eqref{eq:free-schr} is a particular case of \eqref{eq:schr-pot}, we may ask more generally if one may recover the solution $w$ to \eqref{eq:schr-pot} from the data $|w(0,\cdot)|$, $|w(t_0,\cdot)|$, where $t_0\in\R$ is a fixed time. In this direction, Jaming~\cite{Jaming2014} first showed that if one considers solutions to \eqref{eq:free-schr}, then phase retrieval is possible from $\{|u(t,x)|\}_{(t,x)\in\R\times\R}$ by connecting the problem to the fractional Fourier transform. Moreover, he later conjectured~\cite{Jaming2025} that the same should hold for \eqref{eq:schr-pot} under certain conditions on the potential $V$, and claimed that the same result should hold in higher dimensions.
+Back to the particular realm of the Pauli problem, as we may regard \eqref{eq:free-schr} as a particular case of \eqref{eq:schr-pot}, one is led to ask more generally if one may recover the solution $w$ to \eqref{eq:schr-pot} from the data $|w(0,\cdot)|$, $|w(t_0,\cdot)|$, where $t_0\in\R$ is a fixed time. In this direction, Jaming~\cite{Jaming2014} first showed that if one considers solutions to \eqref{eq:free-schr}, then phase retrieval is possible from $\{|u(t,x)|\}_{(t,x)\in\R\times\R}$ by connecting the problem to the fractional Fourier transform. Moreover, he later conjectured~\cite{Jaming2025} that the same should hold for \eqref{eq:schr-pot} under certain conditions on the potential $V$, and claimed that the same result should hold in higher dimensions.
 
 The main purpose of this manuscript is to answer some of the latter questions on phase retrieval for solutions to \eqref{eq:schr-pot}. Our main result is the following:
 
 \begin{mainresult}
 \label{thm:time-potential}
 Let $I_0\subset\R$ be a nonempty open interval. Suppose that the measurable
-function $V:I_0\times\mathbb R\to\mathbb R$ has, on every bounded interval
-$J\Subset I_0$, a decomposition
+function $V:I_0\times\mathbb R\to\mathbb R$ admits, on every compact sub-interval
+$J\subset I_0$, a decomposition of the form
 \[
  V=V_\infty+V_2,
  \qquad
@@ -222,25 +222,24 @@ Ionescu--Kenig~\cite{IonescuKenig}.
 
 \begin{proposition}
 \label{prop:strip-propagation}
-Let $J$ be a compact interval, $z=(z_1,z_2)\in\R^2$, and
+Let $J$ be a compact interval, $z=(z_1,z_2)\in\R^2$. 
 $\mathcal H=i\partial_t+\Delta_z$.  Put
 \begin{align*}
  X&=L^1(J;L^2(\R^2))+L^{4/3}(J\times\R^2),\\
  X'&=L^\infty(J;L^2(\R^2))\cap L^4(J\times\R^2),\\
  Y&=L^1(J;L^\infty(\R^2))+L^2(J\times\R^2).
 \end{align*}
-The sum norm on $X$ and $Y$ is the infimum over all decompositions into the
-two displayed summands; the intersection norm on $X'$ is the maximum of the
-two norms.  There is an absolute $\varepsilon_*>0$ with the following
+Let those spaces be normed in the canonical way.  Then there is an absolute $\varepsilon_*>0$ with the following
 property.  Suppose
-$Z\in C(J;L^2)\cap X'$, $\mathcal HZ=WZ\in X$, and
-$Z=0$ on $J\times\{z_1>b\}$.  If for some $h>0$
+$Z\in C(J;L^2)\cap X'$ us such that 
+$$i\partial_tZ+\Delta_zZ=WZ\in X,$$ 
+and $Z=0$ on $J\times\{z_1>b\}$.  Here, $W$ is a potential such that, for some $h>0,$
 \[
  \sup_{a\le b-h}
- \|\1_{\{a<z_1<a+h\}}W\|_Y\le\varepsilon_*,
+ \|\1_{\{a<z_1<a+h\}}W\|_Y\le\varepsilon_*.
  \tag{1.3}\label{eq:strip-smallness}
 \]
-then $Z=0$ on $J\times\R^2$.
+Under those hypotheses, we have that $Z=0$ on $J\times\R^2$.
 \end{proposition}
 
 \begin{proof}
@@ -290,7 +289,7 @@ We next recover the normal Cauchy data needed to create a half-space solution.
 \begin{lemma}
 \label{lem:endpoint-wronskian}
 Under the hypotheses of Theorem~\ref{thm:time-potential}, on every bounded
-interval $I\Subset I_0$ one has
+interval $I\subset I_0$ one has
 \[
  u,v\in L^4(I;L^\infty(\R)),
  \qquad
@@ -540,9 +539,7 @@ $v\in L^\infty_tL^2_x$.  For $V_\infty$, use
  \|V_\infty(t,x)u(t,x)v(t,y)\|_2
  \le\|V_\infty(t)\|_\infty\|u(t)\|_2\|v(t)\|_2
 \]
-and $V_\infty\in L^1_tL^\infty_x$.  The terms with $x$ and $y$ interchanged follow by identical means.
-
-Let us now introduce orthogonal coordinates:
+and $V_\infty\in L^1_tL^\infty_x$.  The terms with $x$ and $y$ interchanged follow by identical means. Let us now introduce orthogonal coordinates:
 \[
  r=\frac{x+y}{\sqrt2},
  \qquad s=\frac{x-y}{\sqrt2}.
