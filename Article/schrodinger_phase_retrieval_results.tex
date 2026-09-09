@@ -222,8 +222,8 @@ Ionescu--Kenig~\cite{IonescuKenig}.
 
 \begin{proposition}
 \label{prop:strip-propagation}
-Let $J$ be a compact interval, $z=(z_1,z_2)\in\R^2$. 
-$\mathcal H=i\partial_t+\Delta_z$.  Put
+Let $J$ be a compact interval of positive length, $z=(z_1,z_2)\in\R^2$.
+Put $\mathcal H=i\partial_t+\Delta_z$.  Put
 \begin{align*}
  X&=L^1(J;L^2(\R^2))+L^{4/3}(J\times\R^2),\\
  X'&=L^\infty(J;L^2(\R^2))\cap L^4(J\times\R^2),\\
@@ -231,7 +231,7 @@ $\mathcal H=i\partial_t+\Delta_z$.  Put
 \end{align*}
 Let those spaces be normed in the canonical way.  Then there is an absolute $\varepsilon_*>0$ with the following
 property.  Suppose
-$Z\in C(J;L^2)\cap X'$ us such that 
+$Z\in C(J;L^2)\cap X'$ is such that
 $$i\partial_tZ+\Delta_zZ=WZ\in X,$$ 
 and $Z=0$ on $J\times\{z_1>b\}$.  Here, $W$ is a potential such that, for some $h>0,$
 \[
@@ -243,45 +243,431 @@ Under those hypotheses, we have that $Z=0$ on $J\times\R^2$.
 \end{proposition}
 
 \begin{proof}
-The multiplier estimate used in the two-dimensional Schr\"odinger Carleman
-inequality follows from two applications of H\"older's inequality.  If
-$A=A_\infty+A_2$ with
-$A_\infty\in L^1_tL^\infty_z$ and $A_2\in L^2_{t,z}$, then
+We will prove that the zero set can be enlarged by one strip, and then
+repeat that argument.  The analytic input is the Carleman inequality in
+\cite[Lemma~9.1]{IonescuKenig}.  We state the form we use and verify its
+hypotheses below.
+
+\medskip
+\noindent\emph{Step 1: the multiplication estimate.}
+The sum norm on $Y$ is
+\[
+ \|A\|_Y=\inf_{A=A_\infty+A_2}
+ \bigl(\|A_\infty\|_{L^1_tL^\infty_z}
+       +\|A_2\|_{L^2_{t,z}}\bigr),
+\]
+where the infimum is over decompositions with the indicated finite norms.
+The norm on $X$ is defined in the same way using its two summands, while
+\[
+ \|B\|_{X'}=\max\bigl\{
+ \|B\|_{L^\infty_tL^2_z},\ \|B\|_{L^4_{t,z}}\bigr\}.
+\]
+Multiplication by a measurable function of absolute value at most one
+cannot increase any of these three norms.  For a sum space, this follows
+by multiplying each term of a decomposition and then taking the infimum.
+For the intersection space, it follows by bounding each of its two norms.
+
+Fix $A\in Y$ and $B\in X'$.  For every decomposition
+$A=A_\infty+A_2$, H\"older's inequality in space followed by integration in
+time gives
 \begin{align*}
  \|A_\infty B\|_{L^1_tL^2_z}
+ &=\int_J\|A_\infty(t)B(t)\|_2\,dt\\
+ &\le\int_J\|A_\infty(t)\|_\infty\|B(t)\|_2\,dt\\
  &\le\|A_\infty\|_{L^1_tL^\infty_z}
-       \|B\|_{L^\infty_tL^2_z},\\
- \|A_2B\|_{L^{4/3}_{t,z}}
- &\le\|A_2\|_{L^2_{t,z}}\|B\|_{L^4_{t,z}}.
+       \|B\|_{L^\infty_tL^2_z}.
 \end{align*}
-Taking the infimum over decompositions of $A$ gives
+H\"older's inequality on spacetime, with
+$1/(4/3)=1/2+1/4$, also gives
+\[
+ \|A_2B\|_{L^{4/3}_{t,z}}
+ \le\|A_2\|_{L^2_{t,z}}\|B\|_{L^4_{t,z}}.
+\]
+Since $AB=A_\infty B+A_2B$ is an admissible decomposition in $X$, these
+bounds imply
 \[
  \|AB\|_X\le
- \|A\|_Y\|B\|_{X'}.
+ \bigl(\|A_\infty\|_{L^1_tL^\infty_z}
+       +\|A_2\|_{L^2_{t,z}}\bigr)\|B\|_{X'}.
+\]
+Taking the infimum over decompositions of $A$ proves
+\[
+ \|AB\|_X\le\|A\|_Y\|B\|_{X'}.
  \tag{1.4}\label{eq:XY-multiplier}
 \]
-Apply the bounded-weight estimate in
-\cite[Lemma~9.1 and the proof of Theorem~2.5]{IonescuKenig} after translating
-the plane $z_1=b$ to $z_1=0$.  Its potential term is bounded by
-\eqref{eq:XY-multiplier} and is absorbed when its $Y$ norm is at most
-$\varepsilon_*$.  After the potential term has been absorbed, the Carleman parameter may tend
-to infinity.  The weighted estimate then shows that a solution which vanishes
-on $z_1>b$ also vanishes on $z_1>b-h$.
+No decomposition attaining the infimum is needed.
 
-For precision, the time-dependent translation used in the cited proof is
-$z_1=y_1+w_\delta(t)$, where $w_\delta=b$ near the endpoints of $J$ and
-$w_\delta=b-h$ away from them.  Conjugation by
-$e^{-iw_\delta'(t)y_1/2}$ removes the first-order term.  The remaining affine
-term $w_\delta''(t)y_1/2$ is controlled by the coercive bounded weight in that
-lemma.  No potential outside the strip $b-h<z_1<b$ occurs because $Z$ already
-vanishes to its right.  Letting the Carleman parameter tend to infinity and
-then $\delta\downarrow0$ gives the asserted enlargement of the zero set.
-Iteration over the planes $z_1=b-jh$, $j\ge1$, gives
+\medskip
+\noindent\emph{Step 2: normalization of the interval and the strip width.}
+Write $J=[t_-,t_+]$ and $L=t_+-t_->0$.  Set
 \[
- Z=0\quad\text{on }\{z_1>b-jh\}\times J
- \quad(j=0,1,2,\ldots).
+ \widetilde Z(\tau,\xi)=L^{1/2}Z(t_-+L\tau,L^{1/2}\xi),
+ \qquad
+ \widetilde W(\tau,\xi)=L W(t_-+L\tau,L^{1/2}\xi).
 \]
-The union of these half-spaces is $\R^2$, which proves $Z=0$.  
+Then
+\[
+ (i\partial_\tau+\Delta_\xi)\widetilde Z
+ =\widetilde W\widetilde Z,
+ \qquad 0<\tau<1.
+\]
+This follows because both the time derivative and the spatial Laplacian
+acquire the factor $L$.  In two spatial dimensions the change of variables
+satisfies $d\tau\,d\xi=L^{-2}\,dt\,dz$.  For any decomposition $A=A_\infty+A_2$ of a potential or restricted
+potential, write
+$\widetilde A_k(\tau,\xi)=L A_k(t_-+L\tau,L^{1/2}\xi)$ for
+$k\in\{\infty,2\}$.  The change of variables gives
+\begin{align*}
+ \|\widetilde Z\|_{L^\infty_\tau L^2_\xi}
+ &=\|Z\|_{L^\infty_tL^2_z},
+ &\|\widetilde Z\|_{L^4_{\tau,\xi}}
+ &=\|Z\|_{L^4_{t,z}},\\
+ \|\widetilde A_\infty\|_{L^1_\tau L^\infty_\xi}
+ &=\|A_\infty\|_{L^1_tL^\infty_z},
+ &\|\widetilde A_2\|_{L^2_{\tau,\xi}}
+ &=\|A_2\|_{L^2_{t,z}}.
+\end{align*}
+We do not assume $W\in Y$ globally.
+Transforming decompositions in both directions shows that the $Y$ norm is
+also preserved.  The forcing is transformed with the factor $L^{3/2}$,
+which preserves both summand norms in $X$.  Thus all the hypotheses are
+preserved, with $b$ and $h$ replaced by $b/L^{1/2}$ and $h/L^{1/2}$.
+It suffices to work on $J=[0,1]$.
+
+We may also decrease $h$ so that $0<h\le1$.  To justify this, let
+$0<\ell\le h$ and $a\le b-\ell$.  The strip $(a,a+\ell)$ is contained in
+the strip $(\alpha,\alpha+h)$, where $\alpha=\min\{a,b-h\}$.
+Indeed, if $a\le b-h$ we take $\alpha=a$; otherwise
+$(a,a+\ell)\subset(b-h,b)$.  Since $\alpha\le b-h$, the original
+hypothesis and the restriction property from Step 1 give the same
+smallness bound for width $\ell$.  We take $\ell=\min\{h,1\}$ and denote
+this new width by $h$.
+
+\medskip
+\noindent\emph{Step 3: the Carleman inequality.}
+Put $\mathcal H_y=i\partial_t+\Delta_y$.  For $\beta\ge2$, define
+\[
+ \phi_\beta(r)=
+ \begin{cases}
+  \beta r,&r\ge-1,\\
+  r-\beta+1,&r<-1.
+ \end{cases}
+\]
+In particular, $\phi_\beta(r)=\beta r$ on $[0,1]$.  On the other side of
+zero we have the bounds
+\[
+ e^{\phi_\beta(r)}\le1,
+ \qquad
+ (1+|r|)e^{\phi_\beta(r)}\le1
+ \quad(r\le0,\ \beta\ge2).
+ \label{eq:IK-weight-left}\tag{1.4a}
+\]
+For $r=-s\in[-1,0]$, the second bound follows from
+$(1+s)e^{-\beta s}\le e^{-(\beta-1)s}\le1$.
+For $s>1$, it follows from
+$(1+s)e^{-s-\beta+1}\le e^{1-\beta}\le1$.
+Here we used $1+s\le e^s$ for $s\ge0$.
+
+The cited lemma gives absolute constants $C_0\ge1$ and $c_0>0$ such that
+\begin{align*}
+ &\|\1_{\{0<y_1<1\}}e^{\phi_\beta(y_1)}U\|_{X'}
+ +\beta^{c_0}
+  \|\1_{\{0<y_1<1\}}e^{\phi_\beta(y_1)}U\|_{L^1_tL^2_y}\\
+ &\qquad\le C_0\Bigl(
+ \|e^{\phi_\beta(y_1)}\mathcal H_yU\|_X
+ +\|e^{\phi_\beta(y_1)}U(0)\|_2
+ +\|e^{\phi_\beta(y_1)}U(1)\|_2\Bigr)
+ \tag{1.4b}\label{eq:IK-bounded-weight}
+\end{align*}
+whenever
+\[
+ U\in C([0,1];L^2),\qquad
+ U=0\text{ for }y_1>1,\qquad
+ (1+|y_1|)^{-1}\mathcal H_yU\in X.
+\]
+This is the case $N=1$ of \cite[Lemma~9.1]{IonescuKenig}, with its
+acceptable exponents chosen as $(p_0,q_0)=(4/3,4/3)$ in dimension two.
+The spaces in that lemma are therefore exactly our $X$ and $X'$.
+We use the lemma in its stated distributional regularity class, not only
+for smooth functions.  Its time-boundary terms have been retained in
+\eqref{eq:IK-bounded-weight}.
+
+The first term on the left will control multiplication by the small
+restricted potential.  The second term will control the additional
+potential produced by the change of variables below, after restricting it
+to the strip where it is bounded.  Its factor
+$\beta^{c_0}$ can be made arbitrarily large.  These are two different
+uses of the inequality.  Fix from now on
+\[
+ \varepsilon_*=(4C_0)^{-1}.
+\]
+
+\medskip
+\noindent\emph{Step 4: a moving spatial coordinate.}
+Set $b_j=b-jh$, and suppose inductively that
+$Z=0$ on $[0,1]\times\{z_1>b_j\}$.  This holds for $j=0$ by hypothesis, including at every time in the $L^2$
+sense: the map $t\mapsto\1_{\{z_1>b\}}Z(t)$ is continuous and zero almost
+everywhere in time, so its norm cannot be positive at any time.
+We will prove the same statement with $b_j$ replaced by $b_{j+1}$.
+
+Fix $0<\delta<1/4$.  Choose a smooth function
+$\eta_\delta:[0,1]\to[0,1]$ which is zero on
+$[0,\delta]\cup[1-\delta,1]$ and one on $[2\delta,1-2\delta]$.
+For example, take
+\[
+ \eta_\delta(t)=\eta(t/\delta)\eta((1-t)/\delta),
+\]
+where $\eta:\R\to[0,1]$ is smooth, zero on $(-\infty,1]$, and one on
+$[2,\infty)$.  Define
+\[
+ w_\delta(t)=b_j-h\eta_\delta(t).
+\]
+Thus $b_{j+1}\le w_\delta\le b_j$, the function $w_\delta$ equals $b_j$
+near the time endpoints, and it equals $b_{j+1}$ on the central interval.
+Differentiating the fixed cutoff gives
+\[
+ \|w_\delta'\|_\infty\le Ch\delta^{-1},
+ \qquad
+ \|w_\delta''\|_\infty\le Ch\delta^{-2}.
+\]
+These bounds are finite for each fixed $\delta$; uniform bounds as
+$\delta\downarrow0$ will not be needed.
+
+Translate the solution and then multiply it by a phase:
+\[
+ \widetilde Z_\delta(t,y)
+ =Z(t,y_1+w_\delta(t),y_2),
+ \qquad
+ U_\delta(t,y)
+ =e^{-iw_\delta'(t)y_1/2}\widetilde Z_\delta(t,y).
+\]
+Translation in space and multiplication by a function of modulus one
+preserve every spatial $L^p$ norm.  Applying this at each time shows that
+$U_\delta\in X'$ and
+$\|U_\delta\|_{L^\infty_tL^2_y}=\|Z\|_{L^\infty_tL^2_z}$.
+Moreover, $U_\delta\in C([0,1];L^2)$: spatial translations and
+multiplications by $e^{iay_1}$ depend strongly continuously on their real
+parameters in $L^2$.  For translations this follows first for smooth
+compactly supported functions and then by density; for the phase factors
+it follows from dominated convergence.  Combining these facts with the
+continuity of $Z$, $w_\delta$, and $w_\delta'$ proves the assertion.
+
+The equation for $U_\delta$ includes two additional zeroth-order terms.
+To compute them, put
+$W_\delta(t,y)=W(t,y_1+w_\delta(t),y_2)$.  The chain rule gives
+\[
+ \mathcal H_y\widetilde Z_\delta
+ =W_\delta\widetilde Z_\delta
+   +iw_\delta'\partial_{y_1}\widetilde Z_\delta.
+\]
+Differentiating the phase factor gives, more explicitly,
+\begin{align*}
+ i\partial_tU_\delta
+ &=e^{-iw_\delta'y_1/2}
+   \left(i\partial_t\widetilde Z_\delta
+         +\tfrac12w_\delta''y_1\widetilde Z_\delta\right),\\
+ \Delta_yU_\delta
+ &=e^{-iw_\delta'y_1/2}
+   \left(\Delta_y\widetilde Z_\delta
+         -iw_\delta'\partial_{y_1}\widetilde Z_\delta
+         -\tfrac14(w_\delta')^2\widetilde Z_\delta\right).
+\end{align*}
+The first-order terms cancel when these identities are added.  Hence
+\[
+ \mathcal H_yU_\delta=(W_\delta+M_\delta)U_\delta,
+ \qquad
+ M_\delta(t,y)=\tfrac12w_\delta''(t)y_1
+               -\tfrac14(w_\delta'(t))^2.
+ \tag{1.4c}\label{eq:IK-moving-equation}
+\]
+The computation also holds for our nonsmooth $Z$.  Indeed, the translation
+is a smooth change of spacetime variables with Jacobian one, and the phase
+factor is smooth.  Testing against a compactly supported smooth function,
+changing variables, and integrating by parts gives the same derivative
+identities in distributions.  This uses no classical derivatives of $Z$.
+
+We next check the support and forcing hypotheses of
+\eqref{eq:IK-bounded-weight}.  If $y_1>h$, then
+$y_1+w_\delta(t)>b_j$, so $U_\delta(t,y)=0$ by the induction hypothesis.
+Since $h\le1$, this gives the required vanishing for $y_1>1$.
+For $t\in[0,\delta]\cup[1-\delta,1]$, we have
+$w_\delta=b_j$ and $w_\delta'=0$, so in fact $U_\delta=0$ for $y_1>0$
+at those times.  In particular, both time-boundary traces are supported
+in $\{y_1\le0\}$.
+
+Define the finite constant
+\[
+ K_\delta=\tfrac12\|w_\delta''\|_\infty
+          +\tfrac14\|w_\delta'\|_\infty^2.
+\]
+Then $|M_\delta(t,y)|\le K_\delta(1+|y_1|)$ everywhere, and
+$|M_\delta(t,y)|\le K_\delta$ when $0<y_1<1$.
+Also,
+\[
+ W_\delta U_\delta
+ =e^{-iw_\delta'y_1/2}(WZ)(t,y_1+w_\delta(t),y_2)\in X,
+ \qquad
+ \|W_\delta U_\delta\|_X=\|WZ\|_X.
+\]
+The norm equality follows by translating and multiplying each summand in
+an $X$ decomposition, and applying the inverse transformation for the
+reverse inequality.  Since
+\[
+ \|(1+|y_1|)^{-1}M_\delta U_\delta\|_{L^1_tL^2_y}
+ \le K_\delta\|U_\delta\|_{L^1_tL^2_y}
+ \le K_\delta\|Z\|_{L^\infty_tL^2_z},
+\]
+equation \eqref{eq:IK-moving-equation} gives
+$(1+|y_1|)^{-1}\mathcal H_yU_\delta\in X$.
+All the hypotheses of the Carleman inequality have now been verified.
+
+\medskip
+\noindent\emph{Step 5: estimating the right-hand side and absorbing two terms.}
+For fixed $j$ and $\delta$, put
+\[
+ U_{\delta,\beta}^{+}
+ =\1_{\{0<y_1<1\}}e^{\phi_\beta(y_1)}U_\delta,
+ \qquad
+ A_\beta=\|U_{\delta,\beta}^{+}\|_{X'},
+ \qquad
+ B_\beta=\|U_{\delta,\beta}^{+}\|_{L^1_tL^2_y}.
+\]
+Both norms are finite for every $\beta$: the weight is at most $e^\beta$
+on this strip, and $U_\delta\in X'$.  Notice also that $B_\beta\le A_\beta$
+because the time interval has length one.
+
+First consider the $W_\delta U_\delta$ term where $y_1>0$.
+Whenever $U_\delta(t,y)\ne0$ there, the original spatial coordinate lies in
+\[
+ b_j-h\le w_\delta(t)<y_1+w_\delta(t)\le b_j.
+\]
+Thus only the restriction of $W$ to the fixed strip
+$S_j=\{b_j-h<z_1<b_j\}$ enters this part of the product.
+More precisely, define
+\[
+ A_{j,\delta}(t,y)
+ =\1_{\{y_1>0\}}(\1_{S_j}W)(t,y_1+w_\delta(t),y_2).
+\]
+Then $A_{j,\delta}U_{\delta,\beta}^{+}
+=\1_{\{0<y_1<1\}}e^{\phi_\beta(y_1)}W_\delta U_\delta$
+almost everywhere.  Time-dependent spatial translation preserves both
+summand norms in $Y$, and restriction cannot increase them.  Therefore
+\[
+ \|A_{j,\delta}\|_Y\le\|\1_{S_j}W\|_Y\le\varepsilon_*.
+\]
+The last inequality is \eqref{eq:strip-smallness} with
+$a=b_j-h=b-(j+1)h\le b-h$.
+Applying \eqref{eq:XY-multiplier} now gives
+\[
+ \|\1_{\{0<y_1<1\}}e^{\phi_\beta(y_1)}
+       W_\delta U_\delta\|_X
+ \le\varepsilon_* A_\beta.
+\]
+On the same strip, the bound for $M_\delta$ gives
+\[
+ \|\1_{\{0<y_1<1\}}e^{\phi_\beta(y_1)}
+       M_\delta U_\delta\|_X
+ \le\|M_\delta U_{\delta,\beta}^{+}\|_{L^1_tL^2_y}
+ \le K_\delta B_\beta.
+\]
+
+The forcing on $y_1\le0$ need not be small.  It is enough that its
+weighted norm be bounded independently of $\beta$.
+By \eqref{eq:IK-weight-left} and the restriction property of $X$,
+\begin{align*}
+ \|\1_{\{y_1\le0\}}e^{\phi_\beta(y_1)}W_\delta U_\delta\|_X
+ &\le\|W_\delta U_\delta\|_X=\|WZ\|_X,\\
+ \|\1_{\{y_1\le0\}}e^{\phi_\beta(y_1)}M_\delta U_\delta\|_X
+ &\le K_\delta\|U_\delta\|_{L^1_tL^2_y}
+ \le K_\delta\|Z\|_{L^\infty_tL^2_z}.
+\end{align*}
+There is no forcing on $y_1>1$, by \eqref{eq:IK-moving-equation} and the
+support of $U_\delta$.  Finally, the support of the time-boundary traces
+and \eqref{eq:IK-weight-left} imply
+\[
+ \|e^{\phi_\beta(y_1)}U_\delta(0)\|_2
+ +\|e^{\phi_\beta(y_1)}U_\delta(1)\|_2
+ \le\|Z(0)\|_2+\|Z(1)\|_2.
+\]
+These traces need not vanish on the whole plane.  The point of the moving
+coordinate is that their weighted norms do not grow with $\beta$.
+
+Set
+\[
+ D_\delta=\|WZ\|_X+K_\delta\|Z\|_{L^\infty_tL^2_z}
+          +\|Z(0)\|_2+\|Z(1)\|_2<\infty.
+\]
+Substituting the preceding estimates into
+\eqref{eq:IK-bounded-weight} gives
+\[
+ A_\beta+\beta^{c_0}B_\beta
+ \le C_0\varepsilon_*A_\beta+C_0K_\delta B_\beta+C_0D_\delta.
+ \tag{1.4d}\label{eq:IK-two-absorptions}
+\]
+Our choice of $\varepsilon_*$ gives $C_0\varepsilon_*=1/4$.
+For the fixed $\delta$, take $\beta$ large enough that
+$C_0K_\delta\le\beta^{c_0}/2$.
+Subtracting the corresponding terms from the two sides of
+\eqref{eq:IK-two-absorptions} yields
+\[
+ \tfrac34 A_\beta+\tfrac12\beta^{c_0}B_\beta
+ \le C_0D_\delta,
+ \qquad
+ A_\beta\le2C_0D_\delta.
+ \tag{1.4e}\label{eq:IK-uniform-weighted-bound}
+\]
+This explains the absorption: the same nonnegative norms occur on both
+sides, and their coefficients on the right are strictly smaller.
+Only the strip restriction of $W$ was required to be small.  The part
+outside that strip was estimated through the assumed finite norm
+$\|WZ\|_X$, not through a global $Y$ norm of $W$.
+
+\medskip
+\noindent\emph{Step 6: the limits and the induction.}
+Fix $0<\alpha<1$.  Since $\phi_\beta(y_1)=\beta y_1$ on $(0,1)$, we have
+\[
+ \|\1_{\{\alpha<y_1<1\}}U_\delta\|_{L^1_tL^2_y}
+ \le e^{-\beta\alpha}B_\beta
+ \le 2C_0D_\delta e^{-\beta\alpha}.
+\]
+For this fixed $\delta$, the constant $D_\delta$ is independent of $\beta$.
+Letting $\beta\to\infty$ proves that $U_\delta=0$ almost everywhere on
+$[0,1]\times\{\alpha<y_1<1\}$.  Taking the countable sequence
+$\alpha=1/m$, $m\ge2$, and recalling that $U_\delta=0$ for $y_1>1$, gives
+$U_\delta=0$ almost everywhere where $y_1>0$.
+Moreover, the map
+$t\mapsto\1_{\{y_1>0\}}U_\delta(t)$ is continuous in $L^2$, since the
+projection onto a half-space is bounded on $L^2$.
+A continuous map which is zero almost everywhere in time is zero at every
+time: if its norm were positive at one time, continuity would make it
+positive on an interval of positive length.  Thus
+\[
+ Z(t)=0\text{ on }\{z_1>w_\delta(t)\}
+ \quad\text{for every }t\in[0,1].
+\]
+
+In particular, $Z(t)=0$ on $\{z_1>b_{j+1}\}$ whenever
+$2\delta\le t\le1-2\delta$.  Every $t\in(0,1)$ belongs to one such central
+interval, by choosing $\delta<\frac12\min\{t,1-t\}$.
+Hence the new half-space vanishing holds at every interior time.
+Continuity of $t\mapsto\1_{\{z_1>b_{j+1}\}}Z(t)$ extends it to $t=0,1$.
+The order of the limits matters: $\beta\to\infty$ was taken for each fixed
+$\delta$, so the possible growth of $K_\delta$ as $\delta\downarrow0$
+causes no difficulty.
+
+This proves the induction step.  Starting at $j=0$, we obtain
+\[
+ Z(t)=0\text{ on }\{z_1>b-jh\}
+ \quad\text{for every }t\in[0,1]\text{ and every integer }j\ge0.
+\]
+These half-spaces increase to all of $\R^2$.  For each fixed $t$,
+monotone convergence therefore gives
+\[
+ \|Z(t)\|_2^2
+ =\lim_{j\to\infty}\int_{\{z_1>b-jh\}}|Z(t,z)|^2\,dz=0.
+\]
+Undoing the change of scale from Step 2 proves the conclusion on the
+original interval $J$.
 \end{proof}
 
 We next recover the normal Cauchy data needed to create a half-space solution.
