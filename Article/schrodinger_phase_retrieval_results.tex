@@ -45,15 +45,13 @@
 \raggedbottom
 
 \begin{abstract}
-Let $I\subset\mathbb R$ be a nonempty open interval.  We prove that two
-$L^2$ solutions of the one-dimensional Schr\"odinger equation with the same
-real potential are equal up to one constant unimodular factor whenever their
-moduli agree on $I\times\mathbb R$.  The potential may depend on time and is
+We prove that two $L^2$ solutions of the one-dimensional Schr\"odinger equation with the same
+real potential are equal up to one constant unimodular factor whenever their moduli agree.  The potential may depend on time and is
 assumed locally to belong to
 $L^1_tL^\infty_x+L^2_{t,x}$.
 
 The result yields
-phase retrieval for the cubic nonlinear Schr\"odinger equation in the global $L^2$ class.  The conclusion is false for the free equation in every spatial dimension at least two, even for Schwartz initial data.
+phase retrieval for the cubic nonlinear Schr\"odinger equation in the global $L^2$ class.  The conclusion is moreover \emph{false} for the free equation in every spatial dimension at least two, even for Schwartz initial data.
 \end{abstract}
 
 \maketitle
@@ -149,7 +147,7 @@ for almost every time. The next step is then to introduce the exterior product
 \]
 Our goal is to show this vanishes identically, as this proves the asserted claim about linear dependence of the two solutions. In order to do so, note that it solves a two-dimensional Schr\"odinger equation with potential $V(t,x)+V(t,y)$. In the coordinates $r=(x+y)/\sqrt2$ and $s=(x-y)/\sqrt2$, the function $F$ is odd in $s$. Its Dirichlet trace at $s=0$ vanishes by oddness, and its normal trace vanishes by the Wronskian identity. The zero extension of $F$ from $s>0$ therefore solves the same equation without a boundary source.
 
-Finally, a stripwise version of the Ionescu--Kenig Carleman estimate propagates this zero half-space through the whole $(r,s)$-plane. The $L^1_tL^\infty_x$ part of the potential is made small by shortening the time interval, while the restriction of the $L^2_{t,x}$ part to a strip of width $h$ has norm of order $h^{1/2}$. Taking $h$ small permits iteration of the estimate and gives $F=0$. Thus $u$ and $v$ are linearly dependent at one time, and equality of their moduli makes the proportionality constant unimodular, with uniqueness propagating the same phase throughout $I_0$.
+Finally, a stripwise version of the Ionescu--Kenig Carleman estimate propagates this zero half-space through the whole $(r,s)$-plane. The $L^1_tL^\infty_x$ part of the potential is made small by shortening the time interval, while the restriction of the $L^2_{t,x}$ part to a strip of width $h$ has norm of order $h^{1/2}$. Taking $h$ small then allows us to iterate the estimate and gives $F=0$. Thus $u$ and $v$ are linearly dependent at one time, and equality of their moduli makes the proportionality constant unimodular, with uniqueness propagating the same phase throughout $I_0$.
 
 If the potential and both solutions extend globally, uniqueness propagates the conclusion to every time.  The theorem also applies to nonlinear equations whenever equality of the moduli makes their nonlinear potentials
 identical. This gives immediately the following consequence.
@@ -201,9 +199,19 @@ We started from the first idea of considering the continuity equation $ \partial
 
 This argument, however, only works in high enough regularity. In order to remove such regularity, we needed to get rid of the assumptions on the phase. At that point, we started exploring with the aid of GPT 5.4/Claude Opus 4.6. It gave us several different directions, many of which are described in the end of this manuscript, such as ones based on scattering theory. 
 
-By exploiting and exhausting several paths towards the general $L^2$ case with GPT 5.4 and 5.5, as well as Claude Opus 4.6, 4.7, 4.8 and Fable 5.0, we had the idea of working at the level of currents. By doing so, we were naturally led to the idea of lifting our equation one dimension higher. The details on how to finish from there, such as applying specific unique continuation lemmas, were then provided by several different LLMs. Finally, Claude Fable 5.0 was also used in order to obtain a lean verification of Corollary \ref{cor:cubic-NLS}; see (add). 
+By exploiting and exhausting several paths towards the general $L^2$ case with GPT 5.4 and 5.5, as well as Claude Opus 4.7 and 4.8, we had the idea of working at the level of currents. By doing so, we were naturally led to the idea of lifting our equation one dimension higher. The details on how to finish from there, such as applying specific unique continuation lemmas, were then provided by interacting with several different LLMs. Finally, Claude Fable 5 was also used in order to obtain a Lean verification of Corollary \ref{cor:cubic-NLS}; see \href{https://github.com/joaopgramos95/Schrodinger-PR/tree/main/SchrodingerPR_verified}{this link}. 
 
-Most of the other attempts and results through different methods have been written down and are kept in the following repository (add). Apart from that note -- which is mostly LLM-written --, the results and proofs here have all been written and verified by humans. We take full responsibility for the contents of both manuscripts. 
+Most of the other attempts and results through different methods have been written down and are kept \href{https://github.com/joaopgramos95/Schrodinger-PR/tree/main/Article}{here}. Apart from that note -- which is mostly LLM-written --, the results and proofs here have all been written and verified by humans. We take full responsibility for the contents of both manuscripts. 
+
+\section*{Acknowledgements}
+
+The authors are thankful to Philippe Jaming and Jaume de Dios for several conversations about the topic during the elaboration of the manuscript. 
+
+J. P. G. R.  was supported by the FCT through project SHADE
+(2023.17881.ICDT), DOI \allowbreak \texttt{10.54499/}
+\texttt{2023.17881.ICDT}. He was also supported  by FAPERJ through  JCNE grant
+no.~SEI-260003/ \allowbreak 020475/2025, and by Instituto Serrapilheira through
+grant Serra-R-2510-59765.
 
 \section{Proof of Theorem \ref{thm:time-potential}}
 
@@ -272,8 +280,7 @@ Iteration over the planes $z_1=b-jh$, $j\ge1$, gives
  Z=0\quad\text{on }\{z_1>b-jh\}\times J
  \quad(j=0,1,2,\ldots).
 \]
-The union of these half-spaces is $\R^2$, which proves $Z=0$.  This proposition
-is the only place where the Ionescu--Kenig Carleman estimate is imported.
+The union of these half-spaces is $\R^2$, which proves $Z=0$.  
 \end{proof}
 
 We next recover the normal Cauchy data needed to create a half-space solution.
@@ -845,7 +852,7 @@ $\Phi(x_3,\ldots,x_d)=\exp(-\frac12\sum_{j=3}^dx_j^2)$.  The free propagator
 again factors, so the modulus identity and nonproportionality are preserved.
 \end{proof}
 
-\section{Comments on stationary alternatives}
+\section{Comments on alternative proof methods}
 \label{sec:stationary-comments}
 
 The companion note contains three proofs for time-independent potentials.
