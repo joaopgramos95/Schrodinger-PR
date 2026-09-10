@@ -18,6 +18,7 @@
 \newtheorem{corollary}[theorem]{Corollary}
 \theoremstyle{remark}
 \newtheorem{remark}[theorem]{Remark}
+\allowdisplaybreaks
 
 
 \newcommand{\R}{\mathbb R}
@@ -39,10 +40,8 @@
 \author{Ben Pineau}
 \author{João P. G. Ramos}
 \author{Mitchell A. Taylor}
-\date{}
 
 \begin{document}
-\raggedbottom
 
 \begin{abstract}
 We prove that two $L^2$ solutions of the one-dimensional Schr\"odinger equation with the same
@@ -207,7 +206,7 @@ Most of the other attempts and results through different methods have been writt
 
 \section*{Acknowledgements}
 
-The authors are thankful to Philippe Jaming and Jaume de Dios for several conversations about the topic during the elaboration of the manuscript. 
+The authors are thankful to Philippe Jaming and Jaume de Dios for several enlightening conversations about the topic during the elaboration of the manuscript. 
 
 J. P. G. R.  was supported by the FCT through project SHADE
 (2023.17881.ICDT), DOI \allowbreak \texttt{10.54499/}
@@ -658,8 +657,7 @@ $H^{-1/2}$--$H^{1/2}$ duality.
 \end{lemma}
 
 \begin{proof}
-Fix $I=[a,b]$.  The one-dimensional admissible endpoint is
-$(q,r)=(4,\infty)$, since $2/q+1/r=1/2$.  The homogeneous and inhomogeneous
+Fix $I=[a,b]$. The endpoint homogeneous and inhomogeneous
 Strichartz estimates~\cite{KeelTao} give
 \begin{align*}
  \|e^{i(t-a)\partial_x^2}w(a)\|_{L^4_tL^\infty_x(I)}
@@ -677,21 +675,6 @@ gives
        \|w\|_{L^\infty_tL^2_x(I)}\\
  &+|I|^{1/4}\|V_2\|_{L^2_{t,x}(I\times\R)}
        \|w\|_{L^\infty_tL^2_x(I)}.
-\end{align*}
-For the last term, H\"older's inequality in $x$ gives
-\[
- \|V_2(t)w(t)\|_1\le\|V_2(t)\|_2\|w(t)\|_2.
-\]
-The function $t\mapsto\|V_2(t)\|_2$ belongs to $L^2(I)$, and
-$L^2(I)\subset L^{4/3}(I)$ with norm at most $|I|^{1/4}$.  This proves the
-displayed Strichartz bound.  Since $L^4(I)\subset L^2(I)$ on a bounded
-interval, we also obtain
-\begin{align*}
- \|V_2w\|_{L^1_tL^2_x}
- &\le \|V_2\|_{L^2_{t,x}}\|w\|_{L^2_tL^\infty_x}<\infty,\\
- \|V_\infty w\|_{L^1_tL^2_x}
- &\le \|V_\infty\|_{L^1_tL^\infty_x}
-       \|w\|_{L^\infty_tL^2_x}<\infty.
 \end{align*}
 The local-smoothing estimate~\cite{Vega,VegaVisciglia} states that, for
 $\chi\in C_c^\infty(\R)$,
@@ -716,11 +699,10 @@ For $w\in H^{1/2}_{\loc}\cap L^\infty_{\loc}$ define
  :=\langle\partial_xw,\phi\overline w\rangle_{H^{-1/2},H^{1/2}},
  \qquad \phi\in C_c^\infty(\R).
 \]
-This pairing is well-defined. Indeed, after inserting a cutoff equal to one on
+This pairing is well-defined, since after inserting a cutoff equal to one on
 $\supp\phi$, multiplication by $\phi$ maps
 $H^{1/2}\cap L^\infty$ into $H^{1/2}$, while differentiation maps
-$H^{1/2}$ into $H^{-1/2}$.  Its time integral is finite because the local
-$H^{1/2}$ norm belongs to $L^2(I)$.
+$H^{1/2}$ into $H^{-1/2}$. 
 
 With that object being well-defined, the continuity equation
 \[
@@ -837,10 +819,8 @@ set $\rho=|u|^2=|v|^2$ and define the exterior product
  F(t,x,y)=u(t,x)v(t,y)-v(t,x)u(t,y).
  \tag{1.9}\label{eq:exterior-product}
 \]
-The two tensor products in \eqref{eq:exterior-product} belong to
-$C(I;L^2(\R^2))$, as
-$\|a\otimes b\|_{L^2(\R^2)}=\|a\|_2\|b\|_2$.  Apply
-$i\partial_t+\partial_x^2+\partial_y^2$ to each term.  For instance,
+Apply
+$i\partial_t+\partial_x^2+\partial_y^2$ to each term.  For instance, applying it to the first one gives
 \begin{align*}
  &(i\partial_t+\partial_x^2+\partial_y^2)
    (u(t,x)v(t,y))\\
@@ -851,9 +831,7 @@ The identical calculation for $v(t,x)u(t,y)$ gives
  i\partial_tF+\partial_x^2F+\partial_y^2F=(V(t,x)+V(t,y))F
  \tag{1.10}\label{eq:exterior-equation}
 \]
-in distributions.  The calculation is justified by inserting smooth
-approximations in the mild equation and passing to the limit in the spaces
-established below.  On each bounded interval $I$,
+in distributions. On each bounded interval $I$,
 \[
  F\in C(I;L^2(\R^2))\cap L^4(I\times\R^2).
  \tag{1.11}\label{eq:exterior-class}
@@ -1025,22 +1003,15 @@ Thus $v(t_0)=\zeta u(t_0)$ for a scalar $\zeta$.  The hypotheses then directly i
 
 \section{Cubic NLS: Proof of Corollary \ref{cor:cubic-NLS}}
 
-We prove Corollary~\ref{cor:cubic-NLS}.  Its equation is
+We continue our program by proving Corollary~\ref{cor:cubic-NLS}.  We recall, for the reader's convenience, the non-linear cubic Sch\"odinger equation 
 \[
  i\partial_t w+\partial_x^2w=\sigma|w|^2w.
  \tag{2.1}\label{eq:cubic-NLS}
 \]
-The mild solutions are the standard $L^2$ Strichartz solutions obtained from
-the Duhamel formula~\cite{Cazenave}.
+pertaining to that result. 
 
 \begin{proof}[Proof of Corollary~\ref{cor:cubic-NLS}]
-Fix a bounded interval $I$.  A pair $(q,r)$ is Schr\"odinger-admissible in
-one dimension if
-\[
- \frac2q+\frac1r=\frac12,
- \qquad 2\le q,r\le\infty.
-\]
-The pair $(8,4)$ is admissible.  On a time interval $K$, the homogeneous and
+Our main strategy will be to verify that the equation, as well as the `potential' $V = |u|^2 = |v|^2$, satisfy the hypotheses of Theorem \ref{thm:time-potential}. Fix then a bounded interval $I$. On a time interval $K$, the homogeneous and
 inhomogeneous Strichartz estimates~\cite{KeelTao} give
 \[
  \left\|e^{i(t-t_0)\partial_x^2}w(t_0)
@@ -1100,10 +1071,8 @@ Finally, \eqref{eq:NLS-L8L4} and the finite length of $I$ imply
  \|u\|_{L^4(I\times\R)}
  \le |I|^{1/8}\|u\|_{L^8_tL^4_x},
 \]
-and the same estimate holds for $v$.
-
-On $I_0\times\R$, set $\rho=|u|^2=|v|^2$ and
-$V=\sigma\rho$.  For every bounded $J\Subset I_0$, the preceding estimate
+and the same estimate holds for $v$. On $I_0\times\R$, set $\rho=|u|^2=|v|^2$ and
+$V=\sigma\rho$.  For every bounded $J$ with $\overline{J}\subset I_0$, the preceding estimate
 gives
 \[
  \|V\|_{L^2(J\times\R)}
