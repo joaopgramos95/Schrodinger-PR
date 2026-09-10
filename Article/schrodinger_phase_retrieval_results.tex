@@ -344,7 +344,15 @@ zero we have the bounds
  \label{eq:IK-weight-left}\tag{1.4a}
 \]
 
-The cited lemma gives absolute constants $C_0\ge1$ and $c_0>0$ such that
+\begin{lemma}[Ionescu--Kenig]
+There are absolute constants $C_0\ge1$ and $c_0>0$ such that, for every
+$\beta\ge2$ and every $U$ satisfying
+\[
+ U\in C([0,1];L^2),\qquad
+ U=0\text{ for }y_1>1,\qquad
+ (1+|y_1|)^{-1}\mathcal H_yU\in X,
+\]
+one has
 \begin{align*}
  &\|\1_{\{0<y_1<1\}}e^{\phi_\beta(y_1)}U\|_{X'}
  +\beta^{c_0}
@@ -352,15 +360,10 @@ The cited lemma gives absolute constants $C_0\ge1$ and $c_0>0$ such that
  &\qquad\le C_0\Bigl(
  \|e^{\phi_\beta(y_1)}\mathcal H_yU\|_X
  +\|e^{\phi_\beta(y_1)}U(0)\|_2
- +\|e^{\phi_\beta(y_1)}U(1)\|_2\Bigr)
+ +\|e^{\phi_\beta(y_1)}U(1)\|_2\Bigr).
  \tag{1.4b}\label{eq:IK-bounded-weight}
 \end{align*}
-whenever
-\[
- U\in C([0,1];L^2),\qquad
- U=0\text{ for }y_1>1,\qquad
- (1+|y_1|)^{-1}\mathcal H_yU\in X.
-\]
+\end{lemma}
 This is the case $N=1$ of \cite[Lemma~9.1]{IonescuKenig}, with its
 acceptable exponents chosen as $(p_0,q_0)=(4/3,4/3)$ in dimension two.
 The spaces in that lemma are therefore exactly our $X$ and $X'$.
