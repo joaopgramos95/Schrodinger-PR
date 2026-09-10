@@ -201,9 +201,9 @@ We started from the first idea of considering the continuity equation $ \partial
 
 This argument, however, only works in high enough regularity. In order to remove such regularity, we needed to get rid of the assumptions on the phase. At that point, we started exploring with the aid of GPT 5.4/Claude Opus 4.6. It gave us several different directions, many of which are described in the end of this manuscript, such as ones based on scattering theory. 
 
-By exploiting and exhausting several paths towards the general $L^2$ case with GPT 5.4 and 5.5, as well as Claude Opus 4.7 and 4.8, we had the idea of working at the level of currents. By doing so, we were naturally led to the idea of lifting our equation one dimension higher. The details on how to finish from there, such as applying specific unique continuation lemmas, were then provided by interacting with several different LLMs. Finally, Claude Fable 5 was also used in order to obtain a Lean verification of Corollary \ref{cor:cubic-NLS}; see \href{https://github.com/joaopgramos95/Schrodinger-PR/tree/main/SchrodingerPR_verified}{this link}. 
+By exploiting and exhausting several paths towards the general $L^2$ case with GPT 5.4 and 5.5, as well as Claude Opus 4.7 and 4.8, we had the idea of working at the level of currents. By doing so, we were naturally led to the idea of lifting our equation one dimension higher. The details on how to finish from there, such as applying specific unique continuation lemmas, were then provided by interacting with several different LLMs. Finally, GPT 5.5 in Codex was also used in order to obtain a Lean verification of Corollary \ref{cor:cubic-NLS}; see \href{https://github.com/joaopgramos95/Schrodinger-PR/tree/main/SchrodingerPR_verified}{this link}. 
 
-Most of the other attempts and results through different methods have been written down and are kept \href{https://github.com/joaopgramos95/Schrodinger-PR/tree/main/Article}{here}. Apart from that note -- which is mostly LLM-written --, the results and proofs here have all been written and verified by humans. We take full responsibility for the contents of both manuscripts. 
+Most of the other attempts and results through different methods have been written down and are kept \href{https://github.com/joaopgramos95/Schrodinger-PR/tree/main/Article}{here}. Apart from that note -- which is mostly LLM-written -- the results and proofs here have all been written and verified by humans. We take full responsibility for the contents of both manuscripts. 
 
 \section*{Acknowledgements}
 
@@ -263,9 +263,7 @@ The norm on $X$ is defined in the same way using its two summands, while
  \|B\|_{L^\infty_tL^2_z},\ \|B\|_{L^4_{t,z}}\bigr\}.
 \]
 Multiplication by a measurable function of absolute value at most one
-cannot increase any of these three norms.  For a sum space, this follows
-by multiplying each term of a decomposition and then taking the infimum.
-For the intersection space, it follows by bounding each of its two norms.
+cannot increase any of these three norms. 
 
 Fix $A\in Y$ and $B\in X'$.  For every decomposition
 $A=A_\infty+A_2$, H\"older's inequality in space followed by integration in
@@ -295,7 +293,6 @@ Taking the infimum over decompositions of $A$ proves
  \|AB\|_X\le\|A\|_Y\|B\|_{X'}.
  \tag{1.4}\label{eq:XY-multiplier}
 \]
-No decomposition attaining the infimum is needed.
 
 \medskip
 \noindent\emph{Step 2: normalization of the interval and the strip width.}
@@ -311,9 +308,7 @@ Then
  =\widetilde W\widetilde Z,
  \qquad 0<\tau<1.
 \]
-This follows because both the time derivative and the spatial Laplacian
-acquire the factor $L$.  In two spatial dimensions the change of variables
-satisfies $d\tau\,d\xi=L^{-2}\,dt\,dz$.  For any decomposition $A=A_\infty+A_2$ of a potential or restricted
+For any decomposition $A=A_\infty+A_2$ of a potential or restricted
 potential, write
 $\widetilde A_k(\tau,\xi)=L A_k(t_-+L\tau,L^{1/2}\xi)$ for
 $k\in\{\infty,2\}$.  The change of variables gives
@@ -327,21 +322,7 @@ $k\in\{\infty,2\}$.  The change of variables gives
  &\|\widetilde A_2\|_{L^2_{\tau,\xi}}
  &=\|A_2\|_{L^2_{t,z}}.
 \end{align*}
-We do not assume $W\in Y$ globally.
-Transforming decompositions in both directions shows that the $Y$ norm is
-also preserved.  The forcing is transformed with the factor $L^{3/2}$,
-which preserves both summand norms in $X$.  Thus all the hypotheses are
-preserved, with $b$ and $h$ replaced by $b/L^{1/2}$ and $h/L^{1/2}$.
-It suffices to work on $J=[0,1]$.
-
-We may also decrease $h$ so that $0<h\le1$.  To justify this, let
-$0<\ell\le h$ and $a\le b-\ell$.  The strip $(a,a+\ell)$ is contained in
-the strip $(\alpha,\alpha+h)$, where $\alpha=\min\{a,b-h\}$.
-Indeed, if $a\le b-h$ we take $\alpha=a$; otherwise
-$(a,a+\ell)\subset(b-h,b)$.  Since $\alpha\le b-h$, the original
-hypothesis and the restriction property from Step 1 give the same
-smallness bound for width $\ell$.  We take $\ell=\min\{h,1\}$ and denote
-this new width by $h$.
+Thus all the hypotheses are preserved, with $b$ and $h$ replaced by $b/L^{1/2}$ and $h/L^{1/2}$. It suffices thus to work on $J=[0,1]$. We also suppose without loss of generality that $h \in (0,1].$
 
 \medskip
 \noindent\emph{Step 3: the Carleman inequality.}
@@ -362,11 +343,6 @@ zero we have the bounds
  \quad(r\le0,\ \beta\ge2).
  \label{eq:IK-weight-left}\tag{1.4a}
 \]
-For $r=-s\in[-1,0]$, the second bound follows from
-$(1+s)e^{-\beta s}\le e^{-(\beta-1)s}\le1$.
-For $s>1$, it follows from
-$(1+s)e^{-s-\beta+1}\le e^{1-\beta}\le1$.
-Here we used $1+s\le e^s$ for $s\ge0$.
 
 The cited lemma gives absolute constants $C_0\ge1$ and $c_0>0$ such that
 \begin{align*}
@@ -445,12 +421,7 @@ Translation in space and multiplication by a function of modulus one
 preserve every spatial $L^p$ norm.  Applying this at each time shows that
 $U_\delta\in X'$ and
 $\|U_\delta\|_{L^\infty_tL^2_y}=\|Z\|_{L^\infty_tL^2_z}$.
-Moreover, $U_\delta\in C([0,1];L^2)$: spatial translations and
-multiplications by $e^{iay_1}$ depend strongly continuously on their real
-parameters in $L^2$.  For translations this follows first for smooth
-compactly supported functions and then by density; for the phase factors
-it follows from dominated convergence.  Combining these facts with the
-continuity of $Z$, $w_\delta$, and $w_\delta'$ proves the assertion.
+Moreover, $U_\delta\in C([0,1];L^2)$. 
 
 The equation for $U_\delta$ includes two additional zeroth-order terms.
 To compute them, put
@@ -480,11 +451,6 @@ The first-order terms cancel when these identities are added.  Hence
                -\tfrac14(w_\delta'(t))^2.
  \tag{1.4c}\label{eq:IK-moving-equation}
 \]
-The computation also holds for our nonsmooth $Z$.  Indeed, the translation
-is a smooth change of spacetime variables with Jacobian one, and the phase
-factor is smooth.  Testing against a compactly supported smooth function,
-changing variables, and integrating by parts gives the same derivative
-identities in distributions.  This uses no classical derivatives of $Z$.
 
 We next check the support and forcing hypotheses of
 \eqref{eq:IK-bounded-weight}.  If $y_1>h$, then
@@ -509,9 +475,7 @@ Also,
  \qquad
  \|W_\delta U_\delta\|_X=\|WZ\|_X.
 \]
-The norm equality follows by translating and multiplying each summand in
-an $X$ decomposition, and applying the inverse transformation for the
-reverse inequality.  Since
+Since
 \[
  \|(1+|y_1|)^{-1}M_\delta U_\delta\|_{L^1_tL^2_y}
  \le K_\delta\|U_\delta\|_{L^1_tL^2_y}
@@ -550,8 +514,7 @@ More precisely, define
 \]
 Then $A_{j,\delta}U_{\delta,\beta}^{+}
 =\1_{\{0<y_1<1\}}e^{\phi_\beta(y_1)}W_\delta U_\delta$
-almost everywhere.  Time-dependent spatial translation preserves both
-summand norms in $Y$, and restriction cannot increase them.  Therefore
+almost everywhere, and thus
 \[
  \|A_{j,\delta}\|_Y\le\|\1_{S_j}W\|_Y\le\varepsilon_*.
 \]
@@ -616,11 +579,6 @@ Subtracting the corresponding terms from the two sides of
  A_\beta\le2C_0D_\delta.
  \tag{1.4e}\label{eq:IK-uniform-weighted-bound}
 \]
-This explains the absorption: the same nonnegative norms occur on both
-sides, and their coefficients on the right are strictly smaller.
-Only the strip restriction of $W$ was required to be small.  The part
-outside that strip was estimated through the assumed finite norm
-$\|WZ\|_X$, not through a global $Y$ norm of $W$.
 
 \medskip
 \noindent\emph{Step 6: the limits and the induction.}
@@ -666,8 +624,7 @@ monotone convergence therefore gives
  \|Z(t)\|_2^2
  =\lim_{j\to\infty}\int_{\{z_1>b-jh\}}|Z(t,z)|^2\,dz=0.
 \]
-Undoing the change of scale from Step 2 proves the conclusion on the
-original interval $J$.
+This proves the desired conclusion.
 \end{proof}
 
 We next recover the normal Cauchy data needed to create a half-space solution.
