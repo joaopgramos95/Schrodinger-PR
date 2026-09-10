@@ -67,7 +67,7 @@ i\partial_t w+\Delta w=Vw,
 \end{equation}
 in a suitable sense. Equation \eqref{eq:schr-pot} is of pivotal importance in quantum mechanics, where by adjusting the potential $V$ we may use it to describe the time evolution of the spatial distribution of particles. We refer the reader to Teschl~\cite{TeschlBook} for the theoretical background in physics of this equation.
 
-Our question in this manuscript is tightly connected to quantum mechanics, and dates back to the work of Pauli~\cite{Pauli}. Indeed, let us consider first the problem of determining when it is possible to recover a (nice enough) function $f$ up to a unimodular constant from measurements of the form $|f|$, $|\widehat{f}|$. This is the so-called \emph{Pauli problem}~\cite{CorbettHurst,Vogt,RamosSousa}. A negative answer was later given by Moroz and Perelomov~\cite{MorozPerelomov}, who showed that counterexamples are, as a matter of fact, abundant.
+Our question in this manuscript is tightly connected to quantum mechanics, and dates back to the work of Pauli~\cite{Pauli}. Indeed, let us consider first the problem of determining when it is possible to recover a (nice enough) function $f$ up to a unimodular constant from measurements of the form $|f|$, $|\widehat f|$. This is the so-called \emph{Pauli problem}~\cite{CorbettHurst,Vogt,RamosSousa}. A negative answer was later given by Moroz and Perelomov~\cite{MorozPerelomov}, who showed that counterexamples are, as a matter of fact, abundant.
 
 As it turns out, the Fourier transform is intimately connected to Schr\"odinger equations, and so is the Pauli problem: if we let $u$ be a solution to
 \begin{equation}\label{eq:free-schr}
@@ -82,7 +82,7 @@ u(t,x)=\frac{1}{(4\pi i t)^{n/2}}e^{i|x|^2/(4t)}
 \widehat{\left(e^{i|\cdot|^2/(4t)}f\right)}
 \left(\frac{x}{4\pi t}\right),
 \]
-where $\widehat h(\xi)=\int_{\R^n}e^{-2\pi i x\cdot\xi}h(x)\,dx$. In other words, if we are able to solve Pauli's problem for the corresponding chirped datum, we should be able to recover the solution $u$ to the free Schr\"odinger equation \eqref{eq:free-schr} above from its values $|u(0,\cdot)|$, $|u(t_0,\cdot)|$, and vice-versa. Regarding the problem in this particular setting, the counterexamples to Pauli's problem do show also here that recovery of the solution is not possible in general. This led the community to several follow-up questions, such as Wright's conjecture~\cite{JamingRathmair}, which states that there is a third unitary operator $T$ defined on $L^2$ such that any $f \in L^2(\R)$ may be recovered from $|f|,|Tf|, |\widehat{f}|$. Another closely related question~\cite{CarmeliHeinosaariSchultzToigo} is that of determining the minimal $N$ such that there are $N$ times $\{t_i\}_{i=1}^N$ for which any solution to \eqref{eq:free-schr} is determined up to multiplication by scalars from $\{|u(t_i,x)|:x\in\R,\ i=1,\dots,N\}$. To the best of our knowledge, both problems remain open.
+where $\widehat h(\xi)=\int_{\R^n}e^{-2\pi i x\cdot\xi}h(x)\,dx$. In other words, if we are able to solve Pauli's problem for the corresponding chirped datum, we should be able to recover the solution $u$ to the free Schr\"odinger equation \eqref{eq:free-schr} above from its values $|u(0,\cdot)|$, $|u(t_0,\cdot)|$, and vice-versa. Regarding the problem in this particular setting, the counterexamples to Pauli's problem do show also here that recovery of the solution is not possible in general. This led the community to several follow-up questions, such as Wright's conjecture~\cite{JamingRathmair}, which states that there is a third unitary operator $T$ defined on $L^2$ such that any $f \in L^2(\R)$ may be recovered from $|f|,|Tf|, |\widehat f|$. Another closely related question~\cite{CarmeliHeinosaariSchultzToigo} is that of determining the minimal $N$ such that there are $N$ times $\{t_i\}_{i=1}^N$ for which any solution to \eqref{eq:free-schr} is determined up to multiplication by scalars from $\{|u(t_i,x)|:x\in\R,\ i=1,\dots,N\}$. To the best of our knowledge, both problems remain open.
 
 The Pauli problem is one instance of the broader phase retrieval problem: recovering a function or vector, up to a constant phase, from magnitudes of prescribed measurements. This problem also arises in optics, crystallography and signal processing; we refer to~\cite{KlibanovSacksTikhonravov,GrohsKoppensteinerRathmair} for surveys. Finite-dimensional recovery from frame coefficients and convex reconstruction methods are studied in~\cite{BalanCasazzaEdidin,CandesStrohmerVoroninski}, while infinite-dimensional Hilbert- and Banach-space formulations are treated in~\cite{CahillCasazzaDaubechies,AlaifariGrohs}. Stability on subspaces of function spaces is investigated in~\cite{ChristPineauTaylor,FreemanOikhbergPineauTaylor,AbdallaDeDiosRamosTaylor}, and H\"older stability on nonlinear subsets is studied in~\cite{FreemanTaylor}. For short-time Fourier measurements, local stability and its obstructions are considered in~\cite{AlaifariDaubechiesGrohsYin,GrohsRathmair,AlaifariPineauTaylorWellershoff,BertoliniDeDiosPineauRamosTaylor}; square-restricted stability in Fock space is treated in~\cite{BortolottoRamos}.
 
@@ -93,22 +93,22 @@ The main purpose of this manuscript is to answer some of the latter questions on
 \begin{mainresult}
 \label{thm:time-potential}
 Let $I_0\subset\R$ be a nonempty open interval. Suppose that the measurable
-function $V:I_0\times\mathbb R\to\mathbb R$ admits, on every compact sub-interval
+function $V:I_0\times\R\to\R$ admits, on every compact sub-interval
 $J\subset I_0$, a decomposition of the form
 \[
  V=V_\infty+V_2,
  \qquad
- V_\infty\in L^1(J;L^\infty(\mathbb R)),
+ V_\infty\in L^1(J;L^\infty(\R)),
  \qquad
- V_2\in L^2(J\times\mathbb R).
+ V_2\in L^2(J\times\R).
 \]
-Let $u,v\in C(I_0;L^2(\mathbb R))$ be mild solutions of\eqref{eq:schr-pot}. If
+Let $u,v\in C(I_0;L^2(\R))$ be mild solutions of \eqref{eq:schr-pot}. If
 \[
  |u(t,x)|=|v(t,x)|
- \quad\text{for almost every }(t,x)\in I_0\times\mathbb R,
+ \quad\text{for almost every }(t,x)\in I_0\times\R,
 \]
-then $v=\zeta u$ on $I_0\times\mathbb R$ for some
-$\zeta\in\mathbb T$.
+then $v=\zeta u$ on $I_0\times\R$ for some
+$\zeta\in\T$.
 \end{mainresult}
 
 Here, a solution $w$ to \eqref{eq:schr-pot} is said to be ``mild'' if it satisfies the Duhamel formula. That is, for $t_0,t\in I_0$, we have
@@ -125,7 +125,7 @@ in the sense of distributions. The products of $w$ with each part of the potenti
 by H\"older's inequality and the fact that $w\in C(I;L^2)$. The Duhamel integral above is then interpreted using this decomposition.
 
 We remark that, in particular, the potentials in~\cite{Jaming2025} are all assumed to be time-\emph{independent}, and hence Theorem \ref{thm:time-potential} provides a positive answer to Question I.2 in~\cite{Jaming2025} for a wide class of potentials, namely any potential in $L^2(\R)+L^\infty(\R)$, which includes all $L^p(\R)$,
-$2\leq p\leq\infty$.
+$2\le p\le\infty$.
 
 The proof of Theorem \ref{thm:time-potential} starts with the endpoint Strichartz and local smoothing estimates~\cite{KeelTao,VegaVisciglia}. On each compact time interval,  we have
 \[
@@ -136,12 +136,12 @@ The proof of Theorem \ref{thm:time-potential} starts with the endpoint Strichart
 \]
 This is enough to justify the continuity equation
 \[
- \partial_t|w|^2+2\partial_x\Im(\overline w\,\partial_xw)=0
+ \partial_t|w|^2+2\partial_x\operatorname{Im}(\overline w\,\partial_xw)=0
  \]
 in $L^2$. A regularization argument together with $|u| = |v|$ then gives
 \[
  v\,\partial_xu-u\,\partial_xv=0
- \quad\text{in }\mathcal D'(\R_x)
+ \quad\text{in }\D'(\R_x)
 \]
 for almost every time. The next step is then to introduce the exterior product
 \[
@@ -156,13 +156,13 @@ identical. This gives immediately the following consequence.
 
 \begin{maincorollary}
 \label{cor:cubic-NLS}
-Let $\sigma\in\mathbb R$, let $I_0\subset\R$ be a nonempty open interval, and let
-$u,v\in C(\mathbb R;L^2(\mathbb R))$ be global mild solutions of
+Let $\sigma\in\R$, let $I_0\subset\R$ be a nonempty open interval, and let
+$u,v\in C(\R;L^2(\R))$ be global mild solutions of
 \[
 i\partial_t w+\partial_x^2w=\sigma|w|^2w.
 \]
-If $|u|=|v|$ almost everywhere on $I_0\times\mathbb R$, then
-$v=\zeta u$ for every time and some $\zeta\in\mathbb T$.
+If $|u|=|v|$ almost everywhere on $I_0\times\R$, then
+$v=\zeta u$ for every time and some $\zeta\in\T$.
 \end{maincorollary}
 
 As a final result, we prove that the prediction made by Jaming in~\cite{Jaming2025} regarding the extendability of the results for \eqref{eq:free-schr} to higher dimensions is \emph{false}:
@@ -171,10 +171,10 @@ As a final result, we prove that the prediction made by Jaming in~\cite{Jaming20
 \begin{mainresult}
 \label{thm:higher-dimensional-failure}
 For every $d\ge2$ there are nonproportional functions
-$f,g\in\mathcal S(\mathbb R^d)$ such that
+$f,g\in\Sc(\R^d)$ such that
 \[
  |e^{it\Delta}f(x)|=|e^{it\Delta}g(x)|
- \quad\text{for every }(t,x)\in\mathbb R\times\mathbb R^d.
+ \quad\text{for every }(t,x)\in\R\times\R^d.
 \]
 \end{mainresult}
 
@@ -197,7 +197,7 @@ This article is organized as follows. In Section 2, we prove Theorem \ref{thm:ti
 
 \subsection*{LLM Usage.} Large language models have been of great importance in the production of this manuscript. Below is a brief narration of how they contributed to the current work. 
 
-We started from the first idea of considering the continuity equation $ \partial_t|w|^2+2\partial_x\Im(\overline w\,\partial_xw)=0$, together with integration by parts, in order to show that, if we had $w(t,x) = |w(t,x)| \cdot e^{i \phi(t,x)},$ with $\phi$ smooth enough on each connected component where $w$ does not vanish, then $\phi$ must be constant on each such component. Our initial argument then ran through classical works (see e.g. \cite{Masuda}) to obtain uniqueness of the phase overall. 
+We started from the first idea of considering the continuity equation $ \partial_t|w|^2+2\partial_x\operatorname{Im}(\overline w\,\partial_xw)=0$, together with integration by parts, in order to show that, if we had $w(t,x) = |w(t,x)| \cdot e^{i \phi(t,x)},$ with $\phi$ smooth enough on each connected component where $w$ does not vanish, then $\phi$ must be constant on each such component. Our initial argument then ran through classical works (see e.g. \cite{Masuda}) to obtain uniqueness of the phase overall.
 
 This argument, however, only works in high enough regularity. In order to remove such regularity, we needed to get rid of the assumptions on the phase. At that point, we started exploring with the aid of GPT 5.4/Claude Opus 4.6. It gave us several different directions, many of which are described in the end of this manuscript, such as ones based on scattering theory. 
 
@@ -223,7 +223,7 @@ Ionescu--Kenig~\cite{IonescuKenig}.
 \begin{proposition}
 \label{prop:strip-propagation}
 Let $J$ be a compact interval of positive length, $z=(z_1,z_2)\in\R^2$.
-Put $\mathcal H=i\partial_t+\Delta_z$.  Put
+Put $\HH=i\partial_t+\Delta_z$.  Put
 \begin{align*}
  X&=L^1(J;L^2(\R^2))+L^{4/3}(J\times\R^2),\\
  X'&=L^\infty(J;L^2(\R^2))\cap L^4(J\times\R^2),\\
@@ -232,7 +232,9 @@ Put $\mathcal H=i\partial_t+\Delta_z$.  Put
 Let those spaces be normed in the canonical way.  Then there is an absolute $\varepsilon_*>0$ with the following
 property.  Suppose
 $Z\in C(J;L^2)\cap X'$ is such that
-$$i\partial_tZ+\Delta_zZ=WZ\in X,$$ 
+\[
+i\partial_tZ+\Delta_zZ=WZ\in X,
+\]
 and $Z=0$ on $J\times\{z_1>b\}$.  Here, $W$ is a potential such that, for some $h>0,$
 \[
  \sup_{a\le b-h}
@@ -326,7 +328,7 @@ Thus all the hypotheses are preserved, with $b$ and $h$ replaced by $b/L^{1/2}$ 
 
 \medskip
 \noindent\emph{Step 3: the Carleman inequality.}
-Put $\mathcal H_y=i\partial_t+\Delta_y$.  For $\beta\ge2$, define
+Put $\HH_y=i\partial_t+\Delta_y$.  For $\beta\ge2$, define
 \[
  \phi_\beta(r)=
  \begin{cases}
@@ -350,7 +352,7 @@ $\beta\ge2$ and every $U$ satisfying
 \[
  U\in C([0,1];L^2),\qquad
  U=0\text{ for }y_1>1,\qquad
- (1+|y_1|)^{-1}\mathcal H_yU\in X,
+ (1+|y_1|)^{-1}\HH_yU\in X,
 \]
 one has
 \begin{align*}
@@ -358,7 +360,7 @@ one has
  +\beta^{c_0}
   \|\1_{\{0<y_1<1\}}e^{\phi_\beta(y_1)}U\|_{L^1_tL^2_y}\\
  &\qquad\le C_0\Bigl(
- \|e^{\phi_\beta(y_1)}\mathcal H_yU\|_X
+ \|e^{\phi_\beta(y_1)}\HH_yU\|_X
  +\|e^{\phi_\beta(y_1)}U(0)\|_2
  +\|e^{\phi_\beta(y_1)}U(1)\|_2\Bigr).
  \tag{1.4b}\label{eq:IK-bounded-weight}
@@ -430,7 +432,7 @@ The equation for $U_\delta$ includes two additional zeroth-order terms.
 To compute them, put
 $W_\delta(t,y)=W(t,y_1+w_\delta(t),y_2)$.  The chain rule gives
 \[
- \mathcal H_y\widetilde Z_\delta
+ \HH_y\widetilde Z_\delta
  =W_\delta\widetilde Z_\delta
    +iw_\delta'\partial_{y_1}\widetilde Z_\delta.
 \]
@@ -448,7 +450,7 @@ Differentiating the phase factor gives, more explicitly,
 \end{align*}
 The first-order terms cancel when these identities are added.  Hence
 \[
- \mathcal H_yU_\delta=(W_\delta+M_\delta)U_\delta,
+ \HH_yU_\delta=(W_\delta+M_\delta)U_\delta,
  \qquad
  M_\delta(t,y)=\tfrac12w_\delta''(t)y_1
                -\tfrac14(w_\delta'(t))^2.
@@ -485,7 +487,7 @@ Since
  \le K_\delta\|Z\|_{L^\infty_tL^2_z},
 \]
 equation \eqref{eq:IK-moving-equation} gives
-$(1+|y_1|)^{-1}\mathcal H_yU_\delta\in X$.
+$(1+|y_1|)^{-1}\HH_yU_\delta\in X$.
 All the hypotheses of the Carleman inequality have now been verified.
 
 \medskip
@@ -722,11 +724,11 @@ $H^{1/2}$ norm belongs to $L^2(I)$.
 
 With that object being well-defined, the continuity equation
 \[
- \partial_t|w|^2+2\partial_x\Im(\overline w\,\partial_xw)=0
+ \partial_t|w|^2+2\partial_x\operatorname{Im}(\overline w\,\partial_xw)=0
  \tag{1.7}\label{eq:continuity-general}
 \]
 holds in distributions. Let now $\phi\in C_c^\infty(\R)$ and
-$a(x)=\int_{-\infty}^x\phi(y)\,dy$. It follows that $a$ is bounded and $a'=\phi$. Although $a$ need not have compact support, it is a bounded Lipschitzmultiplier and $a'=\phi$ is compactly supported.  One may therefore test the
+$a(x)=\int_{-\infty}^x\phi(y)\,dy$. It follows that $a$ is bounded and $a'=\phi$. Although $a$ need not have compact support, it is a bounded Lipschitz multiplier and $a'=\phi$ is compactly supported.  One may therefore test the
 weak equation \eqref{eq:continuity-general} directly against a regularization of
 $\eta(t)a(x)\overline{w(t,x)}$.  Multiplication by $a$ is bounded on
 $H^{1/2}$, the potential contribution is real and cancels after taking the
@@ -736,18 +738,18 @@ then gives
 \[
  -\int_I\eta'(t)\int_\R a(x)|w(t,x)|^2\,dx\,dt
  =2\int_I\eta(t)
- \langle\Im(\overline w\,\partial_xw),\phi\rangle\,dt.
+ \langle\operatorname{Im}(\overline w\,\partial_xw),\phi\rangle\,dt.
 \]
 Equivalently,
 \[
  \frac d{dt}\int_\R a|w|^2
- =2\langle\Im(\overline w\,\partial_xw),\phi\rangle
+ =2\langle\operatorname{Im}(\overline w\,\partial_xw),\phi\rangle
  \tag{1.8}\label{eq:localized-continuity-general}
 \]
 in $\D'(I)$.  The left-hand sides for $u$ and $v$ agree, since their absolute values agree.  Hence
 \[
  \int_I\eta(t)
- \langle\Im(\overline u\,\partial_xu-\overline v\,\partial_xv),\phi\rangle\,dt=0
+ \langle\operatorname{Im}(\overline u\,\partial_xu-\overline v\,\partial_xv),\phi\rangle\,dt=0
 \]
 for every $\eta\in C_c^\infty(I)$ and every spatial test function $\phi$.
 Choose a countable dense family of spatial test functions.  After removing
@@ -755,7 +757,7 @@ one null set of times, the current identity holds for every member of this
 family and therefore, by continuity of the distributional pairing, for every
 $\phi$.  Their real parts agree because the distributional product rule gives
 \[
- 2\Re(\overline w\,\partial_xw)=\partial_x|w|^2.
+ 2\operatorname{Re}(\overline w\,\partial_xw)=\partial_x|w|^2.
 \]
 This rule follows by approximating $w$ in local $H^{1/2}$ while retaining its
 local $L^\infty$ bound, or directly from the Gagliardo product estimate.  We
@@ -822,7 +824,7 @@ multiplication by the fixed test function $\phi$, duality gives
        \|T_\varepsilon(p)\phi\|_{H^{1/2}},
 \end{align*}
 where $K$ contains $\supp\phi$.  Both right-hand sides above tend to zero.  It follows thus by passing to
-the limit that $q\,\partial_xp-p\,\partial_xq=0$. The first identity in
+the limit that $q\,\partial_xp-p\,\partial_xq=0$. The second identity in
 \eqref{eq:current-wronskian} then follows at once. 
 \end{proof}
 
@@ -1256,19 +1258,31 @@ allows the stated time-dependent potential class and arbitrary $L^2$ data.
 
 \subsection{Faddeev scattering}
 
-For a real potential in $L^1_1(\R)$, one-dimensional scattering
-theory~\cite{DeiftTrubowitz,EgorovaKopylovaMarchenkoTeschl} gives finitely many simple negative eigenvalues
-$-\kappa_j^2$ and two continuous channels.  The corresponding spectral
-expansion has the form
+We write
+\[
+ L^1_1(\R)=\left\{V\in L^1(\R):\int_\R(1+|x|)|V(x)|\,dx<\infty\right\}.
+\]
+For a real potential $V\in L^1_1(\R)$, one-dimensional scattering
+theory~\cite{DeiftTrubowitz,EgorovaKopylovaMarchenkoTeschl} shows that
+$H=-\partial_x^2+V$ has finitely many simple negative eigenvalues
+$-\kappa_j^2$, while its absolutely continuous spectrum on $(0,\infty)$
+has multiplicity two.  The corresponding spectral expansion has the
+form
 \[
  e^{-itH}f
  =\sum_j c_j e^{it\kappa_j^2}\phi_j
   +\sum_{\alpha=1}^2\int_0^\infty
     e^{-itk^2}g_\alpha(k)e_\alpha(\,\cdot\,,k)\,dk.
 \]
-This representation remains valid in the resonant case at zero energy.  The
-bound-state coefficients and the two functions $g_\alpha$ give a unitary
-spectral representation of arbitrary $L^2$ initial data.
+Here, $\phi_j$ is an $L^2$ eigenfunction, and, for each $k>0$, the functions
+$e_1(\,\cdot\,,k)$ and $e_2(\,\cdot\,,k)$ form a basis of the
+two-dimensional spectral fiber at energy $k^2$.  Thus $\alpha\in\{1,2\}$
+indexes the two components of the absolutely continuous spectral
+representation.  The expansion remains valid if zero energy is resonant,
+meaning that $H\phi=0$ has a nonzero bounded solution which is not in $L^2$.
+The coefficients $c_j$ and the two functions $g_\alpha$ give a unitary
+spectral representation of arbitrary $L^2$ initial data.  We denote this
+unitary spectral transform by $\mathcal F$.
 
 The temporal Fourier transform of the density identity separates products by
 their energy difference $\delta=E-F$.  Along a fixed nonzero gap, use the
@@ -1290,13 +1304,13 @@ and integrates in $s$.  The resulting vector solves the same product system
 with sum $\lambda$.  For sufficiently negative $\lambda$, both auxiliary
 energies $(\lambda\pm\delta)/2$ are negative and the lower one lies below
 $\inf\sigma(H)$.  Scattering asymptotics and the Riemann--Lebesgue lemma show
-that its scalar component decays at both spatial infinities.  The
-negative-energy ODE dichotomy then forces the whole vector to vanish: a
-nonzero solution decaying at both ends at the lower energy would be an
+that its scalar component decays at both spatial infinities.  The behavior of
+solutions to the negative-energy ODE then forces the whole vector to vanish:
+a nonzero solution decaying at both ends at the lower energy would be an
 $L^2$ eigenfunction below the spectrum.  Analyticity in $\lambda$ and
 Stieltjes inversion show that the original fixed-gap measure is zero.
-Applying this for almost every $\delta\ne0$, and treating the finite
-bound--bound part separately, recovers
+Applying this for almost every $\delta\ne0$, and treating separately the
+finite sum of products of two eigenfunctions, recovers
 \[
  (\mathcal F u_0)\otimes\overline{\mathcal F u_0}
  =(\mathcal F v_0)\otimes\overline{\mathcal F v_0}.
@@ -1305,7 +1319,7 @@ Equality of these rank-one operators gives $v_0=\zeta u_0$.
 
 This proof allows arbitrary $L^2$ data, negative eigenvalues, and a
 zero-energy resonance.  It was left in the companion note because it requires
-a time-independent potential with Faddeev decay, observations for all
+a time-independent potential in $L^1_1(\R)$, observations for all
 $t\in\R$, and the complete spectral resolution of $H$.  As none of these
 spectral reductions is available for the time-dependent potentials arising
 in the nonlinear application, the argument is hence more specialized
@@ -1315,8 +1329,10 @@ than the physical-space proof of Theorem~\ref{thm:time-potential}.
 
 Suppose that $V$ is smooth, compactly supported, and vanishes on
 $(R,\infty)$.  Each negative-energy eigenfunction is then a nonzero multiple
-of $e^{-\kappa_j(x-R)}$ on this half-line.  The two continuous scattering
-channels can also be combined into one Fourier integral, so the restriction
+of $e^{-\kappa_j(x-R)}$ on this half-line.  The two components of the
+absolutely continuous spectral representation can also be combined into one
+Fourier integral by assigning them to positive and negative $k$, respectively,
+so the restriction
 of an evolution has the form
 \[
  e^{-itH}f(x)
@@ -1344,18 +1360,19 @@ then the free--free term becomes
 The compact support of $\chi$ and a Schur estimate make $M_\chi$ integrable,
 so this is an ordinary Cauchy transform.
 
-Every term containing a bound state is holomorphic in a strip across the
-imaginary axis.  The transformed density identity therefore continues
+Every term containing a negative-energy eigenfunction is holomorphic in a
+strip across the imaginary axis.  The transformed density identity therefore continues
 $\Phi_\chi$ through that axis.  The Cauchy jump formula gives
 $M_\chi=0$ for every $\chi$.  The change of variables
 $\xi=k-\ell$, $\omega=\ell^2-k^2$ then yields $q=0$ away from the diagonal,
 which is a null set.  Hence $F\otimes\overline F=G\otimes\overline G$ and
-$G=\zeta F$.  The mixed terms recover the bound-state coefficients by
+$G=\zeta F$.  The mixed terms recover the negative-eigenvalue coefficients by
 successively crossing the lines $\operatorname{Re}z=-\kappa_j$; when the
-continuous part vanishes, two elementary Vandermonde arguments recover the
-finite bound-state rank-one matrix.  Finally, the transmission coefficient
-has no positive-energy zeros~\cite{DeiftTrubowitz}, so the relation on the free half-line recovers
-both original scattering channels.
+absolutely continuous part vanishes, two elementary Vandermonde arguments
+recover the finite rank-one matrix of negative-eigenvalue coefficients.
+Finally, the transmission coefficient has no positive-energy
+zeros~\cite{DeiftTrubowitz}, so the relation on the free half-line recovers
+both components of the original absolutely continuous spectral data.
 
 This theorem uses less spatial data than Theorem~\ref{thm:time-potential},
 but it assumes a time-independent, smooth, compactly supported potential and
