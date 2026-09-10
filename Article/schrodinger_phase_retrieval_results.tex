@@ -344,7 +344,7 @@ zero we have the bounds
  \label{eq:IK-weight-left}\tag{1.4a}
 \]
 
-\begin{lemma}[Ionescu--Kenig]
+\begin{lemma}[Ionescu--Kenig; see \cite{IonescuKenig}]
 There are absolute constants $C_0\ge1$ and $c_0>0$ such that, for every
 $\beta\ge2$ and every $U$ satisfying
 \[
@@ -1061,7 +1061,7 @@ The pointwise inequality
  \bigl||z_1|^2z_1-|z_2|^2z_2\bigr|
  \le C(|z_1|^2+|z_2|^2)|z_1-z_2|
 \]
-and the same H\"older estimate give
+and the same H\"older estimate now yield
 \begin{align*}
  &\||w_1|^2w_1-|w_2|^2w_2\|_{L^{8/7}_tL^{4/3}_x(K)}\\
  &\qquad\le C|K|^{1/2}
@@ -1124,7 +1124,7 @@ $v=\zeta u$ for every time.
 
 \section{Failure in dimensions at least two: Proof of Theorem \ref{thm:higher-dimensional-failure}}
 
-As a final contribution, we build a simple family of counterexamples showing Theorem~\ref{thm:higher-dimensional-failure}. This, incidentally, provides both a \emph{negative} answer to the higher-dimensional assertion in \cite{Jaming2025}, and an example showing that the one-dimensional case of the four-time problem mentioned previously is genuinely special, as the same result in higher dimensions fails even for a continuum of times. 
+As a final contribution, we build a simple family of counterexamples showing Theorem~\ref{thm:higher-dimensional-failure}. This, incidentally, provides both a \emph{negative} answer to the higher-dimensional assertion in \cite{Jaming2025}, as well as an example showing that the one-dimensional case of the four-time problem mentioned previously is genuinely special, as the same result in higher dimensions fails even for a continuum of times. 
 
 \begin{proof}[Proof of Theorem~\ref{thm:higher-dimensional-failure}]
 It suffices to work in $d=2$.  Let
@@ -1200,9 +1200,7 @@ again factors, so the modulus identity and nonproportionality are preserved.
 \section{Comments on alternative proof methods}
 \label{sec:stationary-comments}
 
-The companion note contains three proofs for time-independent potentials.
-They are recorded there because their hypotheses and methods differ from the
-time-dependent argument of Theorem~\ref{thm:time-potential}.
+The aforementioned companion note contains three alternative proofs for time-independent potentials. They are recorded there because their hypotheses and methods differ from the time-dependent argument of Theorem~\ref{thm:time-potential}. However, we give the interested reader a quick panorama of our techniques used in those cases below. 
 
 \subsection{Masuda's unique-continuation theorem}
 
@@ -1255,8 +1253,6 @@ Hamiltonian, while the common potential arising in a nonlinear equation is
 generally time dependent.  The phase reduction also uses $H^1$ regularity on
 the observation interval.  Theorem~\ref{thm:time-potential}, by contrast,
 allows the stated time-dependent potential class and arbitrary $L^2$ data.
-The Masuda argument therefore has a narrower range for the applications of
-this paper.
 
 \subsection{Faddeev scattering}
 
@@ -1310,9 +1306,9 @@ Equality of these rank-one operators gives $v_0=\zeta u_0$.
 This proof allows arbitrary $L^2$ data, negative eigenvalues, and a
 zero-energy resonance.  It was left in the companion note because it requires
 a time-independent potential with Faddeev decay, observations for all
-$t\in\R$, and the complete spectral resolution of $H$.  None of these
+$t\in\R$, and the complete spectral resolution of $H$.  As none of these
 spectral reductions is available for the time-dependent potentials arising
-in the nonlinear application.  The argument is therefore more specialized
+in the nonlinear application, the argument is hence more specialized
 than the physical-space proof of Theorem~\ref{thm:time-potential}.
 
 \subsection{Observation on one exterior half-line}
@@ -1366,8 +1362,7 @@ but it assumes a time-independent, smooth, compactly supported potential and
 observations for every time.  Its proof depends on an exactly free exterior
 region, on analytic continuation of the associated Laplace transforms, and
 on one-dimensional scattering coefficients.  These ingredients do not
-persist for the time-dependent potentials in the nonlinear problem.  The
-result was therefore retained as a separate auxiliary statement.
+persist for the time-dependent potentials in the nonlinear problem, the reason for which we decided to leave it out. 
 
 \begin{thebibliography}{99}
 
