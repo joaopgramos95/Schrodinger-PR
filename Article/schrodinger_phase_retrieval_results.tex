@@ -44,13 +44,15 @@
 \begin{document}
 
 \begin{abstract}
-We prove that two $L^2$ solutions of the one-dimensional Schr\"odinger equation with the same
-real potential are equal up to one constant unimodular factor whenever their moduli agree.  The potential may depend on time and is only
-assumed to locally belong to
-$L^1_tL^\infty_x+L^2_{t,x}$.
-
-The result yields
-phase retrieval for the cubic nonlinear Schr\"odinger equation in the global $L^2$ class.  The conclusion is moreover \emph{false} for the free equation in every spatial dimension at least two, even for Schwartz initial data.
+Consider the one-dimensional Schr\"odinger evolution
+\begin{equation}\label{SchV}
+i\partial_tw+\partial_x^2w=Vw,\hspace{5mm}(t,x)\in [0,T]\times\mathbb{R}    
+\end{equation}
+where $V$ is a real-valued time-dependent potential belonging to $L^1_tL^\infty_x+L^2_{t,x}$. We prove that an $L^2$ solution to the above equation is determined by its mass density $|w|^2$ modulo a global unimodular phase factor. This answers a question recently posed by Jaming \cite{Jaming2025} for a large class of stationary potentials, and recovers his earlier result for the free Schr\"odinger evolution. Our proof is simple and robust. Our argument combines the basic local smoothing properties of the above Schr\"odinger evolution, Strichartz estimates and a strip-wise version of a unique continuation theorem of Ionescu and Kenig to show that the interaction function
+\begin{equation*}
+F(t,x,y)=u(t,x)v(t,y)-u(t,y)v(t,x)    
+\end{equation*}
+vanishes identically on $[0,T]\times\mathbb{R}^2$ whenever $u$ and $v$ are $L^2$ solutions to \eqref{SchV} with the same mass density. Our method immediately applies to several important nonlinear models such as the cubic NLS equation, which is globally well-posed in $L^2(\mathbb{R})$ with $V=|u|^2$. We also complement this result by showing that the above phase recovery property fails in dimensions two and higher, even for the free equation and with Schwartz initial data.
 \end{abstract}
 
 \maketitle
@@ -59,35 +61,35 @@ phase retrieval for the cubic nonlinear Schr\"odinger equation in the global $L^
 \section{Introduction}
 
 Let $\Omega\subset\R^n$ be a domain, and let $T>0$. We say that a function
-$w:[0,T]\times\Omega\to\C$ solves a Schr\"odinger equation with potential
+$w:[0,T]\times\Omega\to\C$ solves a Schr\"odinger equation with real-valued potential
 $V:[0,T]\times\Omega\to\R$ if it satisfies
 \begin{equation}\label{eq:schr-pot}
 i\partial_t w+\Delta w=Vw,
 \end{equation}
-in a suitable sense. Equation \eqref{eq:schr-pot} is of pivotal importance in quantum mechanics, where by adjusting the potential $V$ we may use it to describe the time evolution of the spatial distribution of particles. We refer the reader to Teschl~\cite{TeschlBook} for the theoretical background in physics of this equation.
+in a suitable sense, depending on the regularity of the solution and the potential. Equation \eqref{eq:schr-pot} is of pivotal importance in quantum mechanics, where by adjusting the potential $V$ we may use it to describe the time evolution of the spatial distribution of particles. We refer the reader to Teschl~\cite{TeschlBook} for the theoretical background in the physics of this equation.
 
-Our question in this manuscript is tightly connected to quantum mechanics, and dates back to the work of Pauli~\cite{Pauli}. Indeed, let us consider first the problem of determining when it is possible to recover a (nice enough) function $f$ up to a unimodular constant from measurements of the form $|f|$, $|\widehat f|$. This is the so-called \emph{Pauli problem}~\cite{CorbettHurst,Vogt,RamosSousa}. A negative answer was later given by Moroz and Perelomov~\cite{MorozPerelomov}, who showed that counterexamples are, as a matter of fact, abundant.
+The main question we are concerned with in this manuscript is heavily motivated by quantum mechanics, and dates back to the work of Pauli~\cite{Pauli}. Indeed, let us consider first the problem of determining when it is possible to recover a (nice enough) function $f$ up to a unimodular constant from measurements of the form $|f|$, $|\widehat f|$. This is the so-called \emph{Pauli problem}~\cite{CorbettHurst,Vogt,RamosSousa}. From a quantum mechanical point of view, this can be thought of as recovering a wave function from its probability densities of position and momentum at a single time. By now, it is well-known that this is not possible. %, and in fact Moroz and Perelomov~\cite{MorozPerelomov} showed that counterexamples are extremely abundant.
 
-As it turns out, the Fourier transform is intimately connected to Schr\"odinger equations, and so is the Pauli problem: if we let $u$ be a solution to
+On the other hand, Pauli's problem is intimately connected to the problem of phase retrieval for Schr\"odinger equations. Indeed, if $u\in C(\mathbb{R};L^2(\mathbb{R}^n))$ is a solution to the free Schr\"odinger evolution,
 \begin{equation}\label{eq:free-schr}
 \begin{cases}
 i\partial_t u(t,x)+\Delta u(t,x)=0 & \text{in }\R\times\R^n,\\
-u(0,x)=f(x) & \text{on }\R^n.
+u(0,x)=f(x) & \text{on }\R^n,
 \end{cases}
 \end{equation}
-Then, for $t\ne0$,
+then, for $t\ne0$, the solution can be represented as
 \[
 u(t,x)=\frac{1}{(4\pi i t)^{n/2}}e^{i|x|^2/(4t)}
 \widehat{\left(e^{i|\cdot|^2/(4t)}f\right)}
 \left(\frac{x}{4\pi t}\right),
 \]
-where $\widehat h(\xi)=\int_{\R^n}e^{-2\pi i x\cdot\xi}h(x)\,dx$. In other words, if we are able to solve Pauli's problem for the corresponding chirped datum, we should be able to recover the solution $u$ to the free Schr\"odinger equation \eqref{eq:free-schr} above from its values $|u(0,\cdot)|$, $|u(t_0,\cdot)|$, and vice-versa. Regarding the problem in this particular setting, the counterexamples to Pauli's problem do show also here that recovery of the solution is not possible in general. This led the community to several follow-up questions, such as Wright's conjecture~\cite{JamingRathmair}, which states that there is a third unitary operator $T$ defined on $L^2$ such that any $f \in L^2(\R)$ may be recovered from $|f|,|Tf|, |\widehat f|$. Another closely related question~\cite{CarmeliHeinosaariSchultzToigo} is that of determining the minimal $N$ such that there are $N$ times $\{t_i\}_{i=1}^N$ for which any solution to \eqref{eq:free-schr} is determined up to multiplication by scalars from $\{|u(t_i,x)|:x\in\R,\ i=1,\dots,N\}$. To the best of our knowledge, both problems remain open.
+where $\widehat h(\xi)=\int_{\R^n}e^{-2\pi i x\cdot\xi}h(x)\,dx$ is the (suitably normalized) Fourier transform on $\mathbb{R}^n$. In other words, if we are able to solve Pauli's problem for the corresponding chirped datum, we would be able to recover the solution $u$ to the free Schr\"odinger equation \eqref{eq:free-schr} above from its values $|u(0,\cdot)|$, $|u(t_0,\cdot)|$, and vice-versa. Regarding the problem in this particular setting, the counterexamples to Pauli's problem do show that recovery of the solution from two times is not possible in general. This has led the community to several follow-up questions, such as Wright's conjecture~\cite{JamingRathmair}, which posits that there exists a third unitary operator $T$ defined on $L^2$ such that any $f \in L^2(\R)$ may be recovered from $|f|,|Tf|, |\widehat f|$. Another closely related question~\cite{CarmeliHeinosaariSchultzToigo} is that of determining the minimal $N$ such that there are $N$ times $\{t_i\}_{i=1}^N$ for which any solution to \eqref{eq:free-schr} is determined up to multiplication by scalars from $\{|u(t_i,x)|:x\in\R,\ i=1,\dots,N\}$. To the best of our knowledge, both problems remain open.
 
-The Pauli problem is one instance of the broader phase retrieval problem: recovering a function or vector, up to a constant phase, from magnitudes of prescribed measurements. This problem also arises in optics, crystallography and signal processing; we refer to~\cite{KlibanovSacksTikhonravov,GrohsKoppensteinerRathmair} for surveys. Finite-dimensional recovery from frame coefficients and convex reconstruction methods are studied in~\cite{BalanCasazzaEdidin,CandesStrohmerVoroninski}, while infinite-dimensional Hilbert- and Banach-space formulations are treated in~\cite{CahillCasazzaDaubechies,AlaifariGrohs}. Stability on subspaces of function spaces is investigated in~\cite{ChristPineauTaylor,FreemanOikhbergPineauTaylor,AbdallaDeDiosRamosTaylor}, and H\"older stability on nonlinear subsets is studied in~\cite{FreemanTaylor}. For short-time Fourier measurements, local stability and its obstructions are considered in~\cite{AlaifariDaubechiesGrohsYin,GrohsRathmair,AlaifariPineauTaylorWellershoff,BertoliniDeDiosPineauRamosTaylor}; square-restricted stability in Fock space is treated in~\cite{BortolottoRamos}.
+The Pauli problem can also be thought of as one instance of the broader phase retrieval problem: recovering a function or vector, up to a constant phase, from magnitudes of prescribed measurements. This problem also arises in optics, crystallography and signal processing; we refer to~\cite{KlibanovSacksTikhonravov,GrohsKoppensteinerRathmair} for surveys. Finite-dimensional recovery from frame coefficients and convex reconstruction methods are studied in~\cite{BalanCasazzaEdidin,CandesStrohmerVoroninski}, while infinite-dimensional Hilbert- and Banach-space formulations are treated in~\cite{CahillCasazzaDaubechies,AlaifariGrohs}. Stability on subspaces of function spaces is investigated in~\cite{ChristPineauTaylor,FreemanOikhbergPineauTaylor,AbdallaDeDiosRamosTaylor}, and H\"older stability on nonlinear subsets is studied in~\cite{FreemanTaylor}. For short-time Fourier measurements, local stability and its obstructions are considered in~\cite{AlaifariDaubechiesGrohsYin,GrohsRathmair,AlaifariPineauTaylorWellershoff,BertoliniDeDiosPineauRamosTaylor}; square-restricted stability in Fock space is treated in~\cite{BortolottoRamos}.
 
-Back to the particular realm of the Pauli problem, as we may regard \eqref{eq:free-schr} as a particular case of \eqref{eq:schr-pot}, one is led to ask more generally if one may recover the solution $w$ to \eqref{eq:schr-pot} from the data $|w(0,\cdot)|$, $|w(t_0,\cdot)|$, where $t_0\in\R$ is a fixed time. In this direction, Jaming~\cite{Jaming2014} first showed that if one considers solutions to \eqref{eq:free-schr}, then phase retrieval is possible from $\{|u(t,x)|\}_{(t,x)\in\R\times\R}$ by connecting the problem to the fractional Fourier transform. Moreover, he later conjectured~\cite{Jaming2025} that the same should hold for \eqref{eq:schr-pot} under certain conditions on the potential $V$, and claimed that the same result should hold in higher dimensions.
+Back to the particular realm of the Pauli problem, as we may regard \eqref{eq:free-schr} as a particular case of \eqref{eq:schr-pot} with $V=0$, one is led to ask more generally if one may recover the solution $w$ to \eqref{eq:schr-pot} from the data $|w(0,\cdot)|$, $|w(t_0,\cdot)|$, where $t_0\in\R$ is a fixed time. In this direction, Jaming~\cite{Jaming2014} first showed that if one considers solutions to \eqref{eq:free-schr}, then phase retrieval is possible from $\{|u(t,x)|\}_{(t,x)\in\R\times\R}$ by connecting the problem to the fractional Fourier transform. Moreover, he later conjectured~\cite{Jaming2025} that the same should hold for \eqref{eq:schr-pot} under certain conditions on the potential $V$, and claimed that the same result should hold in higher dimensions.
 
-The main purpose of this manuscript is to answer some of the latter questions on phase retrieval for solutions to \eqref{eq:schr-pot}. Our main result is the following:
+The main purpose of this manuscript is to answer some of these latter questions on phase retrieval for solutions to \eqref{eq:schr-pot}. Our main result is the following generalization of Jaming's result which holds for a large class of real-valued potentials:
 
 \begin{mainresult}
 \label{thm:time-potential}
@@ -109,49 +111,56 @@ Let $u,v\in C(I_0;L^2(\R))$ be mild solutions of \eqref{eq:schr-pot}. If
 then $v=\zeta u$ on $I_0\times\R$ for some
 $\zeta\in\T$.
 \end{mainresult}
-
 Here, a solution $w$ to \eqref{eq:schr-pot} is said to be ``mild'' if it satisfies the Duhamel formula. That is, for $t_0,t\in I_0$, we have
-\[
+\begin{equation}\label{milddef}
  w(t)=e^{i(t-t_0)\partial_x^2}w(t_0)
  -i\int_{t_0}^t e^{i(t-s)\partial_x^2}(V(s)w(s))\,ds
-\]
-in the sense of distributions. The products of $w$ with each part of the potential satisfy
+\end{equation}
+in the sense of distributions. On every compact interval $J\subset I_0$, the products of $w$ with each part of the potential satisfy
 \[
- V_\infty w\in L^1(I;L^2),
+ V_\infty w\in L^1(J;L^2),
  \qquad
- V_2w\in L^2(I;L^1)\subset L^{4/3}(I;L^1),
+ V_2w\in L^2(J;L^1)\subset L^{4/3}(J;L^1),
 \]
-by H\"older's inequality and the fact that $w\in C(I;L^2)$. The Duhamel integral above is then interpreted using this decomposition.
+by H\"older's inequality and the fact that $w\in C(J;L^2)$. The Duhamel integral above is then interpreted using this decomposition. The motivation for this particular potential decomposition comes from the fact that a $C(J;L^2(\mathbb{R}))$ solution to \eqref{milddef} satisfies the natural Strichartz estimate (see Lemma \ref{lem:endpoint-wronskian} below) $w\in L_t^{\infty}L_x^2\cap L_t^4L_x^{\infty}$; the assumption on the potential then ensures that we can measure the source term $Vw$ in the natural dual norm $L_t^1L_x^2+L_t^{\frac{4}{3}}L_x^1$.
 
-We remark that, in particular, the potentials in~\cite{Jaming2025} are all assumed to be time-\emph{independent}, and hence Theorem \ref{thm:time-potential} provides a positive answer to Question I.2 in~\cite{Jaming2025} for a wide class of potentials, namely any potential in $L^2(\R)+L^\infty(\R)$, which includes all $L^p(\R)$,
+We also remark that, in particular, the potentials in~\cite{Jaming2025} are all assumed to be time-\emph{independent}, and hence Theorem \ref{thm:time-potential} provides a positive answer to Question I.2 in~\cite{Jaming2025} for a wide class of stationary potentials, namely any potential in $L^2(\R)+L^\infty(\R)$, which includes all $L^p(\R)$,
 $2\le p\le\infty$.
 
-The proof of Theorem \ref{thm:time-potential} starts with the endpoint Strichartz and local smoothing estimates~\cite{KeelTao,VegaVisciglia}. On each compact time interval,  we have
+In contrast to ~\cite{Jaming2025}, our proof relies essentially only on physical space tools, and basic estimates from the theory of dispersive PDE. To briefly sketch the proof of Theorem \ref{thm:time-potential}, we start with the standard endpoint Strichartz and local smoothing estimates~\cite{KeelTao,VegaVisciglia}. On each compact time interval,  we have
 \[
  u,v\in L^4_tL^\infty_x,
  \qquad
  \chi u,\chi v\in L^2_tH^{1/2}_x
  \quad(\chi\in C_c^\infty(\R)).
 \]
-This is enough to justify the continuity equation
-\[
- \partial_t|w|^2+2\partial_x\operatorname{Im}(\overline w\,\partial_xw)=0
- \]
-in $L^2$. A regularization argument together with $|u| = |v|$ then gives
-\[
- v\,\partial_xu-u\,\partial_xv=0
- \quad\text{in }\D'(\R_x)
-\]
-for almost every time. The next step is then to introduce the exterior product
+The latter property provides just barely enough regularity to justify the continuity equation
+\begin{equation}\label{localmass}
+\partial_t|w|^2+2\partial_x\operatorname{Im}(\overline w\,\partial_xw)=0
+\end{equation}
+in the sense of distributions. For Schwartz solutions $u$ and $v$ with $|u|=|v|$ this will show that the currents (or momentum densities) agree in the sense of distributions, 
+\begin{equation*}
+\operatorname{Im}(\overline{u}\partial_xu)=\operatorname{Im}(\overline{v}\partial_xv)    
+\end{equation*}
+and thus, since $2\operatorname{Re}(\overline{u}\partial_xu)=\partial_x|u|^2$, we would have
+\begin{equation*}
+\overline{u}\partial_xu-\overline{v}\partial_xv=0.    
+\end{equation*}
+Using $|u|=|v|$, this formally gives
+\begin{equation*}
+v\,\partial_xu-u\,\partial_xv=0
+ \quad\text{in }\D'(\R_x)    
+\end{equation*}
+for almost every time. One of the subtle difficulties in our argument will be in showing that this can be made sense of for solutions with merely $L^2$ initial data. Once this is achieved, the next step is then to introduce the exterior product, or "interaction function"
 \[
  F(t,x,y)=u(t,x)v(t,y)-v(t,x)u(t,y).
 \]
-Our goal is to show this vanishes identically, as this proves the asserted claim about linear dependence of the two solutions. In order to do so, note that it solves a two-dimensional Schr\"odinger equation with potential $V(t,x)+V(t,y)$. In the coordinates $r=(x+y)/\sqrt2$ and $s=(x-y)/\sqrt2$, the function $F$ is odd in $s$. Its Dirichlet trace at $s=0$ vanishes by oddness, and its normal trace vanishes by the Wronskian identity. The zero extension of $F$ from $s>0$ therefore solves the same equation without a boundary source.
+Our goal is to show this vanishes identically, which would prove, in particular, that the two solutions $u$ and $v$ are linearly dependent. In order to do so, we make the observation that $F$ also solves a two-dimensional Schr\"odinger equation with potential $V(t,x)+V(t,y)$. In the coordinates $r=(x+y)/\sqrt2$ and $s=(x-y)/\sqrt2$, the function $F$ is odd in $s$. Its Dirichlet trace (interpreted in a certain weak sense) at $s=0$ vanishes by oddness, and its normal trace vanishes by the Wronskian identity above. These vanishing Dirichlet and normal traces will enable us to show that the zero extension of $F$ from $s>0$ solves the same two-dimensional Schr\"odinger equation without a singular boundary source term.
 
-Finally, a stripwise version of the Ionescu--Kenig Carleman estimate~\cite{IonescuKenig} propagates this zero half-space through the whole $(r,s)$-plane. The $L^1_tL^\infty_x$ part of the potential is made small by shortening the time interval, while the restriction of the $L^2_{t,x}$ part to a strip of width $h$ has norm of order $h^{1/2}$. Taking $h$ small then allows us to iterate the estimate and gives $F=0$. Thus $u$ and $v$ are linearly dependent at one time, and equality of their moduli makes the proportionality constant unimodular, with uniqueness propagating the same phase throughout $I_0$.
+Finally, a stripwise version of the Ionescu--Kenig Carleman estimate~\cite{IonescuKenig} (which applies to our potentials) propagates this zero half-space through the whole $(r,s)$-plane to show that $F$ vanishes identically. Thus $u$ and $v$ are linearly dependent at one time, and equality of their moduli makes the proportionality constant unimodular, with uniqueness propagating the same phase throughout $I_0$.
 
 If the potential and both solutions extend globally, uniqueness propagates the conclusion to every time.  The theorem also applies to nonlinear equations whenever equality of the moduli makes their nonlinear potentials
-identical. This gives immediately the following consequence.
+identical. This gives immediately the following consequence for the cubic nonlinear Schr\"odinger equation (or cubic NLS for short).
 
 \begin{maincorollary}
 \label{cor:cubic-NLS}
@@ -163,10 +172,11 @@ i\partial_t w+\partial_x^2w=\sigma|w|^2w.
 If $|u|=|v|$ almost everywhere on $I_0\times\R$, then
 $v=\zeta u$ for every time and some $\zeta\in\T$.
 \end{maincorollary}
+Here, cubic NLS mild solutions are understood in the standard class
+$C(\R;L^2(\R))\cap L^8_{\loc}(\R;L^4(\R))$.
 
 As a final result, we prove that the prediction made by Jaming in~\cite{Jaming2025} regarding the extendability of the results for \eqref{eq:free-schr} to higher dimensions is \emph{false}:
 
-\setcounter{mainresult}{5}
 \begin{mainresult}
 \label{thm:higher-dimensional-failure}
 For every $d\ge2$ there are nonproportional functions
@@ -191,12 +201,25 @@ These are nonproportional Schwartz functions. If $A_t=e^{it\partial_x^2}\phi$, t
  &=\frac{A_t(x_1)A_t(x_2)}{1+2it}(x_2-ix_1).
 \end{align*}
 The two expressions have the same modulus for every point and every time. For $d>2$, tensor both functions with a Gaussian in the remaining variables.
+\\
+
+It is instructive to interpret this counterexample in relation to the general continuity equation
+\begin{equation*}
+\partial_t|w|^2+2\nabla\cdot \operatorname{Im}(\overline{w}\nabla w)=0  
+\end{equation*}
+which is the higher dimensional analogue of \eqref{localmass}. In one dimension, one sees formally that the evolution of the mass density $|u|^2$ uniquely determines the momentum density (for regular enough sufficiently decaying data), but it only determines the momentum density modulo divergence free vector fields in higher-dimensions. In the two dimensional example above, the initial momentum densities are
+\[
+p_f(x)=-p_g(x)=e^{-|x|^2}(x_2,-x_1),
+\]
+which are purely rotational and divergence-free. Thus the two data carry
+opposite circulations, while their evolutions have identical mass densities.
+\\
 
 This article is organized as follows. In Section 2, we prove Theorem \ref{thm:time-potential}. In Section 3, we deduce Corollary \ref{cor:cubic-NLS} as a consequence of the preceding result. Section 4 is then dedicated to the counterexample construction of Theorem \ref{thm:higher-dimensional-failure}. Finally, we gather, in Section 5 below, some other results obtained in parallel to the ones here. These are results which are mostly superseded/covered by the ones in the present paper, but since their techniques are interesting and beautiful on their own, we decided to keep them in a separate repository for independent consultation by the interested reader.
 
 \subsection*{LLM Usage.} Large language models have been of great importance in the production of this manuscript. Below is a brief narration of how they contributed to the current work. 
 
-We started from the first idea of considering the continuity equation $ \partial_t|w|^2+2\partial_x\operatorname{Im}(\overline w\,\partial_xw)=0$, together with integration by parts, in order to show that, if we had $w(t,x) = |w(t,x)| \cdot e^{i \phi(t,x)},$ with $\phi$ smooth enough on each connected component where $w$ does not vanish, then $\phi$ must be constant on each such component. Our initial argument then ran through classical works (see e.g. \cite{Masuda}) to obtain uniqueness of the phase overall.
+We started from the first idea of considering the continuity equation $ \partial_t|w|^2+2\partial_x\operatorname{Im}(\overline w\,\partial_xw)=0$, together with integration by parts, in order to show that, for two sufficiently regular solutions $u,v$ with $|u|=|v|$, a smooth relative phase in the representation $v(t,x)=e^{i\phi(t,x)}u(t,x)$ must be locally constant in space on the nonvanishing set of $u$. The equations then imply that the relative phase is constant on each connected component of this nonvanishing set. Our initial argument then ran through classical works (see e.g. \cite{Masuda}) to obtain uniqueness of the phase overall.
 
 This argument, however, only works in high enough regularity. In order to remove such regularity, we needed to get rid of the assumptions on the phase. At that point, we started exploring with the aid of GPT 5.4/Claude Opus 4.6. It gave us several different directions, many of which are described in the end of this manuscript, such as ones based on scattering theory. 
 
@@ -386,7 +409,7 @@ uses of the inequality.  Fix from now on
 \noindent\emph{Step 4: a moving spatial coordinate.}
 Set $b_j=b-jh$, and suppose inductively that
 $Z=0$ on $[0,1]\times\{z_1>b_j\}$.  This holds for $j=0$ by hypothesis, including at every time in the $L^2$
-sense: the map $t\mapsto\1_{\{z_1>b\}}Z(t)$ is continuous and zero almost
+sense: the map $t\mapsto\1_{\{z_1>b_j\}}Z(t)$ is continuous and zero almost
 everywhere in time, so its norm cannot be positive at any time.
 We will prove the same statement with $b_j$ replaced by $b_{j+1}$.
 
@@ -635,8 +658,8 @@ We next recover the normal Cauchy data needed to create a half-space solution.
 
 \begin{lemma}
 \label{lem:endpoint-wronskian}
-Under the hypotheses of Theorem~\ref{thm:time-potential}, on every bounded
-interval $I\subset I_0$ one has
+Under the hypotheses of Theorem~\ref{thm:time-potential}, on every interval
+$I$ with compact closure in $I_0$ one has
 \[
  u,v\in L^4(I;L^\infty(\R)),
  \qquad
@@ -676,6 +699,13 @@ gives
  &+|I|^{1/4}\|V_2\|_{L^2_{t,x}(I\times\R)}
        \|w\|_{L^\infty_tL^2_x(I)}.
 \end{align*}
+Moreover,
+\[
+ \|V_2w\|_{L^1_tL^2_x(I)}
+ \le |I|^{1/4}\|V_2\|_{L^2_{t,x}(I\times\R)}
+                  \|w\|_{L^4_tL^\infty_x(I)}.
+\]
+Together with the bound for $V_\infty w$, this gives $Vw\in L^1(I;L^2)$.
 The local-smoothing estimate~\cite{Vega,VegaVisciglia} states that, for
 $\chi\in C_c^\infty(\R)$,
 \[
@@ -710,8 +740,9 @@ With that object being well-defined, the continuity equation
  \tag{1.7}\label{eq:continuity-general}
 \]
 holds in distributions. Let now $\phi\in C_c^\infty(\R)$ and
+$\eta\in C_c^\infty(I)$ be real-valued, and set
 $a(x)=\int_{-\infty}^x\phi(y)\,dy$. It follows that $a$ is bounded and $a'=\phi$. Although $a$ need not have compact support, it is a bounded Lipschitz multiplier and $a'=\phi$ is compactly supported.  One may therefore test the
-weak equation \eqref{eq:continuity-general} directly against a regularization of
+weak Schr\"odinger equation \eqref{eq:schr-pot} against a regularization of
 $\eta(t)a(x)\overline{w(t,x)}$.  Multiplication by $a$ is bounded on
 $H^{1/2}$, the potential contribution is real and cancels after taking the
 imaginary part, and all remaining pairings are integrable in time by
@@ -733,7 +764,8 @@ in $\D'(I)$.  The left-hand sides for $u$ and $v$ agree, since their absolute va
  \int_I\eta(t)
  \langle\operatorname{Im}(\overline u\,\partial_xu-\overline v\,\partial_xv),\phi\rangle\,dt=0
 \]
-for every $\eta\in C_c^\infty(I)$ and every spatial test function $\phi$.
+for every $\eta\in C_c^\infty(I)$ and every spatial test function $\phi$,
+extending to complex-valued test functions by linearity.
 Choose a countable dense family of spatial test functions.  After removing
 one null set of times, the current identity holds for every member of this
 family and therefore, by continuity of the distributional pairing, for every
@@ -754,7 +786,7 @@ $\overline p\,\partial_xp=\overline q\,\partial_xq$ as quadratic-form
 distributions.  After multiplying both functions by a common smooth cutoff which equals one
 near the test-function support, assume
 $p,q\in H^{1/2}\cap L^\infty$.  The hypotheses are preserved: the additional
-term in each logarithmic derivative is the same because $|p|=|q|$.  Put
+term in each quadratic expression is the same because $|p|=|q|$.  Put
 \[
  \rho=|p|^2=|q|^2,
  \quad s_\varepsilon=\frac{\rho}{\rho+\varepsilon},
@@ -767,15 +799,20 @@ The Gagliardo seminorm~\cite{DiNezzaPalatucciValdinoci} is
 \]
 It shows directly that a Lipschitz map fixing zero acts continuously on
 $H^{1/2}$, and that $H^{1/2}\cap L^\infty$ is an algebra.  Hence
-$h_\varepsilon$, $s_\varepsilon p$, and $s_\varepsilon q$ are admissible
-localized $H^{1/2}$ multipliers.  Since
+$h_\varepsilon$, $s_\varepsilon p$, and $s_\varepsilon q$ belong to
+$H^{1/2}\cap L^\infty$.  To use $h_\varepsilon\phi$ as a test function,
+approximate it by smooth, compactly supported, uniformly bounded functions converging in
+$H^{1/2}$ and almost everywhere.  The Gagliardo formula and dominated
+convergence show that their products with $\overline p$ and $\overline q$
+converge in $H^{1/2}$ as well, so the identity extends to this test function.
+Since
 \[
  \overline p h_\varepsilon=s_\varepsilon q,
  \qquad
  \overline q h_\varepsilon=s_\varepsilon p,
 \]
-testing the logarithmic-derivative identity against
-$h_\varepsilon\phi$ gives
+testing the identity $\overline p\,\partial_xp=\overline q\,\partial_xq$
+against $h_\varepsilon\phi$ gives
 \[
  \langle\partial_xp,s_\varepsilon q\phi\rangle
  -\langle\partial_xq,s_\varepsilon p\phi\rangle=0.
@@ -831,7 +868,7 @@ The identical calculation for $v(t,x)u(t,y)$ gives
  i\partial_tF+\partial_x^2F+\partial_y^2F=(V(t,x)+V(t,y))F
  \tag{1.10}\label{eq:exterior-equation}
 \]
-in distributions. On each bounded interval $I$,
+in distributions. On the interval $I$,
 \[
  F\in C(I;L^2(\R^2))\cap L^4(I\times\R^2).
  \tag{1.11}\label{eq:exterior-class}
@@ -908,8 +945,7 @@ $H_\psi(0)=0$.
 For $z=(r-s)/\sqrt2$,
 \begin{align*}
  H_\psi(s)=\sqrt2\iint
- &[u(t,z+\sqrt2s)v(t,z)-v(t,z+\sqrt2s)u(t,z)]\\
- &\hspace{28mm}\times\psi(t,\sqrt2z+s)\,dz\,dt.
+ &[u(t,z+\sqrt2s)v(t,z)-v(t,z+\sqrt2s)u(t,z)]\psi(t,\sqrt2z+s)\,dz\,dt.
 \end{align*}
 For $p\in H^{1/2}$,
 \[
@@ -917,8 +953,8 @@ For $p\in H^{1/2}$,
  \quad\text{in }H^{-1/2}.
 \]
 Indeed, on the Fourier-transform side the multiplier is
-$(e^{ih\xi}-1)/h$, which converges pointwise to $i\xi$ and is bounded by
-$|\xi|$.  Dominated convergence with the $H^{1/2}$ weight proves the claim.
+$(e^{2\pi ih\xi}-1)/h$, which converges pointwise to $2\pi i\xi$ and is bounded by
+$2\pi|\xi|$.  Dominated convergence with the $H^{1/2}$ weight proves the claim.
 After inserting cutoffs supported near the projection of $\supp\psi$, pair
 this convergence with the other local $H^{1/2}$ factor.  The difference
 quotients are uniformly bounded from $H^{1/2}$ to $H^{-1/2}$, while the two
@@ -928,9 +964,9 @@ differentiating $\psi(t,\sqrt2z+s)$ vanishes at $s=0$ because the bracket in
 the preceding display vanishes there.  Lemma~\ref{lem:endpoint-wronskian}
 then gives
 \[
- H_\psi'(0)=2\iint
- \bigl(v\,\partial_xu-u\,\partial_xv\bigr)(t,z)
- \psi(t,\sqrt2z)\,dz\,dt=0.
+ H_\psi'(0)=2\int_I
+ \bigl\langle v\,\partial_xu-u\,\partial_xv,
+ \psi(t,\sqrt2\,\cdot)\bigr\rangle\,dt=0.
 \]
 Thus the zero extension
 \[
@@ -973,7 +1009,22 @@ Proposition~\ref{prop:strip-propagation} then gives at once that $G=0$.  By oddn
 $F\in C(J;L^2(\R^2))$, it follows that $F(t)=0$ in $L^2(\R^2)$ for every
 $t\in J$.
 
-Choose now $t_0\in J$.  If $u(t_0)=0$, since $|u(t_0)| = |v(t_0)|$, it follows at once that $v(t_0)=0$. We then recall that if two mild solutions have the same value at
+Choose now $t_0\in J$. By continuity into $L^2$, the equality
+$|u(t)|=|v(t)|$ holds for every $t\in I_0$. If $u(t_0)=0$, then
+$v(t_0)=0$, and we set $\zeta=1$.
+
+Suppose instead that $u(t_0)\ne0$. The set on which $u(t_0,x)\ne0$
+has positive measure. By Fubini's theorem, we may therefore choose $x_0$
+in this set such that $|u(t_0,x_0)|=|v(t_0,x_0)|$ and
+$F(t_0,x_0,y)=0$ for almost every $y$. Then
+\[
+ v(t_0,y)=\frac{v(t_0,x_0)}{u(t_0,x_0)}u(t_0,y)
+ \quad\text{for almost every }y.
+\]
+Thus $v(t_0)=\zeta u(t_0)$ for a scalar $\zeta$, and equality of the
+moduli at $x_0$ gives $|\zeta|=1$.
+
+We now recall that if two mild solutions have the same value at
 one endpoint of a sufficiently short interval $K$, their difference $w$
 satisfies the homogeneous Duhamel equation.  The homogeneous and inhomogeneous
 Strichartz estimates, together with the estimates used in
@@ -990,28 +1041,17 @@ Partitioning each compact subinterval of $I_0$ into finitely many such pieces
 extends uniqueness forward and backward from $t_0$.  Since multiplication by a
 constant commutes with the linear equation, $v$ and $\zeta u$ have the same
 initial value at $t_0$ and therefore agree throughout $I_0$.
-
-Suppose instead that $u(t_0)\ne0$.  Choose $x_0$ in a full-measure
-set on which $u(t_0,x_0)\ne0$ and the identity
-$F(t_0,x_0,y)=0$ holds for almost every $y$.  Then
-\[
- v(t_0,y)=\frac{v(t_0,x_0)}{u(t_0,x_0)}u(t_0,y)
- \quad\text{for almost every }y.
-\]
-Thus $v(t_0)=\zeta u(t_0)$ for a scalar $\zeta$.  The hypotheses then directly imply that $|\zeta|=1$.
 \end{proof}
 
 \section{Cubic NLS: Proof of Corollary \ref{cor:cubic-NLS}}
 
-We continue our program by proving Corollary~\ref{cor:cubic-NLS}.  We recall, for the reader's convenience, the non-linear cubic Sch\"odinger equation 
+Next, we prove Corollary~\ref{cor:cubic-NLS}, which is to establish phase retrieval in $L^2(\mathbb{R})$ for the nonlinear cubic Schr\"odinger equation 
 \[
  i\partial_t w+\partial_x^2w=\sigma|w|^2w.
  \tag{2.1}\label{eq:cubic-NLS}
 \]
-pertaining to that result. 
-
 \begin{proof}[Proof of Corollary~\ref{cor:cubic-NLS}]
-Our main strategy will be to verify that the equation, as well as the `potential' $V = |u|^2 = |v|^2$, satisfy the hypotheses of Theorem \ref{thm:time-potential}. Fix then a bounded interval $I$. On a time interval $K$, the homogeneous and
+Our main strategy will be to verify that the equation, as well as the `potential' $V = \sigma|u|^2 = \sigma|v|^2$, satisfy the hypotheses of Theorem \ref{thm:time-potential}. This is entirely standard in the theory of nonlinear dispersive PDE (see \cite{Tao2006}), but we provide the short argument for convenience to the reader, whose main research focus may not be in PDE. Fix then a bounded interval $I$. On a time interval $K$, the homogeneous and
 inhomogeneous Strichartz estimates~\cite{KeelTao} give
 \[
  \left\|e^{i(t-t_0)\partial_x^2}w(t_0)
@@ -1023,10 +1063,8 @@ inhomogeneous Strichartz estimates~\cite{KeelTao} give
 For the nonlinear term, H\"older's inequality in space and the finite-measure
 embedding in time give
 \begin{align*}
- \||w|^2w\|_{L^{8/7}_tL^{4/3}_x(K)}
- &\le |K|^{1/2}
-       \||w|^2w\|_{L^{8/3}_tL^{4/3}_x(K)}\\
- &=|K|^{1/2}\|w\|_{L^8_tL^4_x(K)}^3.
+ \||w|^2w\|_{L^{8/7}_tL^{4/3}_x(K)}\le |K|^{1/2}
+       \||w|^2w\|_{L^{8/3}_tL^{4/3}_x(K)}=|K|^{1/2}\|w\|_{L^8_tL^4_x(K)}^3.
  \tag{2.2}\label{eq:NLS-fixed-point-estimate}
 \end{align*}
 The pointwise inequality
@@ -1036,14 +1074,13 @@ The pointwise inequality
 \]
 and the same H\"older estimate now yield
 \begin{align*}
- &\||w_1|^2w_1-|w_2|^2w_2\|_{L^{8/7}_tL^{4/3}_x(K)}\\
- &\qquad\le C|K|^{1/2}
+ &\||w_1|^2w_1-|w_2|^2w_2\|_{L^{8/7}_tL^{4/3}_x(K)}\le C|K|^{1/2}
  \bigl(\|w_1\|_{L^8_tL^4_x(K)}^2+\|w_2\|_{L^8_tL^4_x(K)}^2\bigr)
  \|w_1-w_2\|_{L^8_tL^4_x(K)}.
 \end{align*}
 Thus the Duhamel map is a contraction on a ball in
-$C(K;L^2)\cap L^8(K;L^4)$ when $K$ is sufficiently short.  This is the local
-$L^2$ construction referred to in the theorem.  For smooth solutions,
+$C(K;L^2)\cap L^8(K;L^4)$ when $K$ is sufficiently short.  This is the standard local
+$L^2$ construction for the solutions considered in the corollary.  For smooth solutions,
 multiplication by $\overline w$, integration in $x$, and taking imaginary
 parts give
 \[
@@ -1089,16 +1126,16 @@ Theorem~\ref{thm:time-potential} gives $v=\zeta u$ on $I_0$ for some
 $\zeta\in\T$.  Choose $t_0\in I_0$.  The fixed-point difference estimate
 above gives uniqueness for the cubic equation in
 $C_tL^2_x\cap L^8_tL^4_x$.  Since the two nonlinear solutions agree up to
-$\zeta$ at $t_0$, gauge covariance and uniqueness give
+$\zeta$ at $t_0$, phase-rotation invariance of NLS and uniqueness give
 $v=\zeta u$ for every time.
 \end{proof}
 
 \section{Failure in dimensions at least two: Proof of Theorem \ref{thm:higher-dimensional-failure}}
 
-As a final contribution, we build a simple family of counterexamples showing Theorem~\ref{thm:higher-dimensional-failure}. This, incidentally, provides both a \emph{negative} answer to the higher-dimensional assertion in \cite{Jaming2025}, as well as an example showing that the one-dimensional case of the four-time problem mentioned previously is genuinely special, as the same result in higher dimensions fails even for a continuum of times. 
+As a final contribution, we build a simple family of counterexamples showing Theorem~\ref{thm:higher-dimensional-failure}. This provides a \emph{negative} answer to the higher-dimensional assertion in \cite{Jaming2025}. It also shows that the finite-time recovery problem mentioned previously is specific to one dimension: in higher dimensions, recovery fails even with observations at every time. 
 
 \begin{proof}[Proof of Theorem~\ref{thm:higher-dimensional-failure}]
-It suffices to work in $d=2$.  Let
+We first prove the assertion for $d=2$.  Let
 \[
  \phi(x)=e^{-x^2/2},
  \qquad \psi(x)=-\phi'(x)=xe^{-x^2/2},
@@ -1108,7 +1145,7 @@ and define
  a(x_1,x_2)&=\phi(x_1)\psi(x_2),\\
  b(x_1,x_2)&=\psi(x_1)\phi(x_2),\\
  f&=a+ib,
- \qquad g=a-ib.
+ \qquad g=a-ib = \overline{f}.
 \end{align*}
 Since
 \[
@@ -1123,7 +1160,7 @@ $x_1\ne0$ gives $c=-1$.
 The free propagator preserves tensor products.  Indeed, the Fourier transform
 of $p(x_1)q(x_2)$ is $\widehat p(\xi_1)\widehat q(\xi_2)$, while
 \[
- e^{-it(\xi_1^2+\xi_2^2)}=e^{-it\xi_1^2}e^{-it\xi_2^2}.
+ e^{-4\pi^2it(\xi_1^2+\xi_2^2)}=e^{-4\pi^2it\xi_1^2}e^{-4\pi^2it\xi_2^2}.
 \]
 Therefore
 \[
@@ -1165,7 +1202,7 @@ coincide at every point and every time.
 
 For $d>2$, tensor both functions with
 $\Phi(x_3,\ldots,x_d)=\exp(-\frac12\sum_{j=3}^dx_j^2)$.  The free propagator
-again factors, so the modulus identity and nonproportionality are preserved.
+again factors, so both the modulus identity and nonproportionality are preserved. This finishes the proof.
 \end{proof}
 
 \section{Comments on alternative proof methods}
@@ -1493,10 +1530,10 @@ K.~Masuda,
 equations},
 Proc. Japan Acad. \textbf{43} (1967), 361--364.
 
-\bibitem{MorozPerelomov}
-B.~Z.~Moroz and A.~M.~Perelomov,
-\emph{On a problem posed by Pauli},
-Theoret. Math. Phys. \textbf{101} (1994), 1200--1204.
+%\bibitem{MorozPerelomov}
+%B.~Z.~Moroz and A.~M.~Perelomov,
+%\emph{On a problem posed by Pauli},
+%Theoret. Math. Phys. \textbf{101} (1994), 1200--1204.
 
 \bibitem{Pauli}
 W.~Pauli,
@@ -1508,6 +1545,12 @@ Springer-Verlag, Berlin, 1933, 83--272.
 J.~P.~G.~Ramos and M.~Sousa,
 \emph{On Pauli pairs and Fourier uniqueness problems},
 J. Lond. Math. Soc. (2) \textbf{112} (2025), Paper No.~e70358.
+
+\bibitem{Tao2006}
+T.~Tao,
+\emph{Nonlinear dispersive equations: Local and global analysis},
+CBMS Regional Conference Series in Mathematics, vol.~106,
+American Mathematical Society, Providence, RI, 2006.
 
 \bibitem{TeschlBook}
 G.~Teschl,
