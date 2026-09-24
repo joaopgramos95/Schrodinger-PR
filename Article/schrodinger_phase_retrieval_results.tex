@@ -37,9 +37,19 @@
 \setstretch{1.25}
 
 \title{Phase retrieval for Schr\"odinger evolutions}
+
 \author{Ben Pineau}
+\address{Courant Institute School of Mathematics, Computing, and Data Science, New York University,
+New York, NY, 10012}
+\email{brp305@nyu.edu}
+
 \author{João P. G. Ramos}
-\author{Mitchell A. Taylor}
+\address{Instituto de Matemática Pura e Aplicada (IMPA) - Estrada Dona Castorina 110, 22460-320, Rio de Janeiro - RJ, Brazil.}
+\email{joao.ramos@impa.br}
+
+\author[Mitchell A. Taylor]{Mitchell A. Taylor}
+\address{Mathematical Institute, University of Oxford, Andrew Wiles Building, Radcliffe Observatory Quarter, Woodstock Road, Oxford, OX2 6GG, United Kingdom}
+\email{mitchtaylor@shaw.ca}
 
 \begin{document}
 
@@ -222,9 +232,9 @@ We started from the first idea of considering the continuity equation $ \partial
 
 This argument, however, only works in high enough regularity. In order to remove such regularity, we needed to get rid of the assumptions on the phase. Entirely human ideas allowed us to work with data in $L^2$ for a restricted class of potentials, and data in $H^{\epsilon}$ for a large class of potentials, but not both simultaneously.  At that point, we started exploring with the aid of GPT 5.4/Claude Opus 4.6. It gave us several different directions, many of which are described in the end of this manuscript, such as ones based on scattering theory. 
 
-By exploiting and exhausting several paths towards the general $L^2$ case with GPT 5.4 and 5.5, as well as Claude Opus 4.7 and 4.8, we had the idea of working at the level of currents. By doing so, we were naturally led to the idea of lifting our equation one dimension higher. The details on how to finish from there, such as applying specific unique continuation lemmas, were then provided by interacting with several different LLMs. Finally, GPT 5.5 in Codex was also used in order to obtain a Lean verification of Corollary \ref{cor:cubic-NLS}; see \href{https://github.com/joaopgramos95/Schrodinger-PR/tree/main/Formalization}{this link}.
+By exploiting and exhausting several paths towards the general $L^2$ case with GPT 5.4 and 5.5, as well as Claude Opus 4.7 and 4.8, we had the idea of working at the level of currents. By doing so, we were naturally led to the idea of lifting our equation one dimension higher. The details on how to finish from there, such as applying specific unique continuation lemmas, were then provided by interacting with several different LLMs. Finally, GPT 5.5 in Codex was also used in order to obtain a Lean verification of Corollary \ref{cor:cubic-NLS}.
 
-Most of the other attempts and results through different methods have been written down and are kept \href{https://github.com/joaopgramos95/Schrodinger-PR/tree/main/Article}{here}. Apart from that note, the results and proofs here have all been written and verified by humans. We take full responsibility for the contents of both manuscripts. 
+Most of the other attempts and results through different methods have been written down and are kept \href{https://github.com/joaopgramos95/Schrodinger-PR/tree/main}{here}, together with the aforementioned Lean verification. Apart from that note, the results and proofs here have all been written and verified by humans. We take full responsibility for the contents of both manuscripts. 
 
 \section*{Acknowledgements}
 
