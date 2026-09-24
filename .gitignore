@@ -1,0 +1,26 @@
+# macOS Finder metadata
+.DS_Store
+
+# LaTeX build products
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.run.xml
+*.synctex.gz
+*.toc
+Article/*.pdf
+main.pdf
+SchrodingerPR_verified/*.pdf
+/schrodinger_phase_retrieval_results.pdf
+/schrodinger_phase_retrieval_stationary_results.pdf
+
+# Lean build and package caches
+.lake/
+lake-packages/
+SchrodingerPR_verified/.lake/
+SchrodingerPR_verified/lake-packages/

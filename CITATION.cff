@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+message: "If you use this work, please cite the repository and the relevant manuscript."
+title: "Phase retrieval for Schrödinger evolutions"
+type: software
+authors:
+  - family-names: Pineau
+    given-names: Ben
+  - family-names: Ramos
+    given-names: João P. G.
+  - family-names: Taylor
+    given-names: Mitchell A.
+repository-code: "https://github.com/joaopgramos95/Schrodinger-PR"

@@ -1,0 +1,38 @@
+name: Build manuscripts
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build ${{ matrix.manuscript.name }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        manuscript:
+          - name: time-dependent results
+            source: schrodinger_phase_retrieval_results.tex
+            pdf: Article/schrodinger_phase_retrieval_results.pdf
+          - name: stationary results
+            source: schrodinger_phase_retrieval_stationary_results.tex
+            pdf: Article/schrodinger_phase_retrieval_stationary_results.pdf
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compile manuscript
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: ${{ matrix.manuscript.source }}
+          working_directory: Article
+          latexmk_use_xelatex: false
+      - name: Upload PDF
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.manuscript.name }}-pdf
+          path: ${{ matrix.manuscript.pdf }}
+          if-no-files-found: error
