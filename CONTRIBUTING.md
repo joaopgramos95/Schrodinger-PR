@@ -10,7 +10,7 @@ Contributions are welcome through focused issues and pull requests.
 
 ## Lean workspace
 
-The Lean sources in `SchrodingerPR_verified/` are an active formalization effort.  Before changing them, read `SchrodingerPR_verified/Lean_Code/AXIOM_STATUS.md` and `SchrodingerPR_verified/LLM_HANDOFF.md`.  Do not replace a gap with `sorry`, `admit`, or a new project axiom without documenting it.
+The Lean sources in `Formalization/` are an active formalization effort. Before changing them, read `Formalization/Lean_Code/AXIOM_STATUS.md` and `Formalization/LLM_HANDOFF.md`. Do not replace a gap with `sorry`, `admit`, or a new project axiom without documenting it.
 
 ## Commits
 

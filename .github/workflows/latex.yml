@@ -17,18 +17,20 @@ jobs:
       matrix:
         manuscript:
           - name: time-dependent results
+            directory: Article
             source: schrodinger_phase_retrieval_results.tex
             pdf: Article/schrodinger_phase_retrieval_results.pdf
           - name: stationary results
+            directory: Article/archive
             source: schrodinger_phase_retrieval_stationary_results.tex
-            pdf: Article/schrodinger_phase_retrieval_stationary_results.pdf
+            pdf: Article/archive/schrodinger_phase_retrieval_stationary_results.pdf
     steps:
       - uses: actions/checkout@v4
       - name: Compile manuscript
         uses: xu-cheng/latex-action@v3
         with:
           root_file: ${{ matrix.manuscript.source }}
-          working_directory: Article
+          working_directory: ${{ matrix.manuscript.directory }}
           latexmk_use_xelatex: false
       - name: Upload PDF
         uses: actions/upload-artifact@v4
