@@ -2,7 +2,7 @@
 
 ## Statement of record
 
-The Lean theorem to prove is `CubicNLS.phase_retrieval_interval` in `showcase.lean`.
+The Lean theorem to prove is `CubicNLS.phase_retrieval_interval` in `Showcase.lean`.
 Its statement and the canonical definitions it consumes are fixed; only the `sorry` in
 its proof may be replaced. It is the formal counterpart of
 `cor:interval-version` in the blueprint. `CubicNLS.phase_retrieval_cubic_NLS` is the

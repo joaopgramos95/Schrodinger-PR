@@ -14,13 +14,14 @@
 *.synctex.gz
 *.toc
 Article/*.pdf
+Article/archive/*.pdf
 main.pdf
-SchrodingerPR_verified/*.pdf
+Formalization/*.pdf
 /schrodinger_phase_retrieval_results.pdf
 /schrodinger_phase_retrieval_stationary_results.pdf
 
 # Lean build and package caches
 .lake/
 lake-packages/
-SchrodingerPR_verified/.lake/
-SchrodingerPR_verified/lake-packages/
+Formalization/.lake/
+Formalization/lake-packages/

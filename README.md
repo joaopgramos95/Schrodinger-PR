@@ -1,52 +1,34 @@
 # Phase retrieval for Schrödinger evolutions
 
-This repository contains research manuscripts on phase retrieval for one-dimensional Schrödinger evolutions, together with a Lean verification of the cubic nonlinear Schrödinger equation (NLS) corollary in the primary manuscript.
+This repository contains the research manuscript *Phase retrieval for Schrödinger evolutions* and its Lean formalization project. The formalization accompanies Corollary `cor:cubic-NLS`, which establishes phase retrieval for global one-dimensional cubic NLS solutions.
 
-## Main results
+## Repository structure
 
-The primary manuscript proves that, in one spatial dimension, equality of the spacetime modulus of two solutions determines the solution up to one constant unimodular factor.  It treats real, time-dependent potentials in the local class
-\[
-L^1_t L^\infty_x + L^2_{t,x},
-\]
-derives the corresponding result for the global \(L^2\) cubic NLS flow, and gives counterexamples for the free equation in dimensions at least two.
+| Path | Contents |
+| --- | --- |
+| [`Article/`](Article/) | The primary manuscript source. |
+| [`Article/archive/`](Article/archive/) | Archived stationary-results source and a reference PDF. |
+| [`Formalization/`](Formalization/) | A dedicated Lean 4 / Mathlib project for the cubic-NLS corollary. |
+| [`Formalization/Lean_Code/`](Formalization/Lean_Code/) | Formalization modules, arranged by analytic component. |
+| [`Formalization/Showcase.lean`](Formalization/Showcase.lean) | Public theorem statement and the corollary derivation. |
+| [`Formalization/Check.lean`](Formalization/Check.lean) | Axiom-audit entry point. |
 
-The stationary manuscript records complementary results for time-independent potentials: a Masuda-class result for finite-energy solutions, an \(L^2\) result for real Faddeev-class potentials, and recovery from measurements on one exterior half-line for a suitable compactly supported potential.
+## Manuscript
 
-## Repository layout
+The primary result proves that, in one spatial dimension, equality of the spacetime modulus determines a Schrödinger evolution up to a constant unimodular factor. It treats real time-dependent potentials in the local class `L¹_t L∞_x + L²_{t,x}`, gives the global `L²` cubic-NLS corollary, and records counterexamples for the free equation in dimensions at least two.
 
-- [`Article/schrodinger_phase_retrieval_results.tex`](Article/schrodinger_phase_retrieval_results.tex) — primary manuscript, *Phase retrieval for Schrödinger evolutions*.
-- [`Article/schrodinger_phase_retrieval_stationary_results.tex`](Article/schrodinger_phase_retrieval_stationary_results.tex) — manuscript on stationary Schrödinger evolutions.
-- [`SchrodingerPR_verified/`](SchrodingerPR_verified/) — expanded cubic-NLS proof and Lean formalization workspace.
-- [`main.tex`](main.tex) — earlier working draft and bibliography source.
-- [`references/`](references/) — source papers used during development.
-
-## Build the manuscripts
-
-The two article sources are self-contained: their bibliographies are included in the `.tex` files.  With a TeX Live installation that provides `latexmk`, run:
+With TeX Live and `latexmk` installed, build the primary manuscript with:
 
 ```sh
 make article
-make stationary
 ```
 
-or build both with:
+`make stationary` builds the archived stationary manuscript; `make all` builds both. GitHub Actions compiles both sources and uploads the PDFs as workflow artifacts.
 
-```sh
-make all
-```
+## Lean formalization
 
-The resulting PDFs are written next to their sources in `Article/`.  GitHub Actions builds both manuscripts and exposes the PDFs as workflow artifacts.
+[`Formalization/`](Formalization/) follows the Lake-project organization used by contemporary Lean research repositories: top-level entry points expose the public theorem and audit, while `Lean_Code/` contains the dependency-ordered development. See [`Formalization/README.md`](Formalization/README.md) for the module map, build setup, and precise verification status.
 
-## Lean verification
+## Contributing and citation
 
-[`SchrodingerPR_verified/`](SchrodingerPR_verified/) contains the Lean verification accompanying Corollary `cor:cubic-NLS` in the primary manuscript.  Its entry point, [`showcase.lean`](SchrodingerPR_verified/showcase.lean), formalizes the stronger interval statement `CubicNLS.phase_retrieval_interval`; its theorem `CubicNLS.phase_retrieval_cubic_NLS` derives the corollary's all-spacetime version.
-
-The verification is not yet axiom-free: its current dependencies and remaining project axioms are documented in [`SchrodingerPR_verified/Lean_Code/AXIOM_STATUS.md`](SchrodingerPR_verified/Lean_Code/AXIOM_STATUS.md).  The intended handoff and verification commands are in [`SchrodingerPR_verified/LLM_HANDOFF.md`](SchrodingerPR_verified/LLM_HANDOFF.md).  A Lean toolchain and Mathlib checkout are required before running those commands.
-
-## Contributing
-
-Please read [`CONTRIBUTING.md`](CONTRIBUTING.md) before opening a pull request.  In particular, keep generated TeX artifacts out of commits and make mathematical changes with enough context for careful review.
-
-## Citation
-
-If you use this work, please cite the repository and the relevant manuscript.  Machine-readable metadata is available in [`CITATION.cff`](CITATION.cff).
+Please read [`CONTRIBUTING.md`](CONTRIBUTING.md) before opening a pull request. Citation metadata is in [`CITATION.cff`](CITATION.cff).

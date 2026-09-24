@@ -2,8 +2,8 @@
 
 ## Objective
 
-Prove the fixed `showcase.lean` theorem without project axioms or `sorry`.
-Do not edit `showcase.lean`; its SHA-256 is
+Prove the fixed `Showcase.lean` theorem without project axioms or `sorry`.
+Do not edit `Showcase.lean`; its SHA-256 is
 `e962e355193f718217b227c002ee389b14a8cd001d100f224bcb25fded025500`.
 
 ## Current verified state
@@ -12,7 +12,7 @@ Both commands succeed:
 
 ```sh
 lake build CubicNLSPhaseRetrieval
-lake env lean showcase.lean
+lake env lean Showcase.lean
 ```
 
 There are no `sorry`/`admit` terms in the Lean sources. The showcase audit has
